@@ -1,0 +1,12 @@
+{
+    "name": "quidphp/front",
+    "type": "library",
+    "description": "QuidPHP JavaScript and SCSS front end assets",
+    "keywords": ["quidphp","quid","framework","cms"],
+    "homepage": "https://quidphp.com",
+    "license": "MIT",
+    "authors": [{
+        "name": "Pierre-Philippe Emond",
+        "email": "emondpph@gmail.com"
+    }]
+}
