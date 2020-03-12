@@ -25,8 +25,6 @@ Test.Component = function()
         
         // absolutePlaceholder
         
-        // addRemove
-        
         // ajax
         
         // ajaxBlock
@@ -109,8 +107,6 @@ Test.Component = function()
         
         // doc
         
-        // enumSet
-        
         // fakeSelect
         
         // feed
@@ -188,8 +184,6 @@ Test.Component = function()
         
         // searchSlide
         
-        // sorter
-        
         // tabs
         
         // tabsNav
@@ -203,8 +197,6 @@ Test.Component = function()
         });
         trigEvt(bodyNode,'test:suite');
         assert(i === 1);
-        
-        // tinymce
         
         // tooltip
         
