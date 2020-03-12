@@ -24,7 +24,7 @@ Test.Include = function()
         newHtml += "<div class='border' style='width: 25px; height: 25px; margin: 10px; padding: 5px; border: 5px solid green; box-sizing: border-box; border-image: none;'></div>";
         newHtml += "<div class='hidden' style='display: none; padding: 3px;'>LOL</div>";
         
-        const htmlNode = Nod.scopedQuery(document,'html');
+        const htmlNode = Doc.scopedQuery(document,'html');
         const selectorOne = htmlNode.querySelector("body");
         const selectorAll = htmlNode.querySelectorAll("body");
         const htmlStr = Ele.getOuterHtml(htmlNode);
@@ -300,9 +300,9 @@ Test.Include = function()
         assert(Obj.isNotEmpty(Ele.getBoundingRect(htmlNode)));
         assert(Num.is(Ele.getDimension(htmlNode).width));
         assert(Num.is(Ele.getDimension(htmlNode).height));
-        assert(Integer.round(Ele.getDimension(contentBox).width) > 40);
+        assert(Ele.getDimension(contentBox).width > 40);
         assert(Ele.getDimension(borderBox).width === 25);
-        assert(Pojo.length(Ele.getScroll(htmlNode)) === 4);
+        assert(Pojo.length(Ele.getScroll(htmlNode)) === 8);
         assert(Pojo.is(Ele.attr(htmlNode)));
         assert(Ele.hasAttr(htmlNode,'data-error'));
         assert(!Ele.hasAttr(htmlNode,'data-errorz'));
@@ -322,8 +322,8 @@ Test.Include = function()
         assert(!Ele.hasClass(divNode,'test'));
         assert(Pojo.length(Ele.getOffset(divNode)) === 3);
         assert(Ele.getOffsetParent(divNode).left === 8);
-        assert(Integer.round(Ele.getOffsetDoc(divNode).left) === 8);
-        assert(Integer.round(Ele.getOffsetWin(divNode).left) === 8);
+        assert(Ele.getOffsetDoc(divNode).left === 8);
+        assert(Ele.getOffsetWin(divNode).left === 8);
         assert(Pojo.length(Ele.getOffsetDoc(divNode)) === 2);
         Ele.setHandler(htmlNode,'what',function(value) { setData(this,'OK',value); return true; });
         assert(Ele.getData(htmlNode,'OK') == null);
@@ -342,7 +342,7 @@ Test.Include = function()
         assert(Ele.getData(htmlNode,'OK') == 'james');
         assert(Ele.triggerHandler(htmlNode,'what','no') === true);
         assert(Ele.triggerHandler(htmlNode,'what','yes') === true);
-        assert(Nod.getData(htmlNode,'OK') === 'yes');
+        assert(Ele.getData(htmlNode,'OK') === 'yes');
         Ele.setHandler(htmlNode,'what',function() { return false; });
         assert(Ele.triggerHandler(htmlNode,'what') === false);
         Ele.removeHandler(htmlNode,'what');
@@ -388,6 +388,17 @@ Test.Include = function()
         assert(Ele.getAttr(divNode,'what') === 'ok');
         Ele.removeAttr(divNode,'what');
         assert(!Ele.hasAttr(divNode,'what'));
+        assert(!Ele.hasAttr(divNode,'toggle'));
+        Ele.toggleAttr(divNode,'toggle');
+        assert(Ele.hasAttr(divNode,'toggle'));
+        assert(Ele.getAttr(divNode,'toggle') === '1');
+        assert(Ele.getAttr(divNode,'toggle','int') === 1);
+        Ele.toggleAttr(divNode,'toggle');
+        assert(Ele.getAttr(divNode,'toggle','int') === 0);
+        Ele.toggleAttr(divNode,'toggle',false);
+        assert(Ele.getAttr(divNode,'toggle','int') === 0);
+        Ele.toggleAttr(divNode,'toggle',true);
+        assert(Ele.getAttr(divNode,'toggle','int') === 1);
         Ele.setHtml(divNode,'what <span>ok</span>');
         assert(Ele.getHtml(divNode) === 'what <span>ok</span>');
         Ele.setText(divNode,'what <span>ok</span>');
@@ -411,7 +422,8 @@ Test.Include = function()
         assert(Ele.getCss(divNode,'margin-top','int') === 10);
         assert(Ele.getCss(borderBox,'height') === '25px');
         Ele.setDimension(borderBox,20,40);
-        assert(Integer.round(Ele.getDimension(borderBox).height) === 40);
+        assert(!Ele.isScrollable(htmlNode));
+        assert(Ele.getDimension(borderBox).height === 40);
         assert(Ele.getCss(borderBox,'height') === '40px');
         assert(Ele.setScroll(htmlNode,0,0) === undefined);
         Ele.setHtml(divNode,'OK');
@@ -554,9 +566,16 @@ Test.Include = function()
         assert(Nav.index(11,0,10,true) === null);
         
         // nod
+        assert(Nod.is(document));
+        assert(!Nod.is(window));
+        assert(Nod.is(textNode));
+        assert(Nod.are([document,htmlNode]));
+        assert(!Nod.are([document,window]));
+        assert(Nod.getText(textNode) === 'test ');
         
         // num
         assert(!Num.is('what'));
+        assert(!Num.is('2 px'));
         assert(Num.is('2'));
         assert(Num.is('2.3'));
         assert(Num.is(2));
@@ -588,6 +607,16 @@ Test.Include = function()
         assert(Num.isOdd(11));
         assert(!Num.isOdd(0));
         assert(Num.isEven(0));
+        assert(Num.round("4.2px") === null);
+        assert(Num.round("4.2") === 4);
+        assert(Num.round(4.2) === 4);
+        assert(Num.round(4) === 4);
+        assert(Num.ceil("4.2") === 5);
+        assert(Num.ceil(4.2) === 5);
+        assert(Num.ceil(4) === 4);
+        assert(Num.floor("4.2") === 4);
+        assert(Num.floor(4.2) === 4);
+        assert(Num.floor(4) === 4);
         
         // obj
         assert(Obj.is({}));
@@ -846,16 +875,14 @@ Test.Include = function()
         assert(Target.is(window));
         assert(Target.is(divNode));
         assert(Target.are([window,document]));
+        assert(Target.is(textNode));
         assert(Target.check(fragment) === fragment);
         const arrFragment = [fragment];
         assert(Target.checks(arrFragment) === arrFragment);
         assert(Arr.length(Target.wrap(selectorAll)) === 1);
         assert(Target.wrap(arrFragment) === arrFragment);
         assert(Arr.length(Target.wrap(htmlNode)) === 1);
-        assert(Nod.is(document));
-        assert(!Nod.is(window));
-        assert(Nod.are([document,htmlNode]));
-        assert(!Nod.are([document,window]));
+        assert(Integer.is(Target.getProp(window,'outerHeight')));
         
         // type
         
@@ -983,7 +1010,11 @@ Test.Include = function()
         assert(Win.hasHistoryApi());
         assert(Win.is(window));
         assert(!Win.is(document));
-        assert(Pojo.length(Win.getScroll()) === 4);
+        assert(Win.isCurrent(window));
+        assert(!Win.isProxy(window));
+        assert(Bool.is(Win.isScrollable()));
+        assert(!Win.isScrollable('x'));
+        assert(Pojo.length(Win.getScroll()) === 8);
         assert(Win.getDimension().width > 0);
         assert(Win.getDimension().height > 0);
         assert(Win.are([window,window]));

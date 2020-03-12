@@ -41,20 +41,21 @@ const assert = Debug.assertThrow.bind(Debug);
 const logError = Debug.logError.bind(Debug);
 
 // ele
-const getProp = Ele.getProp.bind(Ele);
 const getAttr = Ele.getAttr.bind(Ele);
-const getHtml = Ele.getHtml.bind(Ele);
-const setProp = Ele.setProp.bind(Ele);
 const setAttr = Ele.setAttr.bind(Ele);
-const setHtml = Ele.setHtml.bind(Ele);
+const toggleAttr = Ele.toggleAttr.bind(Ele);
 const setCss = Ele.setCss.bind(Ele);
 const toggleClass = Ele.toggleClass.bind(Ele);
+const getHtml = Ele.getHtml.bind(Ele);
+const setHtml = Ele.setHtml.bind(Ele);
 
 // nod
 const qs = Nod.scopedQuery.bind(Nod);
 const qsa = Nod.scopedQueryAll.bind(Nod);
 
 // target
+const getProp = Target.getProp.bind(Target);
+const setProp = Target.setProp.bind(Target);
 const getData = Target.getData.bind(Target);
 const setData = Target.setData.bind(Target);
 const setHdlr = Target.setHandler.bind(Target);

@@ -45,8 +45,8 @@ Component.SearchSlide = function(option)
         
         // handler
         setHdlr(input,'inputSearch:getButton',function() {
-            const parent = Nod.parent(this);
-            return Nod.next(parent,"button[type='button']");
+            const parent = Ele.parent(this);
+            return Ele.next(parent,"button[type='button']");
         });
         
         // event

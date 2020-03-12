@@ -69,7 +69,7 @@ Component.FeedSearch = function(option)
         
         loadMoreRemove: function() {
             const loadMore = trigHdlr(this,'feed:loadMore');
-            return Nod.closest(loadMore,'li');
+            return Ele.closest(loadMore,'li');
         },
         
         parseData: function(data,type) {

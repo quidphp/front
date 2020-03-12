@@ -25,13 +25,14 @@ Component.InputNumeric = function(option)
     Component.Timeout.call(this,$option.keyEvent,$option.timeout);
     Component.ValidatePrevent.call(this,'inputNumeric:change');
     Component.KeyboardArrow.call(this,'vertical');
-
+    Component.InputMemory.call(this);
+    
 
     // handler
     setHdlrs(this,'inputNumeric:',{
         
         getValueRestore: function() {
-            return trigHdlr(this,'input:getValueRemember','int') || trigHdlr(this,'input:getValueInt');
+            return trigHdlr(this,'inputMemory:get','int') || trigHdlr(this,'input:getValueInt');
         },
         
         setValue: function(value,change) {
@@ -41,7 +42,7 @@ Component.InputNumeric = function(option)
             trigEvt(this,'inputNumeric:change');
             
             else
-            trigHdlr(this,'input:rememberValue');
+            trigHdlr(this,'inputMemory:remember');
         },
         
         getMin: function() {
@@ -54,7 +55,7 @@ Component.InputNumeric = function(option)
         
         getPrev: function() {
             let r = null;
-            const val = trigHdlr(this,'input:getValueRemember','int');
+            const val = trigHdlr(this,'inputMemory:get','int');
             const min = trigHdlr(this,'inputNumeric:getMin');
             
             if(Integer.is(val))
@@ -69,7 +70,7 @@ Component.InputNumeric = function(option)
         
         getNext: function() {
             let r = null;
-            const val = trigHdlr(this,'input:getValueRemember','int');
+            const val = trigHdlr(this,'inputMemory:get','int');
             const max = trigHdlr(this,'inputNumeric:getMax');
             
             if(Integer.is(val))
@@ -151,7 +152,7 @@ Component.InputNumeric = function(option)
     
     // event
     ael(this,'timeout:'+$option.keyEvent,function() {
-        if(Nod.match(this,":focus"))
+        if(Ele.match(this,":focus"))
         trigHdlr(this,$option.timeoutHandler);
     });
     
@@ -162,22 +163,20 @@ Component.InputNumeric = function(option)
     });
     
     ael(this,'focus',function() {
-        trigHdlr(this,'input:rememberValue');
+        trigHdlr(this,'inputMemory:remember');
         trigHdlr(this,'input:setEmpty');
     });
     
     ael(this,'focusout',function() {
-        if(trigHdlr(this,'input:isRealChange'))
-        trigHdlr(this,'inputNumeric:process');
+        processOnChange.call(this);
     });
     
     ael(this,'change',function() {
-        if(trigHdlr(this,'input:isRealChange'))
-        trigHdlr(this,'inputNumeric:process');
+        processOnChange.call(this);
     });
     
     ael(this,'inputNumeric:change',function() {
-        trigHdlr(this,'input:rememberValue');
+        trigHdlr(this,'inputMemory:remember');
         trigHdlr(this,'timeout:clear',$option.keyEvent);
     });
     
@@ -188,6 +187,14 @@ Component.InputNumeric = function(option)
     ael(this,'keyboardArrow:down',function() {
         trigHdlr(this,'inputNumeric:setPrev');
     });
+    
+    
+    // processOnChange
+    const processOnChange = function() 
+    {
+        if(trigHdlr(this,'inputMemory:hasChanged'))
+        trigHdlr(this,'inputNumeric:process');
+    }
     
     return this;
 }

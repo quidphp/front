@@ -170,7 +170,7 @@ Component.Doc = function(option)
             
             if(contentTarget != null)
             {
-                if($option.routeWrap && !Nod.match(routeWrap,"body"))
+                if($option.routeWrap && !Ele.match(routeWrap,"body"))
                 {
                     const routeWrapTarget = qs(contentTarget,$option.routeWrap);
                     if(routeWrapTarget != null)
@@ -200,7 +200,7 @@ Component.Doc = function(option)
         const routeWrap = trigHdlr(this,'doc:getRouteWrap');
         const body = trigHdlr(this,'doc:getBody');
         
-        if(initial === true)
+        if(body != null && initial === true)
         trigEvt(this,'doc:mountInitial',body,isError);
         
         if(routeWrap != null)
@@ -210,13 +210,15 @@ Component.Doc = function(option)
             
             if(isError !== true)
             {
+                const uri = getAttr(html,"data-uri");
+                
                 const group = getAttr(html,"data-group");
                 if(Str.isNotEmpty(group))
-                trigEvt(this,'group:'+group,routeWrap);
+                trigEvt(this,'group:'+group,routeWrap,uri);
                 
                 const route = getAttr(html,"data-route");
                 if(Str.isNotEmpty(route))
-                trigEvt(this,'route:'+route,routeWrap);
+                trigEvt(this,'route:'+route,routeWrap,uri);
             }
             
             trigEvt(this,'doc:mountedPage',routeWrap,isError);
@@ -236,13 +238,14 @@ Component.Doc = function(option)
             trigEvt(this,'doc:unmountCommon',routeWrap);
             trigEvt(this,'doc:unmountPage',routeWrap);
             
+            const uri = getAttr(html,"data-uri");
             const group = getAttr(html,"data-group");
             if(Str.isNotEmpty(group))
-            trigEvt(this,'group:'+group+':unmount',routeWrap);
+            trigEvt(this,'group:'+group+':unmount',routeWrap,uri);
             
             const route = getAttr(html,"data-route");
             if(Str.isNotEmpty(route))
-            trigEvt(this,'route:'+route+':unmount',routeWrap);
+            trigEvt(this,'route:'+route+':unmount',routeWrap,uri);
                     
             trigEvt(this,'doc:unmounted',routeWrap);
         }

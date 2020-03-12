@@ -71,11 +71,11 @@ Component.SearchAutoInfo = function(option)
         Component.ClickOpen.call(info,$option.info)
         
         ael(info,'clickOpen:opened',function() {
-            setAttr($this,$option.attrInfo,1);
+            toggleAttr($this,$option.attrInfo,true);
         });
         
         ael(info,'clickOpen:closed',function() {
-            setAttr($this,$option.attrInfo,0);
+            toggleAttr($this,$option.attrInfo,false);
         });
         
         trigSetup(info);
@@ -94,7 +94,7 @@ Component.SearchAutoInfo = function(option)
         });
         
         ael(field,'validate:empty',function() {
-            if(Nod.match(this,":focus"))
+            if(Ele.match(this,":focus"))
             trigEvt(info,'clickOpen:open');
         });
         

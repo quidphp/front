@@ -48,7 +48,7 @@ Component.ClickOpen = function(option)
         
         isEmpty: function() {
             const target = trigHdlr(this,'clickOpen:getTargetContent');
-            return Nod.match(target,":empty");
+            return Ele.match(target,":empty");
         },
         
         getTarget: function() {
@@ -88,7 +88,7 @@ Component.ClickOpen = function(option)
         getParent: function() {
             const attr = $option.attr;
             
-            return Nod.closestParent(this,"["+attr+"='1']");
+            return Ele.closestParent(this,"["+attr+"='1']");
         },
         
         getParentOrRoot: function() {

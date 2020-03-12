@@ -67,7 +67,7 @@ Component.Timeout = function(type,timeout)
     // getTimeoutObj
     const getTimeoutObj = function() 
     {
-        return Nod.getOrSetData(this,'timeout-obj',{});
+        return Target.getOrSetData(this,'timeout-obj',{});
     }
     
     return this;

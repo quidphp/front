@@ -27,6 +27,7 @@ Component.InputSearch = function(option)
     Component.KeyboardEnter.call(this,true,$option.keyEvent);
     Component.Timeout.call(this,$option.keyEvent,$option.timeout);
     Component.ValidatePrevent.call(this,'inputSearch:change');
+    Component.InputMemory.call(this);
     
     
     // handler
@@ -45,7 +46,7 @@ Component.InputSearch = function(option)
         },
         
         getButton: function() {
-            return (Str.is($option.button))? Nod.next(this,$option.button):undefined;
+            return (Str.is($option.button))? Ele.next(this,$option.button):undefined;
         },
         
         validate: function() {
@@ -68,7 +69,7 @@ Component.InputSearch = function(option)
             
             if(validate === true)
             {
-                trigHdlr(this,'input:rememberValue');
+                trigHdlr(this,'inputMemory:remember');
                 trigEvt(this,'inputSearch:change');
             }
         },
@@ -102,9 +103,9 @@ Component.InputSearch = function(option)
     });
     
     ael(this,'timeout:'+$option.keyEvent,function(event,keyEvent) {
-        if(Nod.match(this,":focus"))
+        if(Ele.match(this,":focus"))
         {
-            trigHdlr(this,'input:rememberValue');
+            trigHdlr(this,'inputMemory:remember');
             trigHdlr(this,$option.timeoutHandler);
         }
     });
@@ -114,7 +115,7 @@ Component.InputSearch = function(option)
     });
     
     ael(this,'change',function() {
-        if(trigHdlr(this,'input:isRealChange'))
+        if(trigHdlr(this,'inputMemory:hasChanged'))
         trigHdlr(this,'inputSearch:process');
     });
     

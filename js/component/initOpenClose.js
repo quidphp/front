@@ -57,11 +57,11 @@ Component.InitOpenClose = function(option)
         },
         
         disable: function() {
-            setAttr(this,'data-disabled',1);
+            toggleAttr(this,'data-disabled',true);
         },
         
         enable: function() {
-            setAttr(this,'data-disabled',0);
+            toggleAttr(this,'data-disabled',false);
         }
     });
     
@@ -78,11 +78,11 @@ Component.InitOpenClose = function(option)
                 isInit = true;
                 trigEvt(this,type+':init');
                 setData(this,type+'-init',true);
-                setAttr(this,$option.attrInit,1);
+                toggleAttr(this,$option.attrInit,true);
             }
             
             trigHdlr(this,type+':willOpen',isInit);
-            setAttr(this,$option.attr,1);
+            toggleAttr(this,$option.attr,true);
             trigEvt(this,type+':opened',isInit);
             
             if(Integer.is($option.transitionTimeout))
@@ -96,7 +96,7 @@ Component.InitOpenClose = function(option)
     ael(this,type+':close',function() {
         if(trigHdlr(this,type+':canClose') === true)
         {
-            setAttr(this,$option.attr,0);
+            toggleAttr(this,$option.attr,false);
             trigEvt(this,type+':closed');
             
             if(Integer.is($option.transitionTimeout))

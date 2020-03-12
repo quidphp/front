@@ -61,7 +61,7 @@ Component.Tooltip = function(option)
             const target = trigHdlr(this,'tooltip:getTarget');
             const targetContent = trigHdlr(this,'tooltip:getTargetContent');
             const content = trigHdlr(this,'tooltip:getContent');
-            setAttr(target,$option.attr,1);
+            toggleAttr(target,$option.attr,true);
             setHtml(targetContent,content);
             trigHdlr(this,'tooltip:updatePosition');
         },
@@ -69,7 +69,7 @@ Component.Tooltip = function(option)
         hide: function() {
             const target = trigHdlr(this,'tooltip:getTarget');
             const targetContent = trigHdlr(this,'tooltip:getTargetContent');
-            setAttr(target,$option.attr,0);
+            toggleAttr(target,$option.attr,false);
             Ele.removeAttr(target,$option.attrViewport);
             setHtml(targetContent,false);
             setCss(target,'top',null);

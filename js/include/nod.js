@@ -60,7 +60,7 @@ const NodTarget = {
     getText: function(node)
     {
         this.check(node);
-        return node.textContent;
+        return (node.textContent != null)? node.textContent:undefined;
     },
     
     
@@ -70,75 +70,14 @@ const NodTarget = {
     {
         this.check(node);
         Str.check(value,false);
-        value = (value == null)? '':value;
-        node.textContent = value;
+        
+        if(node.textContent != null)
+        {
+            value = (value == null)? '':value;
+            node.textContent = value;
+        }
         
         return;
-    },
-    
-    
-    // getProp
-    // retourne une propriété d'une node
-    getProp: function(node,key)
-    {
-        this.check(node);
-        return Obj.get(key,node);
-    },
-    
-    
-    // setProp
-    // permet de changer la propriété sur une node ou plusieurs node
-    setProp: function(nodes,key,value)
-    {
-        Str.check(key);
-        nodes = this.wrap(nodes,false);
-        
-        this.each(nodes,function() {
-            Obj.setRef(key,value,this);
-        });
-        
-        return;
-    },
-    
-    
-    // propStr
-    // prend un ensemble de node et retourne une string concatené pour une même prop
-    // un séparateur peut être fourni, sinon utilise -
-    propStr: function(nodes,prop,separator) 
-    {
-        let r = '';
-        nodes = Nod.wrap(nodes,true);
-        Str.check(prop,true);
-        separator = (Str.isNotEmpty(separator))? separator:'-';
-        const $inst = this;
-        
-        this.each(nodes,function() {
-            r += (r.length)? separator:"";
-            r += $inst.getProp(this,prop);
-        });
-        
-        return r;
-    },
-    
-    
-    // propObj
-    // permet de retourner un objet à partir de plusieurs nodes
-    // il faut spécifier une prop pour clé et une autre pour valeur
-    propObj: function(nodes,propKey,propValue)
-    {
-        const r = {};
-        nodes = Nod.wrap(nodes,true);
-        const $inst = this;
-        Str.check(propKey,true);
-        Str.check(propValue,true);
-        
-        this.each(nodes,function() {
-            const key = $inst.getProp(this,propKey);
-            const value = $inst.getProp(this,propValue);
-            r[key] = value;
-        });
-        
-        return r;
     },
     
     
@@ -208,30 +147,8 @@ const EleDocTarget = {
     {
         let r = '';
         const children = Nod.children(value,null,true);
-        r = this.getOuterHtml(children);
+        r = Ele.getOuterHtml(children);
         
-        return r;
-    },
-    
-    
-    // getOuterHtml
-    // retourne le outerHtml d'une ou plusieurs nodes
-    getOuterHtml: function(nodes)
-    {
-        let r = '';
-        
-        Nod.each(nodes,function() {
-            let content = '';
-            
-            if(this.outerHTML != null)
-            content = this.outerHTML;
-            
-            else if(this.textContent != null)
-            content = this.textContent;
-            
-            r += content;
-        });
-
         return r;
     },
     
@@ -255,78 +172,51 @@ const EleDocTarget = {
     },
     
     
-    // prepend
-    // ajout une ou plusieurs nodes comme premiers enfant de la node
-    prepend: function(node,value)
+    // getOuterHtml
+    // retourne le outerHtml d'une ou plusieurs nodes
+    getOuterHtml: function(nodes)
+    {
+        let r = '';
+        
+        Nod.each(nodes,function() {
+            let content = '';
+            
+            if(this.outerHTML != null)
+            content = this.outerHTML;
+            
+            else if(this.textContent != null)
+            content = this.textContent;
+            
+            r += content;
+        });
+
+        return r;
+    }
+}
+
+
+// eleWinTarget 
+// objet pour les méthodes communes entre node et window
+const EleWinTarget = {
+    
+    // focus
+    // permet de mettre le focus sur une node ou window
+    focus: function(node)
     {
         this.check(node);
-        value = Dom.htmlNodes(value);
-        node.prepend.apply(node,value);
+        node.focus();
         
         return;
     },
     
     
-    // append
-    // ajoute du contenu html comme dernier enfant de la node
-    append: function(node,value)
+    // blur
+    // permet de retirer le focus d'une node ou window
+    blur: function(node)
     {
         this.check(node);
-        value = Dom.htmlNodes(value);
-        node.append.apply(node,value);
+        node.blur();
         
         return;
-    },
-        
-
-    // insertBefore
-    // permet d'insérer une ou plusieurs node avant une autre
-    insertBefore: function(node,value)
-    {
-        const r = [];
-        this.check(node);
-        value = Dom.htmlNodes(value);
-        
-        this.each(value,function() {
-            r.push(node.insertAdjacentElement('beforebegin',this));
-        });
-        
-        return r;
-    },
-
-
-    // insertAfter
-    // permet d'insérer une ou plusieurs node après une autre
-    insertAfter: function(node,value)
-    {
-        const r = [];
-        this.check(node);
-        value = Dom.htmlNodes(value);
-        
-        this.each(value,function() {
-            r.push(node.insertAdjacentElement('afterend',this));
-        });
-        
-        return r;
-    },
-
-
-    // wrapAll
-    // permet d'enrobber un groupe de node dans une une nouvelle balise html
-    wrapAll: function(nodes,value)
-    {
-        let r = null;
-        nodes = this.wrap(nodes,true);
-        value = Dom.htmlNodes(value);
-        
-        if(Arr.isNotEmpty(value))
-        {
-            r = Arr.valueFirst(value);
-            const firstNode = Arr.valueFirst(nodes);
-            this.insertBefore(firstNode,value);
-            this.append(r,nodes);
-        }
-        
-        return r;
     }
 }

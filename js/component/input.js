@@ -49,13 +49,6 @@ Component.Input = function()
             return (getProp(this,'multiple') === true)? true:false;
         },
         
-        isRealChange: function() {
-            const value = trigHdlr(this,'input:getValue');
-            const remember = trigHdlr(this,'input:getValueRemember');
-
-            return (Str.isEqual(value,remember)) ? false:true;
-        },
-        
         getValue: function(trim,cast) {
             return Ele.getValue(this,trim,cast);
         },
@@ -63,16 +56,7 @@ Component.Input = function()
         getValueTrim: function(cast) {
             return trigHdlr(this,'input:getValue',true,cast);
         },
-        
-        getValueRemember: function(cast) {
-            let r = getData(this,'input-remember');
-            
-            if(r != null && cast != null)
-            r = Scalar.cast(r,cast);
-            
-            return r;
-        },
-        
+
         getValueEncoded: function(trim) {
             let r = trigHdlr(this,'input:getValue',trim);
             
@@ -90,16 +74,6 @@ Component.Input = function()
             return trigHdlr(this,'input:getValue',null,'json');
         },
         
-        setValueRemember: function() {
-            const value = trigHdlr(this,'input:getValueRemember');
-            trigHdlr(this,'input:setValue',value);
-        },
-        
-        rememberValue: function() {
-            const value = trigHdlr(this,'input:getValue');
-            setData(this,'input-remember',value);
-        },
-        
         getId: function() {
             return getProp(this,'id');
         },
@@ -109,7 +83,7 @@ Component.Input = function()
         },
         
         getType: function() {
-            return (Nod.match(this,"input"))? getProp(this,'type'):null;
+            return (Ele.match(this,"input"))? getProp(this,'type'):null;
         },
         
         getTag: function() {
@@ -148,11 +122,11 @@ Component.Input = function()
         },
         
         isSystem: function() {
-            return Nod.match(this,"[name^='-']");
+            return Ele.match(this,"[name^='-']");
         },
         
         isTarget: function() {
-            return (!trigHdlr(this,'input:isDisabled') && !trigHdlr(this,'input:isSystem') && Nod.match(this,"[name]"))? true:false;
+            return (!trigHdlr(this,'input:isDisabled') && !trigHdlr(this,'input:isSystem') && Ele.match(this,"[name]"))? true:false;
         },
         
         isTargetVisible: function() {
@@ -170,31 +144,31 @@ Component.Input = function()
         },
         
         isValidate: function() {
-            return (trigHdlr(this,'input:isTarget') && Nod.match(this,"[data-required],[data-pattern]"))? true:false;
+            return (trigHdlr(this,'input:isTarget') && Ele.match(this,"[data-required],[data-pattern]"))? true:false;
         },
         
         isFile: function() {
-            return Nod.match(this,"input[type='file']");
+            return Ele.match(this,"input[type='file']");
         },
         
         isCsrf: function() {
-            return (trigHdlr(this,'input:isSystem') && Nod.match(this,"[data-csrf='1']"))? true:false;
+            return (trigHdlr(this,'input:isSystem') && Ele.match(this,"[data-csrf='1']"))? true:false;
         },
         
         isGenuine: function() {
-            return (trigHdlr(this,'input:isSystem') && Nod.match(this,"[data-genuine='1']"))? true:false;
+            return (trigHdlr(this,'input:isSystem') && Ele.match(this,"[data-genuine='1']"))? true:false;
         },
         
         isSubmit: function() {
-            return Nod.match(this,"[type='submit'],[type='image']");
+            return Ele.match(this,"[type='submit'],[type='image']");
         },
         
         isClickedSubmit: function() {
-            return (trigHdlr(this,'input:isSubmit') && Nod.match(this,"[data-submit-click]"))? true:false;
+            return (trigHdlr(this,'input:isSubmit') && Ele.match(this,"[data-submit-click]"))? true:false;
         },
         
         getParent: function() {
-            let r = Nod.closest(this,"form");
+            let r = Ele.closest(this,"form");
             
             if(r == null)
             r = document;

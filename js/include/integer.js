@@ -24,14 +24,6 @@ const IntegerPrimitive = {
     },
     
     
-    // round
-    // arrondi le nombre sous forme de int
-    round: function(value)
-    {
-        return (Scalar.isNotBool(value))? Math.round(parseFloat(value)):null;
-    },
-    
-    
     // fromBool
     // retourne un numéro à partir d'un boolean
     fromBool: function(value)

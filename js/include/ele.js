@@ -71,6 +71,36 @@ const EleTarget = {
     },
     
     
+    // isScrollable
+    // retourne vrai si la node est scrollable dans un axis ou n'importe quel axis
+    // retourne toujours faux si overflow est visible
+    isScrollable: function(node,axis)
+    {
+        let r = false;
+        
+        if(this.is(node))
+        {
+            const overflow = this.getCss(node,'overflow');
+            
+            if(overflow !== 'visible')
+            {
+                const scroll = this.getScroll(node);
+                
+                if(Arr.in(axis,['x','horizontal']))
+                r = scroll.scrollableX;
+                
+                else if(Arr.in(axis,['y','vertical']))
+                r = scroll.scrollableY;
+                
+                else
+                r = (scroll.scrollableX === true)? scroll.scrollableX:scroll.scrollableY;
+            }
+        }
+        
+        return r;
+    },
+    
+    
     // hasAttr
     // retourne vrai si la node a l'attribut
     hasAttr: function(node,value)
@@ -138,7 +168,7 @@ const EleTarget = {
         if(Arr.in(key,['width','height']))
         {
             const dimension = this.getDimension(node);
-            r = Integer.round(dimension[key])+"px";
+            r = Num.ceil(dimension[key])+"px";
         }
         
         else
@@ -260,8 +290,8 @@ const EleTarget = {
         }
         
         return {
-            width: rect.width,
-            height: rect.height
+            width: Num.ceil(rect.width),
+            height: Num.ceil(rect.height)
         }
     },
     
@@ -277,7 +307,7 @@ const EleTarget = {
     
     // getScroll
     // retourne un object avec les données pour le scroll
-    // retourne aussi les dimensions
+    // retourne aussi les dimensions externes et internes, ainsi qu'un bool indiquant si une direction est scrollable
     getScroll: function(node)
     {
         let r = null;
@@ -290,12 +320,27 @@ const EleTarget = {
         
         else
         {
+            const rect = this.getBoundingRect(node);
+            
             r = {
-                top: node.scrollTop,
-                left: node.scrollLeft,
-                width: node.scrollWidth,
-                height: node.scrollHeight
+                top: Num.ceil(node.scrollTop),
+                left: Num.ceil(node.scrollLeft),
+                width: Num.ceil(node.scrollWidth),
+                height: Num.ceil(node.scrollHeight),
+                innerWidth: Num.ceil(rect.width),
+                innerHeight: Num.ceil(rect.height),
+                scrollableX: false,
+                scrollableY: false
             };
+            
+            if(r.innerWidth > 0 && r.innerHeight > 0)
+            {
+                if(r.width > r.innerWidth)
+                r.scrollableX = true;
+                
+                if(r.height > r.innerHeight)
+                r.scrollableY = true;
+            }
         }
         
         return r;
@@ -321,8 +366,8 @@ const EleTarget = {
         this.check(node);
         
         return {
-            top: node.offsetTop,
-            left: node.offsetLeft
+            top: Num.ceil(node.offsetTop),
+            left: Num.ceil(node.offsetLeft)
         };
     },
     
@@ -335,8 +380,8 @@ const EleTarget = {
         const scroll = Win.getScroll();
         
         return {
-            top: rect.top + scroll.top,
-            left: rect.left + scroll.left
+            top: Num.ceil(rect.top + scroll.top),
+            left: Num.ceil(rect.left + scroll.left)
         };
     },
     
@@ -348,20 +393,9 @@ const EleTarget = {
         const rect = this.getBoundingRect(node);
         
         return {
-            top: rect.top,
-            left: rect.left
+            top: Num.ceil(rect.top),
+            left: Num.ceil(rect.left)
         };
-    },
-    
-    
-    // focus
-    // permet de mettre le focus sur une node
-    focus: function(node)
-    {
-        this.check(node);
-        node.focus();
-        
-        return;
     },
     
     
@@ -392,6 +426,31 @@ const EleTarget = {
     removeAttr: function(nodes,key)
     {
         return this.setAttr(nodes,key,undefined);
+    },
+    
+    
+    // toggleAttr
+    // permet d'ajouter ou enlever un attribut sur une ou plusieurs nodes
+    // l'atttribut est toujours présent, si true ou inexistant valeur est 1, sinon valeur est 0
+    toggleAttr: function(nodes,key,bool)
+    {
+        nodes = this.wrap(nodes,false);
+        Str.check(key,true);
+        const $inst = this;
+        
+        this.each(nodes,function() {
+            let value = Integer.fromBool(bool);
+            
+            if(value == null)
+            {
+                value = $inst.getAttr(this,key,'int');
+                value = (value === 1)? 0:1;
+            }
+            
+            $inst.setAttr(this,key,value);
+        });
+        
+        return;
     },
     
     
@@ -564,7 +623,7 @@ const EleTarget = {
     serialize: function(nodes,keyProp,valueProp)
     {
         let r = '';
-        nodes = Nod.wrap(nodes,true);
+        nodes = Ele.wrap(nodes,true);
         const query = Uri.query();
         keyProp = (Str.is(keyProp))? keyProp:'name';
         valueProp = (Str.is(valueProp))? valueProp:'value';
@@ -580,4 +639,80 @@ const EleTarget = {
 
         return r;
     },
+    
+    
+    // prepend
+    // ajout une ou plusieurs nodes comme premiers enfant de la node
+    prepend: function(node,value)
+    {
+        this.check(node);
+        value = Dom.htmlNodes(value);
+        node.prepend.apply(node,value);
+        
+        return;
+    },
+    
+    
+    // append
+    // ajoute du contenu html comme dernier enfant de la node
+    append: function(node,value)
+    {
+        this.check(node);
+        value = Dom.htmlNodes(value);
+        node.append.apply(node,value);
+        
+        return;
+    },
+        
+
+    // insertBefore
+    // permet d'insérer une ou plusieurs node avant une autre
+    insertBefore: function(node,value)
+    {
+        const r = [];
+        this.check(node);
+        value = Dom.htmlNodes(value);
+        
+        this.each(value,function() {
+            r.push(node.insertAdjacentElement('beforebegin',this));
+        });
+        
+        return r;
+    },
+
+
+    // insertAfter
+    // permet d'insérer une ou plusieurs node après une autre
+    insertAfter: function(node,value)
+    {
+        const r = [];
+        this.check(node);
+        value = Dom.htmlNodes(value);
+        
+        this.each(value,function() {
+            r.push(node.insertAdjacentElement('afterend',this));
+        });
+        
+        return r;
+    },
+
+
+    // wrapAll
+    // permet d'enrobber un groupe de node dans une une nouvelle balise html
+    wrapAll: function(nodes,value)
+    {
+        let r = null;
+        nodes = this.wrap(nodes,true);
+        value = Dom.htmlNodes(value);
+        
+        if(Arr.isNotEmpty(value))
+        {
+            r = Arr.valueFirst(value);
+            const firstNode = Arr.valueFirst(nodes);
+            this.insertBefore(firstNode,value);
+            this.append(r,nodes);
+        }
+        
+        return r;
+    }
 }

@@ -75,6 +75,7 @@ const NumPrimitive =  {
         return r;
     },
     
+    
     // isOdd
     // vérifie que la valeur est un chiffre impair
     isOdd: function(value)
@@ -112,5 +113,52 @@ const NumPrimitive =  {
     str: function(value)
     {
         return (this.is(value))? Number(value).toString():null;
+    }
+}
+
+
+// numMath
+// contient des méthodes pour faire des opérations avec Math sur des nombres
+const NumMath = {
+    
+    // round
+    // arrondi le nombre sous forme de int
+    round: function(value)
+    {
+        let r = null;
+        value = this.cast(value);
+        
+        if(value != null)
+        r = Math.round(value);
+        
+        return r;
+    },
+    
+    
+    // floor
+    // amène le nombre au int plus petit
+    floor: function(value)
+    {
+        let r = null;
+        value = this.cast(value);
+        
+        if(value != null)
+        r = Math.floor(value);
+        
+        return r;
+    },
+    
+    
+    // ceil
+    // amène le nombre au int plus grand
+    ceil: function(value)
+    {
+        let r = null;
+        value = this.cast(value);
+        
+        if(value != null)
+        r = Math.ceil(value);
+        
+        return r;
     }
 }

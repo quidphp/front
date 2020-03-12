@@ -35,17 +35,16 @@ Component.Scroller = function(option)
             return trigHdlr(this,'scrollChange:getScroller') === window;
         },
         
-        shouldScroll: function(scrollTo) {
+        canScroll: function(top,left) {
             let r = false;
-            Pojo.check(scrollTo);
             const current = trigHdlr(this,'scroller:getCurrentScroll');
-            const left = Integer.cast(scrollTo.left);
-            const top = Integer.cast(scrollTo.top);
+            left = Num.ceil(left);
+            top = Num.ceil(top);
             
-            if(Pojo.keyExists("left",scrollTo) && left >= 0 && left !== Integer.cast(current.left) && left <= current.width)
+            if(Integer.is(left) && current.scrollableX === true && left >= 0 && left !== current.left && left <= current.width)
             r = true;
             
-            else if(Pojo.keyExists("top",scrollTo) && top >= 0 && top !== Integer.cast(current.top) && top <= current.height)
+            else if(Integer.is(top) && current.scrollableY === true && top >= 0 && top !== current.top && top <= current.height)
             r = true;
             
             return r;
@@ -76,16 +75,16 @@ Component.Scroller = function(option)
         go: function(top,left,smooth) {
             let r = null;
             const $this = this;
-            top = (Num.is(top))? Integer.cast(top):null;
-            left = (Num.is(left))? Integer.cast(left):null;
+            top = Num.ceil(top);
+            left = Num.ceil(left);
             const scroller = trigHdlr(this,'scrollChange:getScroller');
             const scrollTo = getScrollTo(top,left,smooth);
             
             if(scrollTo != null)
             {
-                const shouldScroll = trigHdlr(this,'scroller:shouldScroll',scrollTo);
+                const canScroll = trigHdlr(this,'scroller:canScroll',scrollTo.top,scrollTo.left);
                 
-                if(shouldScroll === true)
+                if(canScroll === true)
                 {
                     setData(this,'scroller-scrolling',true);
                     scroller.scroll(scrollTo);

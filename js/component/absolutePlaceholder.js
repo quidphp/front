@@ -21,18 +21,18 @@ Component.AbsolutePlaceholder = function()
     setHdlrs(this,'absolutePlaceholder:',{
         
         getChild: function() {
-            const childs = Nod.children(this);
+            const childs = Ele.children(this);
             return Arr.find(childs,function() {
                 return Ele.isVisible(this);
             });
         },
         
         isOnlyHeight: function() {
-            return Nod.match(this,'[data-only-height]');
+            return Ele.match(this,'[data-only-height]');
         },
         
         isOnlyWidth: function() {
-            return Nod.match(this,'[data-only-width]');
+            return Ele.match(this,'[data-only-width]');
         },
         
         refresh: function() {
@@ -45,10 +45,7 @@ Component.AbsolutePlaceholder = function()
                 
                 Ele.setDimension(this,(doWidth)? 'auto':null,(doHeight)? 'auto':null);
                 const dimension = Ele.getDimension(child);
-                
-                // ici ceil le pixel pour IE
-                Ele.setDimension(this,(doWidth)? Math.ceil(dimension.width):null,(doHeight)? Math.ceil(dimension.height):null);
-                
+                Ele.setDimension(this,(doWidth)? dimension.width:null,(doHeight)? dimension.height:null);
                 setAttr(this,'data-absolute-placeholder','ready');
             }
         }

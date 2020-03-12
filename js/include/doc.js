@@ -40,8 +40,8 @@ const DocTarget = {
         
         if(this.isCurrent(value))
         {
-            r.width = document.documentElement.scrollWidth;
-            r.height = document.documentElement.scrollHeight;
+            r.width = Num.round(document.documentElement.scrollWidth);
+            r.height = Num.round(document.documentElement.scrollHeight);
         }
         
         else

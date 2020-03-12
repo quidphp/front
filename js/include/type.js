@@ -93,7 +93,7 @@ const Func = Lemur.Func = Factory(Type,ObjBase,FuncObj);
 const Integer = Lemur.Integer = Factory(Type,NumPrimitive,IntegerPrimitive);
 
 // num
-const Num = Lemur.Num = Factory(Type,NumPrimitive);
+const Num = Lemur.Num = Factory(Type,NumPrimitive,NumMath);
 
 // obj
 const Obj = Lemur.Obj = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ObjWrite,ObjWriteSelf,ObjProto);

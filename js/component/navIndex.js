@@ -194,7 +194,7 @@ Component.NavIndex = function(option)
         
         const handlers = {
             isEmpty: function() {
-                return Nod.match(this,":empty");
+                return Ele.match(this,":empty");
             },
             
             getParent: function() {

@@ -36,56 +36,46 @@ Component.Modal = function(option)
             return qs(box,".inner");
         },
         
+        getAnchors: function(route) {
+            return getData(this,'data-anchor');
+        },
+        
         getRoute: function() {
             return getAttr(this,'data-route');
         },
         
-        setRoute: function(route) {
-            if(Str.isNotEmpty(route))
-            setAttr(this,'data-route',route);
-            else
-            Ele.removeAttr(this,'data-route');
-        },
-        
-        getRouteAnchors: function(route) {
-            return getData(this,'data-route-anchor') || qsa(document,"a[data-modal='"+route+"']");
-        },
-        
-        setRouteAnchor: function(value) {
-            Ele.check(value,false);
-            setData(this,'data-route-anchor',value);
+        getUri: function() {
+            return getAttr(this,'data-uri');
         },
         
         anchorBind: function(anchor,click) {
             anchorBind.call(this,anchor,click);
         },
         
-        set: function(route,html,anchor) {
-            Str.check(route,true);
+        set: function(html,anchors,route,uri) {
             Str.check(html,true);
-            
-            trigHdlr(this,'modal:setRoute',route);
-            trigHdlr(this,'modal:setRouteAnchor',anchor);
+            setModalAttr.call(this,anchors,route,uri);
             trigHdlr(this,'clickOpen:setTargetContent',html);
             trigEvt(this,'clickOpen:open');
         },
         
-        fetchNode: function(node) {
-            const config = Xhr.configFromNode(node);
-            const route = getAttr(node,'data-modal');
-            return trigHdlr(this,'modal:fetch',config,route);
-        },
-        
-        fetch: function(config,route,anchor) {
+        fetch: function(config,anchors,route,uri) {
             let r = false;
             
             if(Str.isNotEmpty(config))
             config = Xhr.configFromString(config);
             
+            else if(Ele.is(config))
+            {
+                if(anchors == null)
+                anchors = config;
+                
+                config = Xhr.configFromNode(config);
+            }
+            
             if(Pojo.isNotEmpty(config))
             {
-                trigHdlr(this,'modal:setRoute',route);
-                trigHdlr(this,'modal:setRouteAnchor',anchor);
+                setModalAttr.call(this,anchors,route,uri);
                 trigHdlr(this,'ajax:init',config);
                 r = true;
             }
@@ -110,17 +100,18 @@ Component.Modal = function(option)
 
         if(Str.isNotEmpty(route))
         {
-            const anchors = trigHdlr(this,'modal:getRouteAnchors',route);
+            const anchors = trigHdlr(this,'modal:getAnchors',route);
             trigHdlrs(anchors,'modal:open');
         }
     });
     
     ael(this,'clickOpen:ajaxSuccess',function() {
-        const route = trigHdlr(this,'modal:getRoute');
         trigEvt(document,'modal:common',this);
         
+        const route = trigHdlr(this,'modal:getRoute');
+        const uri = trigHdlr(this,'modal:getUri');
         if(Str.isNotEmpty(route))
-        trigEvt(document,'modal:'+route,this);
+        trigEvt(document,'modal:'+route,this,uri);
     });
     
     ael(this,'clickOpen:reopen',function() {
@@ -132,12 +123,11 @@ Component.Modal = function(option)
         const route = trigHdlr(this,'modal:getRoute');
         if(Str.isNotEmpty(route))
         {
-            const anchors = trigHdlr(this,'modal:getRouteAnchors',route);
+            const anchors = trigHdlr(this,'modal:getAnchors',route);
             trigHdlrs(anchors,'modal:close');
         }
         
-        trigHdlr(this,'modal:setRoute',null);
-        trigHdlr(this,'modal:setRouteAnchor',null);
+        resetModalAttr.call(this);
     });
     
     ael(this,'click',function() {
@@ -150,6 +140,37 @@ Component.Modal = function(option)
         boxBind.call(this);
         documentBind.call(this);
     });
+    
+    
+    // setModalAttr
+    const setModalAttr = function(anchors,route,uri)
+    {
+        if(Ele.is(anchors))
+        {
+            if(!Str.isNotEmpty(route))
+            route = getAttr(anchors,'data-modal');
+            
+            if(!Str.isNotEmpty(uri))
+            uri = Ele.getUri(anchors);
+        }
+        
+        Str.check(route,true);
+        
+        anchors = Ele.wrap(anchors,false);
+        setData(this,'data-anchor',anchors);
+        
+        setAttr(this,'data-route',route);
+        setAttr(this,'data-uri',uri);
+    }
+    
+    
+    // resetModalAttr
+    const resetModalAttr = function()
+    {
+        setData(this,'data-anchor',undefined);
+        setAttr(this,'data-route',undefined);
+        setAttr(this,'data-uri',undefined);
+    }
     
     
     // boxBind
@@ -205,7 +226,7 @@ Component.Modal = function(option)
         {
             ael(anchor,'click',function(event) {
                 let r = true;
-                const result = trigHdlr(modal,'modal:fetchNode',this);
+                const result = trigHdlr(modal,'modal:fetch',this);
                 
                 if(result === true)
                 {

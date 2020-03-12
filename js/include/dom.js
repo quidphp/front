@@ -164,18 +164,18 @@ const Dom = Lemur.Dom = {
             Ele.removeAttr(r.html,'data-tag');
             r.htmlAttr = Ele.attr(r.html);
             
-            r.head = Nod.scopedQuery(r.html,"[data-tag='head']");
-            r.body = Nod.scopedQuery(r.html,"[data-tag='body']");
+            r.head = Ele.scopedQuery(r.html,"[data-tag='head']");
+            r.body = Ele.scopedQuery(r.html,"[data-tag='body']");
             
             if(r.head != null)
             {
-                const title = Nod.scopedQuery(r.head,"title");
+                const title = Ele.scopedQuery(r.head,"title");
                 
                 Ele.removeAttr(r.head,'data-tag');
                 r.headAttr = Ele.attr(r.head);
                 r.title = (title != null)? Ele.getText(title):'?';
                 r.titleHtml = r.title.replace('<','&lt;').replace('>','&gt;').replace(' & ',' &amp; ');
-                r.meta = Nod.scopedQueryAll(r.head,"meta");
+                r.meta = Ele.scopedQueryAll(r.head,"meta");
             }
         }
         

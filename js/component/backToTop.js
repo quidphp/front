@@ -33,11 +33,11 @@ Component.BackToTop = function(option)
         },
         
         show: function() {
-            setAttr(this,$option.attr,1);
+            toggleAttr(this,$option.attr,true);
         },
         
         hide: function() {
-            setAttr(this,$option.attr,0);
+            toggleAttr(this,$option.attr,false);
         },
         
         refresh: function() {

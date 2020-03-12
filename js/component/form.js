@@ -110,7 +110,7 @@ Component.Form = function()
                 if(Str.isNotEmpty(name))
                 {
                     r = Arr.filter(trigHdlr(this,'form:getSubmits'),function() {
-                        return Nod.match(this,"[name='"+name+"']");
+                        return Ele.match(this,"[name='"+name+"']");
                     });
                 }
             }
@@ -121,6 +121,11 @@ Component.Form = function()
         serialize: function() {
             const target = trigHdlr(this,'form:getSerializeFields');
             return Ele.serialize(target);
+        },
+        
+        serializeStore: function() {
+            const serialize = trigHdlr(this,'form:serialize');
+            setData(this,'form-serialize',serialize);
         },
         
         hasChanged: function() {
@@ -157,26 +162,26 @@ Component.Form = function()
     // setup
     aelOnce(this,'component:setup',function() {
         // genuine + hasChanged
-        if(!Nod.match(this,"[data-skip-form-prepare='1']"))
+        if(!Ele.match(this,"[data-skip-form-prepare='1']"))
         trigEvt(this,'form:prepare');
         
         // submit
         prepareSubmit.call(this);
         
         // validation 
-        if(!Nod.match(this,"[data-validation='0']"))
+        if(!Ele.match(this,"[data-validation='0']"))
         prepareValidate.call(this);
         
         // confirm
-        if(Nod.match(this,"[data-confirm]"))
+        if(Ele.match(this,"[data-confirm]"))
         prepareConfirm.call(this);
         
         // formUnload
-        if(Nod.match(this,"[data-unload]"))
+        if(Ele.match(this,"[data-unload]"))
         prepareUnload.call(this);
         
         // block
-        if(!Nod.match(this,"[data-block='0']"))
+        if(!Ele.match(this,"[data-block='0']"))
         prepareBlock.call(this);
         
         // setup
@@ -202,8 +207,7 @@ Component.Form = function()
     // prepareHasChanged
     const prepareHasChanged = function() 
     {
-        const serialize = trigHdlr(this,'form:serialize');
-        setData(this,'form-serialize',serialize);
+        trigHdlr(this,'form:serializeStore');
     }
     
     
@@ -216,11 +220,11 @@ Component.Form = function()
         
         ael(submits,'click',function() {
             Ele.removeAttr(submits,'data-submit-click');
-            setAttr(this,'data-submit-click',true);
+            toggleAttr(this,'data-submit-click',true);
         });
         
         const submitsConfirm =  Arr.filter(submits,function() {
-            return Nod.match(this,'[data-confirm]');
+            return Ele.match(this,'[data-confirm]');
         });
         Component.Confirm.call(submitsConfirm,'click');
     }

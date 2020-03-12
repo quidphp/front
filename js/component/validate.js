@@ -105,11 +105,11 @@ Component.Validate = function()
     });
     
     ael(this,'validate:empty',function() {
-        setAttr(this,'data-empty',1);
+        toggleAttr(this,'data-empty',true);
     });
     
     ael(this,'validate:notEmpty',function() {
-        setAttr(this,'data-empty',0);
+        toggleAttr(this,'data-empty',false);
     });
     
     return this;

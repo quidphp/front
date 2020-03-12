@@ -86,7 +86,7 @@ Component.FakeSelect = function()
         setHdlrs(this,'fakeSelect:',{
             
             getSelect: function() {
-                return Nod.prev(this,'select');
+                return Ele.prev(this,'select');
             },
             
             getChoices: function() {
@@ -259,7 +259,7 @@ Component.FakeSelect = function()
             const current = trigHdlr(select,'input:getValue');
             
             Ele.removeAttr(choices,'data-selected');
-            setAttr(selected,'data-selected',1);
+            toggleAttr(selected,'data-selected',true);
             
             trigHdlr(select,'input:setValue',value);
             trigHdlr(this,'fakeSelect:setTitle',text);
@@ -282,7 +282,7 @@ Component.FakeSelect = function()
                 let node = Ele.insertAfter(this,html);
                 node = Arr.valueFirst(node);
                 bindFakeSelect.call(node);
-                setAttr(this,'data-controlled',1);
+                toggleAttr(this,'data-controlled',true);
                 r.push(node);
             }
         }

@@ -46,7 +46,7 @@ Component.Calendar = function(option)
         
         getSelecteds: function() {
             return Arr.filter(trigHdlr(this,'calendar:getCells'),function() {
-                return Nod.match(this,".selected");
+                return Ele.match(this,".selected");
             });
         },
         

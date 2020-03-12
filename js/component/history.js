@@ -277,10 +277,10 @@ Component.History = function(option)
         if(Str.isNotEmpty(href))
         {
             if(type === 'submit')
-            r = Nod.match(node,$option.form);
+            r = Ele.match(node,$option.form);
             
             else
-            r = Nod.match(node,$option.anchor);
+            r = Ele.match(node,$option.anchor);
         }
         
         return r;
@@ -367,7 +367,7 @@ Component.History = function(option)
                 if(r === true)
                 {
                     const targetsTriggered = getTargetsTriggered.call(this,nodeOrEvent);
-                    setAttr(targetsTriggered,'data-triggered',1);
+                    toggleAttr(targetsTriggered,'data-triggered',true);
                     
                     if(srcEvent != null)
                     Evt.preventStop(srcEvent);

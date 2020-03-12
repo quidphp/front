@@ -31,7 +31,7 @@ Component.Focusable = function(option)
             const targets = trigHdlr(this,'focusable:getTargets');
 
             let r = Arr.find(targets,function() {
-                return Nod.match(this,":focus");
+                return Ele.match(this,":focus");
             });
             
             if(r == null)

@@ -161,10 +161,10 @@ Component.TabsNav = function(option)
         
         if(Arr.isNotEmpty(navs))
         {
-            setAttr(navs,$option.navAttr,0);
+            toggleAttr(navs,$option.navAttr,false);
             
             if(current != null)
-            setAttr(current,$option.navAttr,1);
+            toggleAttr(current,$option.navAttr,true);
         }
     }
     

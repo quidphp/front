@@ -59,6 +59,71 @@ const TargetRoot = {
     },
     
     
+    // getProp
+    // retourne une propriété d'une node
+    getProp: function(node,key)
+    {
+        this.check(node);
+        return Obj.get(key,node);
+    },
+    
+    
+    // setProp
+    // permet de changer la propriété sur une node ou plusieurs node
+    setProp: function(nodes,key,value)
+    {
+        Str.check(key);
+        nodes = this.wrap(nodes,false);
+        
+        this.each(nodes,function() {
+            Obj.setRef(key,value,this);
+        });
+        
+        return;
+    },
+    
+    
+    // propStr
+    // prend un ensemble de node et retourne une string concatené pour une même prop
+    // un séparateur peut être fourni, sinon utilise -
+    propStr: function(nodes,prop,separator) 
+    {
+        let r = '';
+        nodes = this.wrap(nodes,true);
+        Str.check(prop,true);
+        separator = (Str.isNotEmpty(separator))? separator:'-';
+        const $inst = this;
+        
+        this.each(nodes,function() {
+            r += (r.length)? separator:"";
+            r += $inst.getProp(this,prop);
+        });
+        
+        return r;
+    },
+    
+    
+    // propObj
+    // permet de retourner un objet à partir de plusieurs nodes
+    // il faut spécifier une prop pour clé et une autre pour valeur
+    propObj: function(nodes,propKey,propValue)
+    {
+        const r = {};
+        nodes = this.wrap(nodes,true);
+        const $inst = this;
+        Str.check(propKey,true);
+        Str.check(propValue,true);
+        
+        this.each(nodes,function() {
+            const key = $inst.getProp(this,propKey);
+            const value = $inst.getProp(this,propValue);
+            r[key] = value;
+        });
+        
+        return r;
+    },
+    
+    
     // wrap
     // wrap une node ou un node-like dans un array, si ce n'est pas un array
     // transforme une arr like en array
@@ -98,7 +163,7 @@ const TargetRoot = {
 const Doc = Lemur.Doc = Factory(TargetRoot,DataTarget,HandlerTarget,ListenerTarget,SelectorTarget,NodTarget,EleDocTarget,DocTarget);
 
 // ele
-const Ele = Lemur.Ele = Factory(TargetRoot,DataTarget,HandlerTarget,ListenerTarget,SelectorTarget,NodTarget,EleDocTarget,EleTarget,ArrLoop);
+const Ele = Lemur.Ele = Factory(TargetRoot,DataTarget,HandlerTarget,ListenerTarget,SelectorTarget,NodTarget,EleWinTarget,EleDocTarget,EleTarget,ArrLoop);
 
 // nod
 const Nod = Lemur.Nod = Factory(TargetRoot,DataTarget,HandlerTarget,ListenerTarget,SelectorTarget,NodTarget);

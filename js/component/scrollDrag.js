@@ -39,7 +39,7 @@ Component.ScrollDrag = function(option)
         },
         
         getChildren: function() {
-            const childs = Nod.children(this);
+            const childs = Ele.children(this);
             return Arr.find(childs,function() {
                 return Ele.isVisible(this);
             });
@@ -47,9 +47,9 @@ Component.ScrollDrag = function(option)
         
         refresh: function() {
             if(trigHdlr(this,'scrollDrag:required'))
-            setAttr(this,'data-grabbable',1);
+            toggleAttr(this,'data-grabbable',true);
             else
-            setAttr(this,'data-grabbable',0);
+            toggleAttr(this,'data-grabbable',false);
         },
         
         stop: function() {

@@ -13,56 +13,60 @@ Component.InputGroup = function()
     return null;
     
     
-    setHdlr(this,'inputGroup:isChecked',function() {
-        return (getProp(this,'checked') === true)? true:false;
-    });
-    
-    setHdlr(this,'inputGroup:getValue',function() {
-        let r = undefined;
-        const group = trigHdlr(this,'inputGroup:getChecked');
+    // handler
+    setHdlrs(this,'inputGroup:',{
         
-        if(Arr.isNotEmpty(group))
-        {
-            r = [];
-            Arr.each(group,function() {
-                const value = trigHdlr(this,'input:getValue');
-                r.push(value);
-            });
+        isChecked: function() {
+            return (getProp(this,'checked') === true)? true:false;
+        },
+        
+        getValue: function() {
+            let r = undefined;
+            const group = trigHdlr(this,'inputGroup:getChecked');
+            
+            if(Arr.isNotEmpty(group))
+            {
+                r = [];
+                Arr.each(group,function() {
+                    const value = trigHdlr(this,'input:getValue');
+                    r.push(value);
+                });
+            }
+            
+            return r;
+        },
+        
+        get: function() {
+            let r = null;
+            const parent = trigHdlr(this,'input:getParent');
+            const name = trigHdlr(this,'input:getName');
+            const type = trigHdlr(this,'input:getType');
+            const tag = trigHdlr(this,'input:getTag');
+            
+            if(Str.isNotEmpty(name) && Str.isNotEmpty(tag))
+            {
+                const typeSearch = (Str.isNotEmpty(type))? "[type='"+type+"']":tag;
+                r = qsa(parent,typeSearch+"[name='"+name+"']");
+            }
+            
+            return r;
+        },
+        
+        getChecked: function() {
+            let r = null;
+            const group = trigHdlr(this,'inputGroup:get');
+            
+            if(Arr.isNotEmpty(group))
+            {
+                r = [];
+                Arr.each(group,function() {
+                    if(trigHdlr(this,'inputGroup:isChecked'))
+                    r.push(this);
+                });
+            }
+            
+            return r;
         }
-        
-        return r;
-    });
-    
-    setHdlr(this,'inputGroup:get',function() {
-        let r = null;
-        const parent = trigHdlr(this,'input:getParent');
-        const name = trigHdlr(this,'input:getName');
-        const type = trigHdlr(this,'input:getType');
-        const tag = trigHdlr(this,'input:getTag');
-        
-        if(Str.isNotEmpty(name) && Str.isNotEmpty(tag))
-        {
-            const typeSearch = (Str.isNotEmpty(type))? "[type='"+type+"']":tag;
-            r = qsa(parent,typeSearch+"[name='"+name+"']");
-        }
-        
-        return r;
-    });
-    
-    setHdlr(this,'inputGroup:getChecked',function() {
-        let r = null;
-        const group = trigHdlr(this,'inputGroup:get');
-        
-        if(Arr.isNotEmpty(group))
-        {
-            r = [];
-            Arr.each(group,function() {
-                if(trigHdlr(this,'inputGroup:isChecked'))
-                r.push(this);
-            });
-        }
-        
-        return r;
     });
     
     return this;
