@@ -409,7 +409,7 @@ $defaultResponsiveMaxWidth: 900px;
 
 // sizeReset
 // mixin utilisé pour annuler les styles width, padding et margin
-@mixin sizeReset($width: auto,$important: null) {
+@mixin sizeReset($width: auto, $important: null) {
     @if ($important) {
         width: $width !important;
         padding: 0 !important;
@@ -423,12 +423,12 @@ $defaultResponsiveMaxWidth: 900px;
 
 // blockReset
 // mixin utilisé pour annuler des styles et que l'élément s'affiche en block avec width auto
-@mixin blockReset($width: auto,$important: null) {
+@mixin blockReset($width: auto, $important: null) {
     @if ($important) {
-        @include sizeReset($width,$important);
+        @include sizeReset($width, $important);
         display: block !important;
     } @else {
-        @include sizeReset($width,$important);
+        @include sizeReset($width, $important);
         display: block;
     }
 }
