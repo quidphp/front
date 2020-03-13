@@ -17,7 +17,7 @@ Component.FeedSearch = function(option)
     const $option = Pojo.replaceRecursive({
         appendTarget: "ul:last-of-type",
         focusableTarget: "button",
-        parseData: null,
+        parse: null,
         result: '.results',
         search: "input[type='text']",
         order: ".order select",
@@ -70,21 +70,6 @@ Component.FeedSearch = function(option)
         loadMoreRemove: function() {
             const loadMore = trigHdlr(this,'feed:loadMore');
             return Ele.closest(loadMore,'li');
-        },
-        
-        parseData: function(data,type) {
-            
-            if(type === 'append')
-            {
-                data = Dom.parseOne(data);
-                
-                if($option.parseData)
-                data = qs(data,$option.parseData);
-                
-                data = getHtml(data);
-            }
-            
-            return data;
         }
     });
     
@@ -95,6 +80,20 @@ Component.FeedSearch = function(option)
     
     setHdlr(this,'ajaxBlock:setContent',function(html,isError) {
         trigHdlr(this,'feed:overwrite',html);
+    });
+    
+    setHdlr(this,'ajaxBlock:parseContent',function(data,type) {
+        if(type === 'append')
+        {
+            data = Dom.parseOne(data);
+            
+            if($option.parse)
+            data = qs(data,$option.parse);
+            
+            data = getHtml(data);
+        }
+        
+        return data;
     });
     
     setHdlr(this,'ajax:config',function() {

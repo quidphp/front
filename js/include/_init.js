@@ -12,6 +12,14 @@ Lemur.Test = {};
 // globale
 window.Lemur = Lemur;
 
+// initDoc
+const InitDoc = Lemur.InitDoc = function()
+{
+    document.addEventListener("DOMContentLoaded", function() {
+        Lemur.Doc.triggerSetup(Lemur.Component.Doc.call(this));
+    });
+}
+
 // factory
 const Factory = Lemur.Factory = function(prototype)
 {
@@ -20,6 +28,14 @@ const Factory = Lemur.Factory = function(prototype)
     Object.assign.apply(null,[r].concat(args));
     
     return r;
+}
+
+// testsuite
+const TestSuite = Lemur.TestSuite = function() 
+{
+    return Pojo.each(Lemur.Test,function(value,key) {
+        return value();
+    });
 }
 
 // alias

@@ -139,8 +139,7 @@ $defaultResponsiveMaxWidth: 900px;
 }
 
 // flex
-// mixin utilisé pour créer un flexbox dont le contenu est centré verticalement
-// et possiblement horizontalement
+// mixin utilisé pour créer un flexbox row
 @mixin flex($justify: null, $align: center, $wrap: null, $inline: null) {
     @if ($inline) {
         display: inline-flex;
@@ -166,6 +165,25 @@ $defaultResponsiveMaxWidth: 900px;
 // et possiblement horizontalement
 @mixin iflex($justify: null, $align: center, $wrap: null) {
     @include flex($justify, $align, $wrap, true);
+}
+
+// flexCol
+// mixin utilisé pour créer un flexbox column
+@mixin flexCol($justify: null, $align: null, $wrap: wrap) {
+    display: flex;
+    flex-direction: column;
+
+    @if ($align) {
+        align-items: $align !important;
+    }
+
+    @if ($justify) {
+        justify-content: $justify;
+    }
+
+    @if ($wrap) {
+        flex-wrap: $wrap;
+    }
 }
 
 // wh
@@ -389,9 +407,9 @@ $defaultResponsiveMaxWidth: 900px;
     }
 }
 
-// responsiveSize
+// sizeReset
 // mixin utilisé pour annuler les styles width, padding et margin
-@mixin responsiveSize($important: null, $width: auto) {
+@mixin sizeReset($width: auto,$important: null) {
     @if ($important) {
         width: $width !important;
         padding: 0 !important;
@@ -403,49 +421,15 @@ $defaultResponsiveMaxWidth: 900px;
     }
 }
 
-// responsiveBlock
+// blockReset
 // mixin utilisé pour annuler des styles et que l'élément s'affiche en block avec width auto
-@mixin responsiveBlock($important: null, $width: auto) {
+@mixin blockReset($width: auto,$important: null) {
     @if ($important) {
-        @include responsiveSize($important, $width);
+        @include sizeReset($width,$important);
         display: block !important;
     } @else {
-        @include responsiveSize($important, $width);
+        @include sizeReset($width,$important);
         display: block;
-    }
-}
-
-// responsiveFlex
-// mixin utilisé que les éléments s'affiche en flex column
-@mixin responsiveFlex($justify: null, $align: null, $wrap: wrap, $important: null) {
-    @if ($important) {
-        flex-direction: column !important;
-
-        @if ($align) {
-            align-items: $align !important;
-        }
-
-        @if ($justify) {
-            justify-content: $justify !important;
-        }
-
-        @if ($wrap) {
-            flex-wrap: $wrap !important;
-        }
-    } @else {
-        flex-direction: column;
-
-        @if ($align) {
-            align-items: $align !important;
-        }
-
-        @if ($justify) {
-            justify-content: $justify;
-        }
-
-        @if ($wrap) {
-            flex-wrap: $wrap;
-        }
     }
 }
 
@@ -508,44 +492,4 @@ $defaultResponsiveMaxWidth: 900px;
     &:active {
         @include triangle($direction, $color3, $dimension, $transparent);
     }
-}
-
-// chamferBorder
-// permet de faire une bordure carré
-@mixin chamferBorder($color, $br: null, $tr: null, $bl: null, $tl: null) {
-    @if ($tl) {
-        $tl: transparent;
-    } @else {
-        $tl: $color;
-    }
-
-    @if ($tr) {
-        $tr: transparent;
-    } @else {
-        $tr: $color;
-    }
-
-    @if ($bl) {
-        $bl: transparent;
-    } @else {
-        $bl: $color;
-    }
-
-    @if ($br) {
-        $br: transparent;
-    } @else {
-        $br: $color;
-    }
-
-    background-color: $color;
-    background: -moz-linear-gradient(45deg, $bl 15px, $color 10px), -moz-linear-gradient(135deg, $br 15px, $color 10px),
-        -moz-linear-gradient(225deg, $tr 15px, $color 10px), -moz-linear-gradient(315deg, $tl 15px, $color 10px);
-    background: -o-linear-gradient(45deg, $bl 15px, $color 10px), -o-linear-gradient(135deg, $br 15px, $color 10px),
-        -o-linear-gradient(225deg, $tr 15px, $color 10px), -o-linear-gradient(315deg, $tl 15px, $color 10px);
-    background: -webkit-linear-gradient(45deg, $bl 15px, $color 10px),
-        -webkit-linear-gradient(135deg, $br 15px, $color 10px), -webkit-linear-gradient(225deg, $tr 15px, $color 10px),
-        -webkit-linear-gradient(315deg, $tl 15px, $color 10px);
-    background-position: bottom left, bottom right, top right, top left;
-    background-size: 50% 50%;
-    background-repeat: no-repeat;
 }

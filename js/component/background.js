@@ -6,11 +6,17 @@
  
 // background
 // component for a background that can fadein or out
-Component.Background = function()
+Component.Background = function(option)
 {
     // not empty
     if(Vari.isEmpty(this)) 
     return null;
+    
+    
+    // option
+    const $option = Pojo.replace({
+        attr: 'data-background'
+    },option);
     
     
     // handler
@@ -18,7 +24,8 @@ Component.Background = function()
         
         // retourne vrai si le background existe et est présentement actif
         isActive: function() {
-            return (getAttr(this,'data-from') != null)? true:false;
+            const node = trigHdlr(this,'background:getStatusNode');
+            return (getAttr(node,$option.attr) != null);
         },
         
         // permet d'ajouter une attribut data au background
@@ -27,11 +34,13 @@ Component.Background = function()
             
             if(Str.isNotEmpty(value))
             {
-                if(replace === true || getAttr(this,'data-from') == null)
+                const node = trigHdlr(this,'background:getStatusNode');
+                
+                if(replace === true || getAttr(node,$option.attr) == null)
                 {
-                    r = true;
-                    setAttr(this,'data-from',value);
+                    setAttr(node,$option.attr,value);
                     trigHdlr(this,'background:changed',value);
+                    r = true;
                 }
             }
             
@@ -44,15 +53,22 @@ Component.Background = function()
             
             if(trigHdlr(this,'background:isActive'))
             {
-                if(value == null || value === getAttr(this,'data-from'))
+                const node = trigHdlr(this,'background:getStatusNode');
+                
+                if(value == null || value === getAttr(node,$option.attr))
                 {
-                    r = true;
-                    Ele.removeAttr(this,'data-from');
+                    Ele.removeAttr(node,$option.attr);
                     trigHdlr(this,'background:changed',undefined);
+                    r = true;
                 }
             }
             
             return r;
+        },
+        
+        // retourne la node ou store l'attribut
+        getStatusNode: function() {
+            return trigHdlr(document,'doc:getHtml');
         }
     });
     

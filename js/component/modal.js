@@ -16,6 +16,7 @@ Component.Modal = function(option)
     // option
     const $option = Pojo.replace({
         background: 'modal',
+        attrAnchor: 'data-modal',
         clickOutsidePersistent: true
     },option);
     
@@ -148,7 +149,7 @@ Component.Modal = function(option)
         if(Ele.is(anchors))
         {
             if(!Str.isNotEmpty(route))
-            route = getAttr(anchors,'data-modal');
+            route = getAttr(anchors,$option.attrAnchor);
             
             if(!Str.isNotEmpty(uri))
             uri = Ele.getUri(anchors);
@@ -199,7 +200,7 @@ Component.Modal = function(option)
         });
         
         ael(document,'doc:mountCommon',function(event,node) {
-            const anchor = qsa(node,"a[data-modal]");
+            const anchor = qsa(node,"a["+$option.attrAnchor+"]");
             trigHdlr(modal,'modal:anchorBind',anchor,true);
         });
         

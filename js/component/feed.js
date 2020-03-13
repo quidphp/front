@@ -18,34 +18,32 @@ Component.Feed = function()
     
     
     // handler
-    setHdlr(this,'feed:getTarget',function() {
-        return this;
+    setHdlrs(this,'feed:',{
+        
+        getTarget: function() {
+            return this;
+        },
+        
+        getAppendTarget: function() {
+            return this;
+        },
+        
+        loadMore: function() {
+            return qs(this,'.load-more');
+        },
+        
+        loadMoreRemove: function() {
+            return trigHdlr(this,'feed:loadMore');
+        },
+        
+        append: function(data) {
+            feedSet.call(this,data,'append');
+        },
+        
+        overwrite: function(data) {
+            feedSet.call(this,data,'overwrite');
+        }
     });
-    
-    setHdlr(this,'feed:getAppendTarget',function() {
-        return this;
-    });
-    
-    setHdlr(this,'feed:parseData',function(data,type) {
-        return data;
-    });
-    
-    setHdlr(this,'feed:loadMore',function() {
-        return qs(this,'.load-more');
-    });
-    
-    setHdlr(this,'feed:loadMoreRemove',function() {
-        return trigHdlr(this,'feed:loadMore');
-    })
-    
-    setHdlr(this,'feed:append',function(data) {
-        feedSet.call(this,'append',data);
-    });
-    
-    setHdlr(this,'feed:overwrite',function(data) {
-        feedSet.call(this,'overwrite',data);
-    });
-    
     
     // event
     ael(this,'feed:bind',function() {
@@ -60,9 +58,10 @@ Component.Feed = function()
 
     
     // feedSet
-    const feedSet = function(type,data)
+    const feedSet = function(data,type)
     {
-        data = trigHdlr(this,'feed:parseData',data,type);
+        Str.check(data);
+        data = trigHdlr(this,'ajaxBlock:parseContent',data,type);
         
         if(type === 'append')
         {
