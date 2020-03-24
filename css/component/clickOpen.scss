@@ -8,7 +8,7 @@
 
 // clickOpen
 // stylesheet for the base styles of the clickOpen component
-@mixin ClickOpen($popup,$zindex:3) {
+@mixin ClickOpen($popup, $zindex: 3) {
     &[data-anchor-corner],
     [data-anchor-corner] {
         @include AnchorCorner($popup);
@@ -51,7 +51,7 @@
 
 // clickOpenPopup
 // style de base pour le popup d'un clickOpen
-@mixin ClickOpenPopup($zindex:3) {
+@mixin ClickOpenPopup($zindex: 3) {
     @include abs(100%, null, null, 0);
     display: none;
     z-index: $zindex;
