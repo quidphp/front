@@ -50,23 +50,20 @@ Component.Focusable = function(option)
         },
         
         prev: function() {
-            trigHdlr(this,'focusable:focus',focusNode.call(this,'prev'));
+            trigHdlr(this,'focusable:focus',trigHdlr(this,'focusable:findTarget','prev'));
         },
         
         next: function() {
-            trigHdlr(this,'focusable:focus',focusNode.call(this,'next'));
+            trigHdlr(this,'focusable:focus',trigHdlr(this,'focusable:findTarget','next'));
+        },
+        
+        findTarget: function(type) {
+            const current = trigHdlr(this,'focusable:getCurrent');
+            const targets = trigHdlr(this,'focusable:getTargets');
+            
+            return Nav.indexNode(type,current,targets,$option.loop);
         }
     });
-    
-    
-    // focusNode
-    const focusNode = function(type)
-    {
-        const current = trigHdlr(this,'focusable:getCurrent');
-        const targets = trigHdlr(this,'focusable:getTargets');
-        
-        return Nav.indexNode(type,current,targets,$option.loop);
-    }
     
     return this;
 }

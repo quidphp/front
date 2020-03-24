@@ -39,7 +39,7 @@ const ScalarPrimitive = {
             if(Arr.in(type,[true,'json']))
             r = Json.decode(r);
             
-            if(type === 'int')
+            else if(type === 'int')
             r = Integer.cast(r);
             
             else if(type === 'bool')
