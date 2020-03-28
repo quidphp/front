@@ -333,13 +333,13 @@ $defaultResponsiveMaxWidth: 900px;
 
 // fade in
 // mixin pour qu'un élément s'anime avec un fadeIn
-@mixin fadeIn($time: 1s,$delay: 0s) {
+@mixin fadeIn($time: 1s, $delay: 0s) {
     @include animate(fadeIn, $time, $delay);
 }
 
 // fade out
 // mixin pour qu'un élément s'anime avec un fadeOut
-@mixin fadeOut($time: 1s,$delay: 0s) {
+@mixin fadeOut($time: 1s, $delay: 0s) {
     @include animate(fadeOut, $time, $delay);
 }
 
