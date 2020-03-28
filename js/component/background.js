@@ -39,7 +39,7 @@ Component.Background = function(option)
                 if(replace === true || getAttr(node,$option.attr) == null)
                 {
                     setAttr(node,$option.attr,value);
-                    trigHdlr(this,'background:changed',value);
+                    trigEvt(this,'background:changed',value);
                     r = true;
                 }
             }
@@ -58,7 +58,7 @@ Component.Background = function(option)
                 if(value == null || value === getAttr(node,$option.attr))
                 {
                     Ele.removeAttr(node,$option.attr);
-                    trigHdlr(this,'background:changed',undefined);
+                    trigEvt(this,'background:changed',undefined);
                     r = true;
                 }
             }

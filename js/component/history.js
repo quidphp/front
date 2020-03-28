@@ -17,7 +17,8 @@ Component.History = function(option)
         anchor: "a:not([target='_blank']):not([data-navigation='0']):not([data-modal]):not([href^='mailto:'])",
         form: "form:not([data-navigation='0'])",
         responseUrl: 'QUID-URI',
-        timeout: 30000
+        timeout: 30000,
+        attrTriggered: "data-triggered"
     },option);
     
     
@@ -346,7 +347,8 @@ Component.History = function(option)
                 const current = trigHdlr(this,'history:getCurrentState');
                 const state = HistoryState.make(href);
                 const isValid = HistoryState.isChangeValid(state,current);
-
+                const isHashChange = Uri.isHashChange(state.url,current.url);
+                
                 if(isValid === true)
                 {
                     if(trigHdlr(window,'windowUnload:isValid') === true)
@@ -356,7 +358,7 @@ Component.History = function(option)
                 }
                 
                 // hash change
-                else if(Uri.isHashChange(state.url,current.url))
+                else if(isHashChange === true)
                 {
                     r = true;
                     trigHdlr(this,'history:pushState',state);
@@ -366,8 +368,11 @@ Component.History = function(option)
                 
                 if(r === true)
                 {
-                    const targetsTriggered = getTargetsTriggered.call(this,nodeOrEvent);
-                    toggleAttr(targetsTriggered,'data-triggered',true);
+                    if(isHashChange === false)
+                    {
+                        const targetsTriggered = getTargetsTriggered.call(this,nodeOrEvent);
+                        toggleAttr(targetsTriggered,$option.attrTriggered,true);
+                    }
                     
                     if(srcEvent != null)
                     Evt.preventStop(srcEvent);
