@@ -165,7 +165,7 @@ const EleTarget = {
         Str.check(key);
         
         // fix pour ie11 qui retourne mauvais computed style pour width/height (box-model)
-        if(Arr.in(key,['width','height']))
+        if(Browser.isIe11() && Arr.in(key,['width','height']))
         {
             const dimension = this.getDimension(node);
             r = Num.ceil(dimension[key])+"px";
