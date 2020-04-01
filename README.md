@@ -1,7 +1,7 @@
 # QuidPHP/Front
 
 ## About
-**QuidPHP/Front** contains the JavaScript and SCSS front end assets. It is part of the [QuidPHP](https://github.com/quidphp/project) package.
+**QuidPHP/Front** contains the JavaScript and CSS front end assets. It is part of the [QuidPHP](https://github.com/quidphp/project) package.
 
 ## License
 **QuidPHP/Front** is available as an open-source software under the [MIT license](LICENSE).
