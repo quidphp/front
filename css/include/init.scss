@@ -19,7 +19,7 @@ $defaultResponsiveMaxWidth: 900px;
 
 // defaultClasses
 // mixin qui génère les classes par défaut
-@mixin defaultClasses()  {
+@mixin defaultClasses() {
     .clear {
         clear: both;
     }
