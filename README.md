@@ -15,24 +15,32 @@
 $ composer require quidphp/front
 ```
 
+## Included
+**QuidPHP/Front** comes bundled with the following front-end polyfills:
+- [jonathantneal/element-qsa-scope](https://github.com/jonathantneal/element-qsa-scope) - Qsa Scope - Return elements matching a selector relative to the current node
+- [Financial-Times/polyfill-service](https://github.com/Financial-Times/polyfill-service) - Polyfill.io - Automatic polyfill service
+
 ## Comment
 **QuidPHP/Front** code is commented and all methods are explained. However, most of the comments are currently written in French.
 
 ## JS
 
 ### Convention
-- *Strict*: All files declare *use strict* on the first line.
 - *ES5*: All code is compatible with ES5, there is no need for any JavaScript transpiler.
+- *Strict*: All generated files declare *use strict* on the first line.
+- *IE11*: The minimum compatible browser is IE11. Older browsers will fail non-gracefully.
+- *Compiling*: The compiling and concatenation of the JS files is done on the PHP side.
 
 ### Overview
 **QuidPHP/Front** contains ? JavaScript files. Here is an overview:
 - TO DO
 
-## SCSS
+## CSS
 
 ### Convention
-- *Mixins*: Nesting, variables and mixins are used within the SCSS stylesheets.
+- *SCSS*: Nesting, variables and mixins are used within the stylesheets.
+- *Compiling*: The compiling and concatenation of the SCSS files is done on the PHP side.
 
 ### Overview
-**QuidPHP/Front** contains ? SCSS stylesheets. Here is an overview:
+**QuidPHP/Front** contains ? CSS stylesheets. Here is an overview:
 - TO DO
