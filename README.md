@@ -19,6 +19,10 @@
 $ composer require quidphp/front
 ```
 
+## Requirement
+**QuidPHP/Front** requires the following:
+- Minimal browser: Internet Explorer 11
+
 ## Included
 **QuidPHP/Front** comes bundled with the following front-end polyfills:
 - [jonathantneal/element-qsa-scope](https://github.com/jonathantneal/element-qsa-scope) - Qsa Scope - Return elements matching a selector relative to the current node
