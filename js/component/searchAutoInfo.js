@@ -5,7 +5,7 @@
  */
  
 // searchAutoInfo
-// script with logic for an auto-complete search component with another info popup when value is empty
+// script with logic for an auto-complete search component with another fallback popup
 Component.SearchAutoInfo = function(option)
 {
     // not empty
