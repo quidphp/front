@@ -5,7 +5,7 @@
  */
  
 // hashChange
-// sends the hash change event back to the nodes
+// script that sends the hash change event back to the nodes
 Component.HashChange = function(persistent)
 {
     // not empty

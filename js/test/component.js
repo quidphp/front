@@ -5,7 +5,7 @@
  */
  
 // include
-// script to test the component.js file
+// script to test the component files
 Test.Component = function()
 {   
     let r = true;

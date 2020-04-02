@@ -5,7 +5,7 @@
  */
  
 // arr
-// script with some objects related to arr manipulation
+// script with some objects related to array manipulation
 
 // arrBase
 // fonctions relatives à la lecture de tableau

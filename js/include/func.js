@@ -5,7 +5,7 @@
  */
  
 // handler
-// script with functions related to functions
+// script with methods related to functions
 const FuncObj = {
     
     // is

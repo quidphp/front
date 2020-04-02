@@ -5,7 +5,7 @@
  */
  
 // handler
-// script containing handler management (functions stored in targets)
+// script for handler management (functions stored in targets)
 const HandlerTarget = {    
 
     // isTriggerHandlerEqual

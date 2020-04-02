@@ -7,7 +7,7 @@
  */
 
 // form
-// mixin for forms components
+// stylsheet with base styles for form components
 @mixin Form() {
     input[data-controlled='1'],
     select[data-controlled='1'],

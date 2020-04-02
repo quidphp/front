@@ -5,7 +5,7 @@
  */
  
 // clickOutside
-// component to manage click outside a node, uses the direct parent of the node
+// component to manage click outside a node
 Component.ClickOutside = function(value,persistent) 
 {
     // not empty

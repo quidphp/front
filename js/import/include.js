@@ -5,6 +5,7 @@
  */
 
 // include
+// script that imports many variables from include within the scope
 const Arr = Lemur.Arr;
 const ArrLike = Lemur.ArrLike;
 const Bool = Lemur.Bool;

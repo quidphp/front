@@ -5,7 +5,7 @@
  */
 
 // modalMailto
-// script containing for mailto links opening in a modal for confirmation
+// script for mailto links opening in a modal for confirmation
 Component.ModalMailto = function(option)
 {
     // option

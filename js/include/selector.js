@@ -5,7 +5,7 @@
  */
  
 // selector
-// script with behaviours related to selecting nodes
+// script with methods related to selecting and matching nodes
 const SelectorTarget = {
     
     // scopedQuery

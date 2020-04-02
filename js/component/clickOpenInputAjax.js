@@ -5,7 +5,7 @@
  */
 
 // clickOpenInputAjax
-// component for a one field form which triggers an ajax request that shows in a clickOpen
+// component for a one field form which triggers an ajax request that displays in a clickOpen
 Component.ClickOpenInputAjax = function(option)
 {
     // not empty

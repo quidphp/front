@@ -5,7 +5,7 @@
  */
  
 // json
-// script with functions related to json
+// script with methods related to json format
 const Json = Lemur.Json = {
     
     // encode

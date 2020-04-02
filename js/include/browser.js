@@ -5,7 +5,7 @@
  */
  
 // browser
-// script with a some functions related to browsers
+// script with a some functions related to browsers detection
 const Browser = Lemur.Browser = {
     
     // isOldIe

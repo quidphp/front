@@ -5,7 +5,7 @@
  */
  
 // navHash
-// adds hashchange support for the nav index component
+// adds hashchange support to the nav index component
 Component.NavHash = function(option)
 {
     // not empty

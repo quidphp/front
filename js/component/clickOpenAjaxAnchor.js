@@ -5,7 +5,7 @@
  */
 
 // clickOpenAjaxAnchor
-// clickOpen component which opens by an anchor click and triggers an ajax calls
+// clickOpen component which is triggered by an anchor click and dispatches an ajax call
 Component.ClickOpenAjaxAnchor = function(option) 
 {
     // not empty

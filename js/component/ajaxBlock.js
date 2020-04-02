@@ -5,7 +5,7 @@
  */
  
 // ajaxBlock
-// intègre la logique ajax, block et loading via une même méthode
+// merges the logic for ajax, block and loading within a component
 Component.AjaxBlock = function(option)
 {
     // not empty

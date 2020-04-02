@@ -5,7 +5,7 @@
  */
  
 // inputNumericRange
-// script with for an numeric input, linked to a range (with plus and minus buttons)
+// script for a numeric input, linked to a range (with plus and minus buttons)
 Component.InputNumericRange = function(option)
 {
     // not empty

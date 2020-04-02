@@ -5,7 +5,7 @@
  */
  
 // modal
-// script for a modal component (popup in a fixed div)
+// script for a modal component
 Component.Modal = function(option)
 {
     // not empty

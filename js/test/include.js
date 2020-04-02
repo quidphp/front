@@ -5,7 +5,7 @@
  */
  
 // include
-// script to test the include.js file
+// script to test the include files
 Test.Include = function()
 {   
     let r = true;

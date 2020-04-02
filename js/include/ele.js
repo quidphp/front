@@ -5,7 +5,7 @@
  */
 
 // eleTarget
-// script with basic functions related to element nodes
+// script with many functions related to element nodes
 const EleTarget = {
 
     // is

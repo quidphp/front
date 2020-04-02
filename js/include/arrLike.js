@@ -5,7 +5,7 @@
  */
  
 // arrLike
-// script with some functions related to arr-like management
+// script with some functions related to array like management
 const ArrLikeRead = {
     
     // is

@@ -5,7 +5,7 @@
  */
  
 // vari
-// script with a set of helper functions related to variables
+// script with a set of general functions related to variables
 const Vari = Lemur.Vari = {    
     
     // is
