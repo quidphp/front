@@ -90,7 +90,7 @@ $ composer require quidphp/front
     - [scrollChange.js](js/component/scrollChange.js) - Component to notify nodes when window scroll has changed or stopped
     - [scrollDrag.js](js/component/scrollDrag.js) - Component to allow scrolling while dragging with the mouse
     - [scroller.js](js/component/scroller.js) - Component to manage scrolling within a container, allows animating
-    - [searchAutoInfo.js](js/component/searchAutoInfo.js) - Script with logic for an auto-complete search component with another info popup when value is empty
+    - [searchAutoInfo.js](js/component/searchAutoInfo.js) - Script with logic for an auto-complete search component with another fallback popup
     - [searchSlide.js](js/component/searchSlide.js) - Component with a search input, and an info box that slides on focus
     - [tabs.js](js/component/tabs.js) - Script with behaviours for a tabs component
     - [tabsNav.js](js/component/tabsNav.js) - Script with behaviours for a tab component with support for navigation
