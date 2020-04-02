@@ -1,4 +1,9 @@
 # QuidPHP/Front
+[![Release](https://img.shields.io/github/v/release/quidphp/front)](https://packagist.org/packages/quidphp/front)
+[![License](https://img.shields.io/github/license/quidphp/front)](https://github.com/quidphp/front/blob/master/LICENSE)
+[![PHP Version](https://img.shields.io/packagist/php-v/quidphp/front)](https://www.php.net)
+[![Style CI](https://styleci.io/repos/246818925/shield)](https://styleci.io)
+[![Code Size](https://img.shields.io/github/languages/code-size/quidphp/front)](https://github.com/quidphp/front)
 
 ## About
 **QuidPHP/Front** contains the JavaScript and CSS front end assets. It is part of the [QuidPHP](https://github.com/quidphp/project) package.
