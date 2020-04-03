@@ -262,10 +262,7 @@
             display: none;
         }
     }
-    input[type='text'],
-    input[type='password'],
-    input[type='email'],
-    textarea {
+    @include inputsTextarea {
         @include transitions(background-color 0.3s);
         padding: 5px;
     }

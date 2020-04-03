@@ -407,6 +407,31 @@ $defaultResponsiveMaxWidth: 900px;
     }
 }
 
+// inputs
+// mixin pour appliquer des styles à tous les inputs de type texte
+@mixin inputs() {
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='url'],
+    input[type='tel'] {
+        @content;
+    }
+}
+
+// inputsTextarea
+// mixin pour appliquer des styles à tous les inputs de type texte et textarea
+@mixin inputsTextarea() {
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='url'],
+    input[type='tel'],
+    textarea {
+        @content;
+    }
+}
+
 // sizeReset
 // mixin utilisé pour annuler les styles width, padding et margin
 @mixin sizeReset($width: auto, $important: null) {
