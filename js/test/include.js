@@ -785,6 +785,7 @@ Test.Include = function()
         assert(Scalar.check(null,false) === null);
         assert(Scalar.cast('2.4','int') === 2);
         assert(Scalar.cast('1','bool') === true);
+        assert(Scalar.cast('2.4','num') === 2.4);
         
         // selector
         

@@ -42,6 +42,9 @@ const ScalarPrimitive = {
             else if(type === 'int')
             r = Integer.cast(r);
             
+            else if(type === 'num')
+            r = Num.cast(r);
+            
             else if(type === 'bool')
             r = Bool.fromScalar(r);
         }

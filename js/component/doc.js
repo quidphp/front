@@ -56,6 +56,24 @@ Component.Doc = function(option)
             return r;
         },
         
+        // getTitle
+        // retourne le titre courant en string
+        getTitle: function() {
+            return this.title;
+        },
+        
+        // setTitle
+        // permet de changer le titre de la page
+        setTitle: function(value) {
+            value = (Str.is(value))? value:'';
+            const node = qs(this,'head title');
+            document.title = value;
+
+            // node
+            if(node != null)
+            setHtml(node,value);
+        },
+        
         // met le statut de la balise html à loading
         setStatusLoading: function() {
             const html = trigHdlr(this,'doc:getHtml');
@@ -141,14 +159,7 @@ Component.Doc = function(option)
             
             // head
             const head = qs(html,'head');
-            const title = qs(head,'title');
-            
-            // title
-            if(title != null && Str.isNotEmpty(doc.title))
-            {
-                document.title = doc.title;
-                setHtml(title,doc.titleHtml);
-            }
+            trigHdlr(this,'doc:setTitle',doc.title);
             
             // meta
             const meta = qsa(head,'meta');

@@ -236,7 +236,8 @@ const Xhr = Lemur.Xhr = new function()
         };
         
         config.success = function(xhr) {
-            Target.triggerHandler(node,'ajax:success',xhr.responseText,xhr);
+            const responseText = (Str.isNotEmpty(xhr.responseText) && Xhr.isResponseJson(xhr))? Json.decode(xhr.responseText):xhr.responseText;
+            Target.triggerHandler(node,'ajax:success',responseText,xhr);
         };
         
         config.error = function(xhr) {
@@ -249,6 +250,24 @@ const Xhr = Lemur.Xhr = new function()
         };
         
         return config;
+    }
+    
+    
+    // isResponseJson
+    // retourne vrai si la réponse du xhr a un content type de json
+    this.isResponseJson = function(xhr) 
+    {
+        let r = false;
+        
+        if(xhr instanceof XMLHttpRequest)
+        {
+            const contentType = xhr.getResponseHeader('Content-Type');
+            
+            if(Str.in('/json',contentType))
+            r = true;
+        }
+        
+        return r;
     }
     
     
