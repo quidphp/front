@@ -75,7 +75,7 @@ const HandlerTarget = {
     setsHandler: function(nodes,typeStart,obj)
     {
         Str.check(typeStart,true);
-        Pojo.check(obj,true);
+        Pojo.check(obj);
         const $inst = this;
         
         Pojo.each(obj,function(value,key) {
