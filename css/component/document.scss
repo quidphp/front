@@ -73,9 +73,6 @@
         font-family: monospace, monospace;
         font-size: 1em;
     }
-    a {
-        background-color: transparent;
-    }
     abbr[title] {
         border-bottom: none;
         text-decoration: underline;
@@ -151,6 +148,7 @@
         @include transitions(color 0.3s, background-color 0.3s, opacity 0.3s, border 0.3s);
         text-decoration: none;
         color: $black;
+        background-color: transparent;
     }
     table {
         border-collapse: collapse;

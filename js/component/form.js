@@ -198,7 +198,7 @@ Component.Form = function()
             const name = trigHdlr(genuine,'input:getName');
             const newName = name+"2-";
             const newValue = 1;
-            const genuine2 = "<input type='hidden' name='"+newName+"' value='"+newValue+"' />";
+            const genuine2 = Html.input(newValue,{type: 'hidden', name: newName});
             Ele.prepend(this,genuine2);
         }
     }

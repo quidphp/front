@@ -13,10 +13,10 @@ Test.Component = function()
     try 
     {
         // prepare
-        let newHtml = "<form method='post' action=''>";
-        newHtml += "<input type='text' value='2' name='test-suite' data-required='1' data-pattern='^[0-9\-]+$' />";
-        newHtml += "<input type='submit' name='test-submit' value='' />";
-        newHtml += "</form>";
+        let newHtml = Html.start('form',null,{action: '', method: 'post'});
+        newHtml += Html.input(2,{type: 'text', name: 'test-suite', data: { required: true, pattern: '^[0-9\-]+$' }});
+        newHtml += Html.input(null,{type: 'submit', name: 'test-submit' });
+        newHtml += Html.end("form");
         const htmlNode = Doc.scopedQuery(document,'html');
         const bodyNode = Ele.scopedQuery(htmlNode,'body');
         Ele.prepend(bodyNode,newHtml);
@@ -107,6 +107,8 @@ Test.Component = function()
         
         // doc
         
+        // externalBlank
+        
         // fakeSelect
         
         // feed
@@ -145,6 +147,8 @@ Test.Component = function()
         // inputCalendar
         
         // inputGroup
+        
+        // inputMemory
         
         // inputNumeric
         

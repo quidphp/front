@@ -154,7 +154,8 @@ const ObjKeyValue = {
     
     // str
     // permet de convertir un objet en string
-    // possible de spécifier deux séparateurs et s'il faut quote les valeurs
+    // possible de spécifier deux séparateurs
+    // possible de quote les valeurs (à ce moment html escape est utilisé)
     str: function(obj,separator,separator2,quote) 
     {
         let r = '';
@@ -165,14 +166,10 @@ const ObjKeyValue = {
         this.each(obj,function(value,key) {
             if(Str.isNotEmpty(key))
             {
-                if(Obj.is(value))
-                value = Json.encode(value);                
-                
-                else
-                value = Str.cast(value);
+                value = Str.cast(value,true);
                 
                 if(quote === true)
-                value = Str.quote(value,false);
+                value = Str.quote(value,false,true);
                 
                 if(r.length)
                 r += separator2;

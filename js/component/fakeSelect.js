@@ -27,46 +27,44 @@ Component.FakeSelect = function()
         const title = (Str.isNotEmpty(selectedText))? selectedText:"&nbsp;";
         const options = qsa(this,'option');
         const value = trigHdlr(this,'input:getValue');
-        const datas = Ele.attrStr(this,'data-');
-                
-        r += "<div data-fake-input='1' data-anchor-corner='1' data-absolute-placeholder='1' class='fakeselect'";
+        
+        const currentAttr = Ele.attr(this,'data-');
+        const dataAttr = { fakeInput: 1, anchorCorner: 1, absolutePlaceholder: 1};
         if(disabled)
-        r += " data-disabled='1'";
-        if(Str.isNotEmpty(datas))
-        r += " "+datas;
-        r += "><button type='button' class='trigger'>";
-        r += "<span data-title'='"+title+"' class='title'>"+title+"</span>";
-        r += "<span class='ico'></span>";
-        r += "</button>";
-        r += "<div class='options' tabindex='0'>";
-        r += "<ul>";
+        dataAttr.disabled = 1;
+        const attr = Pojo.replace(currentAttr,{class: 'fakeselect', data: dataAttr });
+        
+        r += Html.start('div',null,attr);
+        r += Html.start('button',null,{type: 'button',class: 'trigger'});
+        r += Html.span(title,{dataTitle: title, class: "title"});
+        r += Html.span(null,{class: "ico"});
+        r += Html.end('button');
+        r += Html.start('div',null,{class: 'options', tabindex: 0});
+        r += Html.start('ul');
         
         Arr.each(options,function() {
             const val = Str.cast(getProp(this,'value'));
             const text = Ele.getText(this) || "&nbsp;";
-            const datas = Ele.attrStr(this,'data-');
             
-            r += "<li>";
-            r += "<button type='button'";
+            const currentAttr = Ele.attr(this,'data-');
+            const dataAttr = {};
             if(val != null)
             {
+                dataAttr.value = val;
+                
                 if(val === value)
-                r += " data-selected='1'";
-                
-                r += " data-value='"+val+"'";
-                
-                if(Str.isNotEmpty(datas))
-                r += ' '+Obj.str(datas,'=',' ',true);
+                dataAttr.selected = 1;
             }
+            const attr = Pojo.replace(currentAttr,{data: dataAttr});
             
-            r += ">";
-            r += text+"</button>";
-            r += "</li>";
+            r += Html.start('li');
+            r += Html.button(text,attr);
+            r += Html.end('li');
         });
         
-        r += "</ul>";
-        r += "</div>";
-        r += "</div>";
+        r += Html.end('ul');
+        r += Html.end('div');
+        r += Html.end('div');
         
         return r;
     }

@@ -534,11 +534,7 @@ const EleTarget = {
     setValue: function(node,value)
     {
         this.check(node);
-        
-        if(Obj.is(value))
-        value = Json.encode(value);
-        
-        value = Str.cast(value);
+        value = Str.cast(value,true);
         node.value = value;
         
         return;

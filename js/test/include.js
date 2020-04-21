@@ -13,17 +13,16 @@ Test.Include = function()
     try 
     {
         // prepare
-        let newHtml = "<form method='post' action='/ok'>";
-        newHtml += "<input type='text' value='2' name='test-suite' data-required='1' data-pattern='^[0-9\-]+$' />";
-        newHtml += "<input type='submit' name='test-submit3' value='' />";
-        newHtml += "<input type='submit' name='test-submit2' value='' />";
-        newHtml += "<input type='submit' name='test-submit' value='' />";
-        newHtml += "<div class='ok'>test <span>what</span></div>";
-        newHtml += "</form>";
-        newHtml += "<div class='content' style='width: 25px; height: 25px; margin: 10px; padding: 5px; border: 5px solid green; box-sizing: content-box; border-image: none;'></div>";
-        newHtml += "<div class='border' style='width: 25px; height: 25px; margin: 10px; padding: 5px; border: 5px solid green; box-sizing: border-box; border-image: none;'></div>";
-        newHtml += "<div class='hidden' style='display: none; padding: 3px;'>LOL</div>";
-        
+        let newHtml = Html.start('form',null,{action: '/ok', method: 'post'});
+        newHtml += Html.input(2,{type: 'text', name: 'test-suite', data: { required: true, pattern: '^[0-9\-]+$' }});
+        newHtml += Html.input(null,{type: 'submit', name: 'test-submit3' });
+        newHtml += Html.input(null,{type: 'submit', name: 'test-submit2' });
+        newHtml += Html.input(null,{type: 'submit', name: 'test-submit' });
+        newHtml += Html.div("test <span>what</span>",{class: "ok"});
+        newHtml += Html.end("form");
+        newHtml += Html.div(null,{class: 'content', style: 'width: 25px; height: 25px; margin: 10px; padding: 5px; border: 5px solid green; box-sizing: content-box; border-image: none;' });
+        newHtml += Html.div(null,{class: 'border', style: 'width: 25px; height: 25px; margin: 10px; padding: 5px; border: 5px solid green; box-sizing: border-box; border-image: none;' });
+        newHtml += Html.div('LOL',{class: 'hidden', myattr: "L'article", style: "display: none; padding: 3px;" });
         const htmlNode = Doc.scopedQuery(document,'html');
         const selectorOne = htmlNode.querySelector("body");
         const selectorAll = htmlNode.querySelectorAll("body");
@@ -248,8 +247,8 @@ Test.Include = function()
         assert(Arr.length(Doc.scopedQueryAll(fragment,"input")) === 4);
         assert(Arr.length(Doc.scopedQueryAll(template,"input")) === 4);
         assert(Arr.length(Doc.scopedQueryAll(document,"input")) === 4);
-        Doc.setHtml(template,"<div><span>OK</span></div>");
-        Doc.setHtml(fragment,"<div><span>OK</span></div>");
+        Doc.setHtml(template,Html.div('<span>OK</span>'));
+        Doc.setHtml(fragment,Html.div('<span>OK</span>'));
         assert(Arr.length(Doc.scopedQueryAll(fragment,"div")) === 1);
         assert(Arr.length(Doc.scopedQueryAll(template,"span")) === 1);
         assert(Ele.tag(Doc.children(template)[0]) === 'div');
@@ -265,7 +264,7 @@ Test.Include = function()
         assert(Dom.htmlStr(htmlNode) === Dom.htmlStr([htmlNode]));
         assert(Arr.is(Dom.parse(htmlStr)));
         assert(Ele.is(Dom.parseOne(htmlStr)));
-        assert(Dom.querySelector("div[data-success]",htmlStr) === '<span>JavaScript: </span><span>Idle</span>');
+        assert(Dom.querySelector("div[data-success]",htmlStr) === Html.span("JavaScript: </span><span>Idle"));
         assert(Obj.length(Dom.doc(htmlStr)) === 11);
         assert(Dom.selectorInput() === "input,select,textarea,button[type='submit']");
         assert(Dom.selectorInput(true) === "input,select,textarea,button");
@@ -397,6 +396,7 @@ Test.Include = function()
         assert(Ele.getAttr(divNode,'toggle','int') === 0);
         Ele.toggleAttr(divNode,'toggle',false);
         assert(Ele.getAttr(divNode,'toggle','int') === 0);
+        assert(Ele.getAttr(hiddenNode,'myattr') === "L'article");
         Ele.toggleAttr(divNode,'toggle',true);
         assert(Ele.getAttr(divNode,'toggle','int') === 1);
         Ele.setHtml(divNode,'what <span>ok</span>');
@@ -415,7 +415,7 @@ Test.Include = function()
         Ele.toggleClass(divNode,'test');
         assert(!Ele.hasClass(divNode,'test'));
         assert(Ele.getHtml(template) !== newHtml);
-        assert(Str.length(Ele.getHtml(template)) === 707); // ie11 ajoute border-image: none pour une raison
+        assert(Str.length(Ele.getHtml(template)) === 726); // ie11 ajoute border-image: none pour une raison
         assert(Ele.getCss(divNode,'margin-top') === '0px');
         Ele.setCss(divNode,'margin-top','10px');
         assert(Ele.getCss(divNode,'margin-top') === '10px');
@@ -486,6 +486,36 @@ Test.Include = function()
         assert(HistoryState.make('http://google.com/ok#','bleh',true).url === 'http://google.com/ok');
         assert(Str.isEnd('/#',HistoryState.make("#").url));
         assert(!Str.isEnd('/#',HistoryState.make("#",null,true).url));
+        
+        // html
+        assert(Html.isSelfClosing('br'));
+        assert(!Html.isSelfClosing('div'));
+        assert(Html.escape("L'arti\"cle") === "L&#39;arti&quot;cle");
+        assert(Html.escape("<test>ok</test>") === "&lt;test&gt;ok&lt;/test&gt;");
+        assert(Html.start('div','james') === '<div>james');
+        assert(Html.start('img',null,{src: "james.jpg"}) === "<img src='james.jpg'/>");
+        assert(Html.start('img','bleh.jpg',{src: "james.jpg"}) === "<img src='bleh.jpg'/>");
+        assert(Html.start('div','james',{class: "ok", dataTest: "ok2" }) === "<div class='ok' data-test='ok2'>james");
+        assert(Html.end('div') === '</div>');
+        assert(Html.end('input') === '');
+        assert(Html.value(2) === '2');
+        assert(Html.attr({src: "james.jpg"}) === "src='james.jpg'");
+        assert(Html.attr({src: "james.jpg"},'input','what') === "src='james.jpg' value='what'");
+        assert(Html.tag('span','ok',{id: "test"}) === "<span id='test'>ok</span>");
+        assert(Html.tag('input','ok',{value: "test", name: "NOé"}) === "<input value='ok' name='NOé'/>");
+        assert(Html.div('well',{myattr: "L'article", myattr2: 'L"article'}) === "<div myattr='L&#39;article' myattr2='L&quot;article'>well</div>");
+        assert(Html.span({tag: "2", well: "OK"}) === '<span>2, OK</span>');
+        assert(Html.span('meh') === '<span>meh</span>');
+        assert(Html.span(null,{class: ['test','test2']}) === "<span class='test test2'></span>");
+        assert(Html.span(null,{a: '', b: true, c: false, d: null, e: ['1','2']}) === "<span a='' b='1' c='0' e='[&quot;1&quot;,&quot;2&quot;]'></span>");
+        assert(Html.span(false,{ test: 3, data: { test: 2, ok: 'WHAT', james: [1,2], james2: {ok: 'Mé'}}}) === "<span test='3' data-test='2' data-ok='WHAT' data-james='[1,2]' data-james2='{&quot;ok&quot;:&quot;Mé&quot;}'></span>");
+        assert(Html.button(true) === "<button type='button'>&nbsp;</button>");
+        assert(Html.button({test: "OKÉÉÉ", ble: 'MEH'}) === "<button type='button'>OKÉÉÉ, MEH</button>");
+        assert(Html.button([1,2,3]) === "<button type='button'>1, 2, 3</button>");
+        assert(Html.input(true,{type: 'email'}) === "<input type='email' value='1'/>");
+        assert(Html.input(false,{type: 'text'}) === "<input type='text' value='0'/>");
+        assert(Html.input(null,{type: 'text'}) === "<input type='text' value=''/>");
+        assert(Html.div('ok','whatEscape') === "<div class='whatEscape'>ok</div>");
         
         // integer
         assert(!Integer.is('2'));
@@ -653,8 +683,8 @@ Test.Include = function()
         assert(Obj.unset('test',objGetSet) !== objGetSet);
         assert(Obj.str({str: 2, what: 'ok', loop: [1,2], meh: { what: 2 }}) === 'str=2 what=ok loop=[1,2] meh={"what":2}');
         assert(Obj.str({str: 2, what: 'ok', loop: [1,2], meh: { what: 2 }},'!') === 'str!2 what!ok loop![1,2] meh!{"what":2}');
-        assert(Obj.str({str: 2, what: 'ok', loop: [1,2], meh: { what: 2 }},'=',' ',true) === "str='2' what='ok' loop='[1,2]' meh='{\"what\":2}'");
-        assert(Obj.str({str: 2, what: 'ok', loop: [1,2], meh: { what: 2 }},'=',true,true) === "str='2' what='ok' loop='[1,2]' meh='{\"what\":2}'");
+        assert(Obj.str({str: 2, what: 'ok', loop: [1,2], meh: { what: 2 }},'=',' ',true) === "str='2' what='ok' loop='[1,2]' meh='{&quot;what&quot;:2}'");
+        assert(Obj.str({str: 2, what: 'ok', loop: [1,2], meh: { what: 2 }},'=',true,true) === "str='2' what='ok' loop='[1,2]' meh='{&quot;what&quot;:2}'");
         let objCopy = { test: 3};
         assert(Obj.copy(objCopy) !== objCopy);
         assert(Obj.isEqual(Obj.new(),{}));
@@ -825,6 +855,7 @@ Test.Include = function()
         assert(Str.trim(' As ') === 'As');
         assert(Str.quote('what',true) === '"what"');
         assert(Str.quote('what') === "'what'");
+        assert(Str.quote("L'article\"de",false,true) === "'L&#39;article&quot;de'");
         assert(Str.quote(2) === null);
         assert(Str.sub(2,true,'what') === 'at');
         assert(Str.sub(2,true,'éèà') === 'à');
@@ -865,6 +896,9 @@ Test.Include = function()
         }) === 'o');
         assert(Arr.length(Str.arr('what')) === 4);
         assert(Str.removeAllWhitespace(' ads das sda ') === 'adsdassda');
+        assert(Str.fromCamelCase('-','data') === 'data')
+        assert(Str.fromCamelCase('-','marginTopRight') === 'margin-top-right');
+        assert(Str.fromCamelCase('|','marginTopRight') === 'margin|top|right');
         assert(Str.toCamelCase('-','margin-top-right') === 'marginTopRight');
         assert(Str.toCamelCase(' ',' margin top right ') === 'marginTopRight');
         assert(Str.toCamelCase('_',' margin top right ') === 'margintopright');

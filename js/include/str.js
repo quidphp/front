@@ -52,9 +52,21 @@ const StrPrimitive = {
     // cast
     // retourne une valeur string
     // si la valeur est null retourne ''
-    cast: function(value)
+    // si la valeur est objet, et que json est true -> envoie à json encode
+    cast: function(value,json)
     {
-        return (value == null)? '':String(value);
+        let r = '';
+        
+        if(value != null)
+        {
+            if(Obj.is(value) && json === true)
+            r = Json.encode(value);                
+            
+            else
+            r = String(value)
+        }
+        
+        return r;
     },
     
     
@@ -117,10 +129,14 @@ const StrPrimitive = {
     // quote
     // permet d'enrobber une string dans des quotes
     // possible de spécifier double ou non
-    quote: function(value,double)
+    // possible de faire un escape html
+    quote: function(value,double,escape)
     {
         let r = null;
         const quote = (double === true)? '"':"'";
+        
+        if(escape === true)
+        value = Html.escape(value);
         
         if(this.is(value))
         r = quote+value+quote;
@@ -178,13 +194,31 @@ const StrPrimitive = {
     },
     
     
+    // fromCamelCase
+    // transforme une string camelcase vers une string avec séparateur
+    fromCamelCase: function(delimiter,string)
+    {
+        let r = null;
+        
+        if(this.is(string) && this.is(delimiter))
+        {
+            string = this.trim(string);
+            r = string.replace(/[\w]([A-Z])/g, function(value) {
+               return value[0] + delimiter + value[1];
+            }).toLowerCase();
+        }
+        
+        return r;
+    },
+    
+    
     // toCamelCase
-    // transforme une string en camelCase
+    // transforme une string avec séparateur en camelCase
     toCamelCase: function(delimiter,string)
     {
         let r = null;
         
-        if(this.is(string))
+        if(this.is(string) && this.is(delimiter))
         {
             const $inst = this;
             string = this.trim(string);

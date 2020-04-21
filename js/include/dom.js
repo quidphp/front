@@ -188,7 +188,7 @@ const Dom = Lemur.Dom = {
         else
         {
             const html = Ele.getOuterHtml(r.doc);
-            const newBody = "<div data-tag='body'>"+html+"</div>";
+            const newBody = Html.div(html,{dataTag: 'body'});
             r.body = this.parseOne(newBody);
         }
 

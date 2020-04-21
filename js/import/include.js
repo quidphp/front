@@ -18,6 +18,7 @@ const Ele = Lemur.Ele;
 const Evt = Lemur.Evt;
 const Func = Lemur.Func;
 const HistoryState = Lemur.HistoryState;
+const Html = Lemur.Html;
 const Integer = Lemur.Integer;
 const Json = Lemur.Json;
 const Nav = Lemur.Nav;
