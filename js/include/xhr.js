@@ -29,7 +29,7 @@ const Xhr = Lemur.Xhr = new function()
     // trigger
     // fonction utilisé pour lancer une requête ajax
     // retourne null ou un objet promise ajax
-    this.trigger = function(config)
+    this.trigger = function(config,extraEvents)
     {
         let r = null;
         config = prepareConfig(config);
@@ -42,22 +42,20 @@ const Xhr = Lemur.Xhr = new function()
             xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
             
             xhr.ontimeout = function() {
-                if(Func.is(config.error))
-                config.error(xhr);
+                callEvent('error',xhr,config,extraEvents);
             };
             xhr.onreadystatechange = function() {
                 if(this.readyState === XMLHttpRequest.DONE)
                 {
                     const isSuccess = $inst.isStatusSuccess(this.status);
                     
-                    if(isSuccess === false && Func.is(config.error))
-                    config.error(xhr);
+                    if(isSuccess === false)
+                    callEvent('error',xhr,config,extraEvents);
                     
-                    else if(isSuccess === true && Func.is(config.success))
-                    config.success(xhr);
+                    else if(isSuccess === true)
+                    callEvent('success',xhr,config,extraEvents);
                     
-                    if(Func.is(config.complete))
-                    config.complete(xhr);
+                    callEvent('complete',xhr,config,extraEvents);
                 }
             };
             
@@ -67,13 +65,13 @@ const Xhr = Lemur.Xhr = new function()
                     if(Func.is(config.progress) && event.lengthComputable === true)
                     {
                         const percent = parseInt((event.loaded / event.total * 100));
-                        config.progress(percent,event,xhr);
+                        callEvent('progress',xhr,config,extraEvents,percent,event);
                     }
                 });
             }
             
-            if(Func.is(config.before))
-            config.before(xhr);
+            // before
+            callEvent('before',xhr,config,extraEvents);
 
             xhr.send(config.data);
             r = xhr;
@@ -81,7 +79,27 @@ const Xhr = Lemur.Xhr = new function()
         
         return r;
     }
-
+    
+    
+    // callEvent
+    // function utilisé pour faire les appels aux callbacks de la requête ajax
+    // pour les callbacks, this est xhr mais xhr est aussi envoyé en dernier argument
+    const callEvent = function(type,xhr,config,extraEvents)
+    {
+        const configCallback = Pojo.get(type,config);
+        const extraCallback = Pojo.get(type,extraEvents);
+        const args = ArrLike.sliceStart(4,arguments);
+        args.push(xhr);
+        
+        if(Func.is(configCallback))
+        configCallback.apply(xhr,args);
+        
+        if(Func.is(extraCallback))
+        extraCallback.apply(xhr,args);
+        
+        return;
+    }
+    
     
     // configFromString
     // retounre un tableau avec la string comme url
@@ -138,7 +156,7 @@ const Xhr = Lemur.Xhr = new function()
     {
         let r = null;
         
-        if(Ele.is(node) && Target.triggerHandler(node,'ajax:confirm') !== false)
+        if(Ele.is(node))
         {
             r = (Pojo.is(config))? config:{};
             const tagName = Ele.tag(node);

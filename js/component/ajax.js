@@ -6,11 +6,18 @@
 
 // ajax
 // script to activate ajax with an event on the nodes
-Component.Ajax = function(type) 
+Component.Ajax = function(option) 
 {
     // not empty
     if(Vari.isEmpty(this)) 
     return null;
+    
+    
+    // option
+    const $option = Pojo.replace({
+        ajaxEvent: 'click',
+        attrHtml: 'data-ajax'
+    },option);
     
     
     // handler
@@ -20,36 +27,61 @@ Component.Ajax = function(type)
             return (trigHdlr(document,'history:isLoading') === true)? false:true;
         },
         
+        extraEvents: function() {
+            let r = null;
+            
+            if(Str.isNotEmpty($option.attrHtml))
+            {
+                const html = trigHdlr(document,'doc:getHtml');
+
+                r = {
+                    before: function() {
+                        setAttr(html,$option.attrHtml,true);
+                    },
+                    
+                    complete: function() {
+                        Ele.removeAttr(html,$option.attrHtml);
+                    }
+                }
+            }
+            
+            return r;
+        },
+        
         config: function(triggerEvent) {
             return this;
         },
         
         init: function(config) {
-            trigEvt(this,type,config);
+            trigEvt(this,$option.ajaxEvent,config);
         },
         
         trigger: function(config,triggerEvent) {
             let r = null;
             
-            if(!Str.is(config) && !Pojo.isNotEmpty(config))
+            if(trigHdlr(this,'ajax:confirm'))
             {
-                config = trigHdlr(this,'ajax:config');
+                if(!Str.is(config) && !Pojo.isNotEmpty(config))
+                {
+                    config = trigHdlr(this,'ajax:config');
+                    
+                    if(Ele.is(config))
+                    config = Xhr.configFromNode(config);
+                }
                 
-                if(Ele.is(config))
-                config = Xhr.configFromNode(config);
+                if(Str.is(config))
+                config = Xhr.configFromString(config);
+                
+                if(Pojo.isNotEmpty(config))
+                {
+                    Xhr.configNodeEvents(this,config);
+                    const extraEvents = trigHdlr(this,'ajax:extraEvents');
+                    r = Xhr.trigger(config,extraEvents);
+                }
+                
+                if(r != null && triggerEvent != null)
+                Evt.preventStop(triggerEvent,true);
             }
-            
-            if(Str.is(config))
-            config = Xhr.configFromString(config);
-            
-            if(Pojo.isNotEmpty(config))
-            {
-                Xhr.configNodeEvents(this,config);
-                r = Xhr.trigger(config);
-            }
-            
-            if(r != null && triggerEvent != null)
-            Evt.preventStop(triggerEvent,true);
             
             return r;
         }
@@ -57,7 +89,7 @@ Component.Ajax = function(type)
     
     
     // event
-    ael(this,type,function(event,config) {
+    ael(this,$option.ajaxEvent,function(event,config) {
         trigHdlr(this,'ajax:trigger',config,event);
         Evt.preventStop(event);
     });

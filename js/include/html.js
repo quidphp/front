@@ -214,6 +214,14 @@ const Html = Lemur.Html = {
     },
     
     
+    // tagCond
+    // ouvre et ferme une tag avec contenu et attribut seulement si la valeur n'est pas vide
+    tagCond: function(tag,value,attr)
+    {
+        return (Vari.isNotEmpty(this.value(value)))? this.tag(tag,value,attr):'';
+    },
+    
+    
     // div
     // ouvre et ferme une tag div avec contenu et attribut
     div: function(value,attr) 
@@ -227,6 +235,22 @@ const Html = Lemur.Html = {
     span: function(value,attr) 
     {
         return this.tag('span',value,attr);
+    },
+    
+    
+    // ul
+    // ouvre et ferme une tag ul avec contenu et attribut
+    ul: function(value,attr) 
+    {
+        return this.tag('ul',value,attr);
+    },
+    
+    
+    // li
+    // ouvre et ferme une tag li avec contenu et attribut
+    li: function(value,attr) 
+    {
+        return this.tag('li',value,attr);
     },
     
     

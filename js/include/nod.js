@@ -172,6 +172,26 @@ const EleDocTarget = {
     },
     
     
+    // replaceHtml
+    // comme setHtml, mais le html est seulement remplacer si différent
+    // utilise une balise pour avoir le même encodage que la string
+    // il faut absolument fournir une string
+    replaceHtml: function(node,value)
+    {
+        Str.check(value);
+        const current = this.getHtml(node);
+        
+        const newElement = document.createElement('div');
+        this.setHtml(newElement,value);
+        const newValue = this.getHtml(newElement);
+        
+        if(current !== newValue)
+        this.setHtml(node,value);
+        
+        return;
+    },
+    
+    
     // getOuterHtml
     // retourne le outerHtml d'une ou plusieurs nodes
     getOuterHtml: function(nodes)

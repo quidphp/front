@@ -365,7 +365,7 @@ Test.Include = function()
         assert(Arr.length(Ele.prevs(divNode,"input[type='submit']")) === 3);
         assert(Arr.length(Ele.prevs(divNode,"input[type='text']")) === 1);
         assert(Arr.length(Ele.prevs(divNode,'input',"input[type='text']")) === 3);
-        Ele.setHtml(divNode,'text ok bla <span>what</span>');
+        Ele.replaceHtml(divNode,'text ok bla <span>what</span>');
         assert(Arr.length(Ele.children(divNode)) === 1);
         assert(Arr.length(Doc.children(document)) === 1); // ie va avoir besoin d'un polyfill
         assert(Arr.length(Ele.parents(divNode)) === 4);
@@ -503,10 +503,16 @@ Test.Include = function()
         assert(Html.attr({src: "james.jpg"},'input','what') === "src='james.jpg' value='what'");
         assert(Html.tag('span','ok',{id: "test"}) === "<span id='test'>ok</span>");
         assert(Html.tag('input','ok',{value: "test", name: "NOé"}) === "<input value='ok' name='NOé'/>");
+        assert(Html.tagCond('ul',false,'ok') === '');
+        assert(Html.tagCond('ul','','ok') == '');
+        assert(Html.tagCond('ul',null,'ok') == '');
+        assert(Html.tagCond('ul',0,'ok') === "<ul class='ok'>0</ul>");
+        assert(Html.tagCond('ul','0','ok') === "<ul class='ok'>0</ul>");
+        assert(Html.tagCond('ul',true,'ok') === "<ul class='ok'>&nbsp;</ul>");
         assert(Html.div('well',{myattr: "L'article", myattr2: 'L"article'}) === "<div myattr='L&#39;article' myattr2='L&quot;article'>well</div>");
         assert(Html.span({tag: "2", well: "OK"}) === '<span>2, OK</span>');
-        assert(Html.span('meh') === '<span>meh</span>');
-        assert(Html.span(null,{class: ['test','test2']}) === "<span class='test test2'></span>");
+        assert(Html.ul('meh') === '<ul>meh</ul>');
+        assert(Html.li(null,{class: ['test','test2']}) === "<li class='test test2'></li>");
         assert(Html.span(null,{a: '', b: true, c: false, d: null, e: ['1','2']}) === "<span a='' b='1' c='0' e='[&quot;1&quot;,&quot;2&quot;]'></span>");
         assert(Html.span(false,{ test: 3, data: { test: 2, ok: 'WHAT', james: [1,2], james2: {ok: 'Mé'}}}) === "<span test='3' data-test='2' data-ok='WHAT' data-james='[1,2]' data-james2='{&quot;ok&quot;:&quot;Mé&quot;}'></span>");
         assert(Html.button(true) === "<button type='button'>&nbsp;</button>");
@@ -637,6 +643,8 @@ Test.Include = function()
         assert(Num.isOdd(11));
         assert(!Num.isOdd(0));
         assert(Num.isEven(0));
+        assert(Num.formatDecimal(2) === '2.00');
+        assert(Num.formatDecimal(2.034) === '2.03');
         assert(Num.round("4.2px") === null);
         assert(Num.round("4.2") === 4);
         assert(Num.round(4.2) === 4);

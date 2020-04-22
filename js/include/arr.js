@@ -225,7 +225,11 @@ const ArrLoop = {
         
         return this.each(array, function(value, index) {
             const funcTimeout = timeout + (index * indexTimeout);
-            Func.timeout(funcTimeout,callback,this);
+            
+            const funcWrap = function() {
+                callback.call(this,value,index,funcTimeout);
+            }
+            Func.timeout(funcTimeout,funcWrap,this);
         });
     },
     

@@ -410,6 +410,9 @@ const EleTarget = {
         if(Obj.is(value))
         value = Json.encode(value);
         
+        if(Bool.is(value))
+        value = Integer.fromBool(value);
+        
         this.each(nodes,function() {
             if(value === undefined)
             this.removeAttribute(key);
@@ -444,7 +447,7 @@ const EleTarget = {
             if(value == null)
             {
                 value = $inst.getAttr(this,key,'int');
-                value = (value === 1)? 0:1;
+                value = (value === 1)? false:true;
             }
             
             $inst.setAttr(this,key,value);

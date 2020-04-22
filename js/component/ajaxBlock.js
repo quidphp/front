@@ -22,7 +22,7 @@ Component.AjaxBlock = function(option)
     
     // components
     Component.BlockEvent.call(this,$option.ajaxEvent);
-    Component.Ajax.call(this,$option.ajaxEvent);
+    Component.Ajax.call(this,$option);
     
     
     // handler
@@ -31,6 +31,10 @@ Component.AjaxBlock = function(option)
         isReady: function() {
             const node = trigHdlr(this,'ajaxBlock:getStatusNode');
             return (getAttr(node,"data-status") === 'ready')? true:false;
+        },
+        
+        shouldSetContent: function() {
+            return true;
         },
         
         isEmptyContentNode: function() {
@@ -73,32 +77,40 @@ Component.AjaxBlock = function(option)
         },
         
         error: function(parsedError,xhr) {
-            const node = trigHdlr(this,'ajaxBlock:getStatusNode');
-            setAttr(node,"data-status",'error');
-            
-            if($option.autoUnbind === true && !trigHdlr(this,'ajaxBlock:isEmptyContentNode'))
-            trigEvt(this,'ajaxBlock:unmountContent');
-            
-            trigHdlr(this,'ajaxBlock:setContent',parsedError,true);
-            trigEvt(this,'ajaxBlock:beforeMount',parsedError,true);
-            trigEvt(this,'ajaxBlock:error',parsedError,xhr);
+            if(trigHdlr(this,'ajaxBlock:shouldSetContent'))
+            {
+                const node = trigHdlr(this,'ajaxBlock:getStatusNode');
+                setAttr(node,"data-status",'error');
+                
+                if($option.autoUnbind === true && !trigHdlr(this,'ajaxBlock:isEmptyContentNode'))
+                trigEvt(this,'ajaxBlock:unmountContent');
+                
+                trigHdlr(this,'ajaxBlock:setContent',parsedError,true);
+                trigEvt(this,'ajaxBlock:beforeMount',parsedError,true);
+                trigEvt(this,'ajaxBlock:error',parsedError,xhr);
+            }
         },
         
         success: function(data,xhr) {
-            const node = trigHdlr(this,'ajaxBlock:getStatusNode');
-            setAttr(node,"data-status",'ready');
-            
-            if($option.autoUnbind === true && !trigHdlr(this,'ajaxBlock:isEmptyContentNode'))
-            trigEvt(this,'ajaxBlock:unmountContent');
-            
-            trigHdlr(this,'ajaxBlock:setContent',data,false);
-            trigEvt(this,'ajaxBlock:beforeMount',data,false);
-            trigEvt(this,'ajaxBlock:mountContent');
-            trigEvt(this,'ajaxBlock:success',data,xhr);
+            if(trigHdlr(this,'ajaxBlock:shouldSetContent'))
+            {
+                const node = trigHdlr(this,'ajaxBlock:getStatusNode');
+                setAttr(node,"data-status",'ready');
+                
+                if($option.autoUnbind === true && !trigHdlr(this,'ajaxBlock:isEmptyContentNode'))
+                trigEvt(this,'ajaxBlock:unmountContent');
+                
+                trigHdlr(this,'ajaxBlock:setContent',data,false);
+                trigEvt(this,'ajaxBlock:beforeMount',data,false);
+                trigEvt(this,'ajaxBlock:mountContent');
+                trigEvt(this,'ajaxBlock:success',data,xhr);
+            }
         },
         
         complete: function(xhr) {
             trigHdlr(this,'blockEvent:unblock',$option.ajaxEvent);
+            
+            if(trigHdlr(this,'ajaxBlock:shouldSetContent'))
             trigEvt(this,'ajaxBlock:complete',xhr);
         }
     });

@@ -20,6 +20,10 @@ Component.Focusable = function(option)
     },option);
     
     
+    // component
+    Component.IndexNode.call(this,{ current: 'focusable:getCurrent', targets: 'focusable:getTargets', loop: $option.loop });
+
+    
     // handler
     setHdlrs(this,'focusable:',{
         
@@ -50,18 +54,11 @@ Component.Focusable = function(option)
         },
         
         prev: function() {
-            trigHdlr(this,'focusable:focus',trigHdlr(this,'focusable:findTarget','prev'));
+            trigHdlr(this,'focusable:focus',trigHdlr(this,'indexNode:find','prev'));
         },
         
         next: function() {
-            trigHdlr(this,'focusable:focus',trigHdlr(this,'focusable:findTarget','next'));
-        },
-        
-        findTarget: function(type) {
-            const current = trigHdlr(this,'focusable:getCurrent');
-            const targets = trigHdlr(this,'focusable:getTargets');
-            
-            return Nav.indexNode(type,current,targets,$option.loop);
+            trigHdlr(this,'focusable:focus',trigHdlr(this,'indexNode:find','next'));
         }
     });
     

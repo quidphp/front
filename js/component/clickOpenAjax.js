@@ -30,6 +30,10 @@ Component.ClickOpenAjax = function(option)
         return trigHdlr(this,'clickOpen:getTargetContent');
     });
     
+    setHdlr(this,'ajaxBlock:shouldSetContent',function() {
+        return trigHdlr(this,'clickOpen:isOpen');
+    });
+    
     
     // ael
     ael(this,'ajaxBlock:before',function() {

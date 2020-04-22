@@ -13,278 +13,195 @@ Component.FakeSelect = function()
     return null;
     
     
-    const r = [];
+    // components
+    Component.ClickOpenTrigger.call(this,{trigger: "> .trigger", target: "> .options", background: "fakeselect"});
+    Component.Focusable.call(this,{target: "> .options button"});
+    Component.KeyboardEnter.call(this,true);
+    Component.KeyboardArrow.call(this,true);
+    Component.IndexNode.call(this,{ key: 'indexNodePrevNext', current: 'fakeSelect:getSelected', targets: 'fakeSelect:getChoices' });
     
-    // htmlFromSelect
-    const htmlFromSelect = function() 
-    {
-        let r = '';
-        const name = getProp(this,'name');
-        const required = getAttr(this,'data-required');
-        const disabled = getProp(this,'disabled');
-        const selected = qs(this,"option:checked");
-        const selectedText = (selected != null)? Ele.getText(selected):null;
-        const title = (Str.isNotEmpty(selectedText))? selectedText:"&nbsp;";
-        const options = qsa(this,'option');
-        const value = trigHdlr(this,'input:getValue');
+
+    // handler
+    setHdlrs(this,'fakeSelect:',{
         
-        const currentAttr = Ele.attr(this,'data-');
-        const dataAttr = { fakeInput: 1, anchorCorner: 1, absolutePlaceholder: 1};
-        if(disabled)
-        dataAttr.disabled = 1;
-        const attr = Pojo.replace(currentAttr,{class: 'fakeselect', data: dataAttr });
+        getSelect: function() {
+            return Ele.prev(this,'select');
+        },
         
-        r += Html.start('div',null,attr);
-        r += Html.start('button',null,{type: 'button',class: 'trigger'});
-        r += Html.span(title,{dataTitle: title, class: "title"});
-        r += Html.span(null,{class: "ico"});
-        r += Html.end('button');
-        r += Html.start('div',null,{class: 'options', tabindex: 0});
-        r += Html.start('ul');
+        getChoices: function() {
+            const target = trigHdlr(this,'clickOpen:getTarget');
+            return qsa(target,"li > button");
+        },
         
-        Arr.each(options,function() {
-            const val = Str.cast(getProp(this,'value'));
-            const text = Ele.getText(this) || "&nbsp;";
-            
-            const currentAttr = Ele.attr(this,'data-');
-            const dataAttr = {};
-            if(val != null)
-            {
-                dataAttr.value = val;
-                
-                if(val === value)
-                dataAttr.selected = 1;
-            }
-            const attr = Pojo.replace(currentAttr,{data: dataAttr});
-            
-            r += Html.start('li');
-            r += Html.button(text,attr);
-            r += Html.end('li');
-        });
+        getChoice: function(value) {
+            return Arr.find(trigHdlr(this,'fakeSelect:getChoices'),function() {
+                return Str.isEqual(getAttr(this,'data-value'),value);
+            });
+        },
         
-        r += Html.end('ul');
-        r += Html.end('div');
-        r += Html.end('div');
+        getSelected: function() {
+            return Arr.find(trigHdlr(this,'fakeSelect:getChoices'),function() {
+                return (getAttr(this,'data-selected','int') === 1);
+            });
+        },
         
-        return r;
-    }
-    
-    
-    // bindFakeSelect
-    const bindFakeSelect = function() 
-    {    
-        // clickOpen
-        Component.ClickOpenTrigger.call(this,{trigger: "> .trigger", target: "> .options", background: "fakeselect"});
-        Component.Focusable.call(this,{target: "> .options button"});
-        Component.KeyboardEnter.call(this,true);
-        Component.KeyboardArrow.call(this,true);
-        
-        
-        // handler
-        setHdlrs(this,'fakeSelect:',{
-            
-            getSelect: function() {
-                return Ele.prev(this,'select');
-            },
-            
-            getChoices: function() {
-                const target = trigHdlr(this,'clickOpen:getTarget');
-                return qsa(target,"li > button");
-            },
-            
-            getChoice: function(value) {
-                return Arr.find(trigHdlr(this,'fakeSelect:getChoices'),function() {
-                    return Str.isEqual(getAttr(this,'data-value'),value);
-                });
-            },
-            
-            getSelected: function() {
-                return Arr.find(trigHdlr(this,'fakeSelect:getChoices'),function() {
-                    return (getAttr(this,'data-selected','int') === 1);
-                });
-            },
-            
-            getTitle: function() {
-                const trigger = trigHdlr(this,'clickOpen:getTrigger');
-                return qs(trigger,".title");
-            },
-            
-            setTitle: function(value) {
-                const title = trigHdlr(this,'fakeSelect:getTitle');
-                Ele.setText(title,value);
-            },
-            
-            setPrev: function() {
-                choosePrevNext.call(this,'prev');
-            },
-            
-            setNext: function() {
-                choosePrevNext.call(this,'next');
-            }
-        });
-        
-        
-        // event
-        ael(this,'keyboardEnter:blocked',function() {
-            trigHdlr(this,'clickOpen:toggle');
-        });
-        
-        ael(this,'keyboardArrow:up',function() {
-            if(trigHdlr(this,'clickOpen:isOpen'))
-            trigHdlr(this,'focusable:prev');
-            else
-            trigHdlr(this,'fakeSelect:setPrev');
-        });
-        
-        ael(this,'keyboardArrow:down',function() {
-            if(trigHdlr(this,'clickOpen:isOpen'))
-            trigHdlr(this,'focusable:next');
-            else
-            trigHdlr(this,'fakeSelect:setNext');
-        });
-        
-        ael(this,'clickOpen:opened',function() {
-            const selected = trigHdlr(this,'fakeSelect:getSelected');
-            if(selected != null)
-            Ele.focus(selected);
-        });
-        
-        ael(this,'clickOpen:closed',function() {
-            trigHdlr(this,'absolutePlaceholder:refresh');
-        });
-        
-        
-        // setup
-        aelOnce(this,'component:setup',function() {
-            bindTrigger.call(this);
-            bindSelect.call(this);
-            bindChoices.call(this);
-        });
-        
-        
-        // bindTrigger
-        const bindTrigger = function() 
-        {
+        getTitle: function() {
             const trigger = trigHdlr(this,'clickOpen:getTrigger');
-            const select = trigHdlr(this,'fakeSelect:getSelect');
-            
-            ael(trigger,'click',function() {
-                trigEvt(select,'validate:valid');
-            });
-        }
+            return qs(trigger,".title");
+        },
         
+        setTitle: function(value) {
+            const title = trigHdlr(this,'fakeSelect:getTitle');
+            Ele.setText(title,value);
+        },
         
-        // bindSelect
-        const bindSelect = function() 
-        {
-            const $this = this;
-            const select = trigHdlr(this,'fakeSelect:getSelect');
-            const handleChange = function() {
-                const value = trigHdlr(this,'input:getValue');
-                const choice = trigHdlr($this,'fakeSelect:getChoice',value);
-                
-                if(choice != null)
-                choose.call($this,choice);
-            };
-            
-            ael(select,'change',handleChange);
-            ael(select,'input:change',handleChange);
-            
-            ael(select,'input:disable',function() {
-                trigHdlr($this,'clickOpen:disable');
-            });
-            
-            ael(select,'input:enable',function() {
-                trigHdlr($this,'clickOpen:enable');
-            });
-            
-            ael(select,'validate:valid',function() {
-                setAttr($this,'data-validate','valid');
-            });
-            
-            ael(select,'validate:invalid',function() {
-                setAttr($this,'data-validate','invalid');
-            });
-        }
+        setPrev: function() {
+            choosePrevNext.call(this,'prev');
+        },
         
-        
-        // bindChoices
-        const bindChoices = function() 
-        {
-            const $this = this;
-            const choices = trigHdlr(this,'fakeSelect:getChoices');
-            const selected = trigHdlr(this,'fakeSelect:getSelected');
-            
-            Component.KeyboardEnter.call(choices,true);
-            
-            ael(choices,'click',function() {
-                choose.call($this,this);
-                event.stopPropagation();
-            });
-            
-            ael(choices,'keyboardEnter:blocked',function() {
-                choose.call($this,this);
-            });
-            
-            if(selected != null)
-            choose.call(this,selected);
-        }
-        
-        
-        // choosePrevNext
-        const choosePrevNext = function(type)
-        {
-            const choices = trigHdlr(this,'fakeSelect:getChoices');
-            const selected = trigHdlr(this,'fakeSelect:getSelected');
-            
-            if(selected != null)
-            {
-                const newNode = Nav.indexNode(type,selected,choices);
-                
-                if(newNode != null)
-                choose.call(this,newNode);
-            }
-        }
-        
-        
-        // choose
-        const choose = function(selected)
-        {
-            const value = getAttr(selected,'data-value');
-            const text = Ele.getText(selected);
-            const select = trigHdlr(this,'fakeSelect:getSelect');
-            const choices = trigHdlr(this,'fakeSelect:getChoices');
-            const current = trigHdlr(select,'input:getValue');
-            
-            Ele.removeAttr(choices,'data-selected');
-            toggleAttr(selected,'data-selected',true);
-            
-            trigHdlr(select,'input:setValue',value);
-            trigHdlr(this,'fakeSelect:setTitle',text);
-            trigHdlr(this,'absolutePlaceholder:refresh');
-            trigEvt(this,'clickOpen:close');
-            
-            if(!Str.isEqual(value,current))
-            trigBubble(select,'change');
-        }
-    }
-    
-    
-    // htmlFromSelect
-    Ele.each(this,function() {
-        if(trigHdlr(this,'input:getTag') === 'select')
-        {
-            if(trigHdlr(this,'input:allowMultiple') === false && trigHdlr(this,'input:isControlled') === false)
-            {
-                const html = htmlFromSelect.call(this);
-                let node = Ele.insertAfter(this,html);
-                node = Arr.valueFirst(node);
-                bindFakeSelect.call(node);
-                toggleAttr(this,'data-controlled',true);
-                r.push(node);
-            }
+        setNext: function() {
+            choosePrevNext.call(this,'next');
         }
     });
+    
+    
+    // event
+    ael(this,'keyboardEnter:blocked',function() {
+        trigHdlr(this,'clickOpen:toggle');
+    });
+    
+    ael(this,'keyboardArrow:up',function() {
+        if(trigHdlr(this,'clickOpen:isOpen'))
+        trigHdlr(this,'focusable:prev');
+        else
+        trigHdlr(this,'fakeSelect:setPrev');
+    });
+    
+    ael(this,'keyboardArrow:down',function() {
+        if(trigHdlr(this,'clickOpen:isOpen'))
+        trigHdlr(this,'focusable:next');
+        else
+        trigHdlr(this,'fakeSelect:setNext');
+    });
+    
+    ael(this,'clickOpen:opened',function() {
+        const selected = trigHdlr(this,'fakeSelect:getSelected');
+        if(selected != null)
+        Ele.focus(selected);
+    });
+    
+    ael(this,'clickOpen:closed',function() {
+        trigHdlr(this,'absolutePlaceholder:refresh');
+    });
+    
+    
+    // setup
+    aelOnce(this,'component:setup',function() {
+        bindTrigger.call(this);
+        bindSelect.call(this);
+        bindChoices.call(this);
+    });
+    
+    
+    // bindTrigger
+    const bindTrigger = function() 
+    {
+        const trigger = trigHdlr(this,'clickOpen:getTrigger');
+        const select = trigHdlr(this,'fakeSelect:getSelect');
+        
+        ael(trigger,'click',function() {
+            trigEvt(select,'validate:valid');
+        });
+    }
+    
+    
+    // bindSelect
+    const bindSelect = function() 
+    {
+        const $this = this;
+        const select = trigHdlr(this,'fakeSelect:getSelect');
+        const handleChange = function() {
+            const value = trigHdlr(this,'input:getValue');
+            const choice = trigHdlr($this,'fakeSelect:getChoice',value);
+            
+            if(choice != null)
+            choose.call($this,choice);
+        };
+        
+        ael(select,'change',handleChange);
+        ael(select,'input:change',handleChange);
+        
+        ael(select,'input:disable',function() {
+            trigHdlr($this,'clickOpen:disable');
+        });
+        
+        ael(select,'input:enable',function() {
+            trigHdlr($this,'clickOpen:enable');
+        });
+        
+        ael(select,'validate:valid',function() {
+            setAttr($this,'data-validate','valid');
+        });
+        
+        ael(select,'validate:invalid',function() {
+            setAttr($this,'data-validate','invalid');
+        });
+    }
+    
+    
+    // bindChoices
+    const bindChoices = function() 
+    {
+        const $this = this;
+        const choices = trigHdlr(this,'fakeSelect:getChoices');
+        const selected = trigHdlr(this,'fakeSelect:getSelected');
+        
+        Component.KeyboardEnter.call(choices,true);
+        
+        ael(choices,'click',function() {
+            choose.call($this,this);
+            event.stopPropagation();
+        });
+        
+        ael(choices,'keyboardEnter:blocked',function() {
+            choose.call($this,this);
+        });
+        
+        if(selected != null)
+        choose.call(this,selected);
+    }
+    
+    
+    // choosePrevNext
+    const choosePrevNext = function(type)
+    {
+        const newNode = trigHdlr(this,'indexNodePrevNext:find',type);
+        
+        if(newNode != null)
+        choose.call(this,newNode);
+    }
+    
+    
+    // choose
+    const choose = function(selected)
+    {
+        const value = getAttr(selected,'data-value');
+        const text = Ele.getText(selected);
+        const select = trigHdlr(this,'fakeSelect:getSelect');
+        const choices = trigHdlr(this,'fakeSelect:getChoices');
+        const current = trigHdlr(select,'input:getValue');
+        
+        Ele.removeAttr(choices,'data-selected');
+        toggleAttr(selected,'data-selected',true);
+        
+        trigHdlr(select,'input:setValue',value);
+        trigHdlr(this,'fakeSelect:setTitle',text);
+        trigHdlr(this,'absolutePlaceholder:refresh');
+        trigEvt(this,'clickOpen:close');
+        
+        if(!Str.isEqual(value,current))
+        trigBubble(select,'change');
+    }
 
-    return r;
+    return this;
 }

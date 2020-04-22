@@ -117,6 +117,24 @@ const NumPrimitive =  {
 }
 
 
+// numFormat
+// contient des méthodes pour formatter un chiffre
+const NumFormat = {
+    
+    // formatDecimal
+    // permet de formatter un nombre en forçant le nombre de décimal
+    formatDecimal: function(value,decimal,locale)
+    {
+        Num.check(value);
+        locale = (Str.isNotEmpty(locale))? locale:'en-US';
+        decimal = (Integer.is(decimal))? decimal:2;
+        const intl = new Intl.NumberFormat(locale,{ minimumFractionDigits: decimal, maximumFractionDigits: decimal });
+        
+        return intl.format(value);
+    }
+}
+
+
 // numMath
 // contient des méthodes pour faire des opérations avec Math sur des nombres
 const NumMath = {
