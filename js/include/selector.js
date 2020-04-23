@@ -21,9 +21,6 @@ const SelectorTarget = {
             selector = (Doc.is(node))? selector:":scope "+selector;
             r = node.querySelector(selector);
         }
-        
-        if(Debug.is('selector'))
-        console.log(node,selector,'scopedQuerySelector',r);
 
         return r;
     },
@@ -46,9 +43,6 @@ const SelectorTarget = {
             if(r instanceof NodeList)
             r = ArrLike.arr(r);
         }
-        
-        if(Debug.is('selector'))
-        console.log(node,selector,'scopedQuerySelectorAll',r);
 
         return r;
     },
@@ -61,9 +55,6 @@ const SelectorTarget = {
     {
         let r = null;
         const $inst = this;
-        
-        if(Debug.is('selector'))
-        console.log(nodes,selector,'mergedQuerySelectorAll');
         
         if(nodes != null)
         {

@@ -174,7 +174,7 @@ Component.TabsNav = function(option)
     {
         const $this = this;
         const tabs = trigHdlr(this,'tabs:getTargets');
-        const tabsLength = (Arr.length(tabs) > 1)? true:false;
+        const tabsLength = (Arr.length(tabs) > 1);
         let value;
         
         const first = trigHdlr(this,'tabsNav:getFirst');

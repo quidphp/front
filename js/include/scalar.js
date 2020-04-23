@@ -26,7 +26,7 @@ const ScalarPrimitive = {
     // retourne vrai si scalar mais pas bool
     isNotBool: function(value)
     {
-        return (this.is(value) && !Bool.is(value))? true:false;
+        return this.is(value) && !Bool.is(value);
     },
     
     

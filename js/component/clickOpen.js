@@ -145,7 +145,7 @@ Component.ClickOpen = function(option)
     });
     
     setHdlr(this,'keyboardEscape:prevent',function() {
-        return (trigHdlr(this,'clickOpen:isOpen'))? true:false;
+        return trigHdlr(this,'clickOpen:isOpen') === true;
     });
     
     

@@ -28,14 +28,14 @@ Component.ScrollDrag = function(option)
     // handler
     setHdlrs(this,'scrollDrag:',{
         can: function() {
-            return (getAttr(this,'data-grabbable') == 1)? true:false;
+            return getAttr(this,'data-grabbable','int') === 1;
         },
         
         required: function() {
             const children = trigHdlr(this,'scrollDrag:getChildren');
             const dimensionEle = Ele.getDimension(children);
             const dimensionThis = Ele.getDimension(this);
-            return ((dimensionEle.width - dimensionThis.width) > 0)? true:false;
+            return ((dimensionEle.width - dimensionThis.width) > 0);
         },
         
         getChildren: function() {

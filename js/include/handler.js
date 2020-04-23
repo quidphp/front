@@ -123,15 +123,8 @@ const HandlerTarget = {
             if(Func.is(handler))
             {
                 const args = ArrLike.sliceStart(2,arguments);
-                
-                if(Debug.is('handler'))
-                console.log('triggerFunc',type,'found',node);
-                
                 r = handler.apply(node,args);
             }
-            
-            else if(Debug.is('handler'))
-            console.log('triggerFunc',type,'notFound',node);
         }
         
         return r;

@@ -42,11 +42,11 @@ Component.Input = function()
         },
         
         isDisabled: function() {
-            return (getProp(this,'disabled') === true)? true:false;
+            return getProp(this,'disabled') === true;
         },
         
         allowMultiple: function() {
-            return (getProp(this,'multiple') === true)? true:false;
+            return getProp(this,'multiple') === true;
         },
         
         getValue: function(trim,cast) {
@@ -126,11 +126,11 @@ Component.Input = function()
         },
         
         isTarget: function() {
-            return (!trigHdlr(this,'input:isDisabled') && !trigHdlr(this,'input:isSystem') && Ele.match(this,"[name]"))? true:false;
+            return (!trigHdlr(this,'input:isDisabled') && !trigHdlr(this,'input:isSystem') && Ele.match(this,"[name]"));
         },
         
         isTargetVisible: function() {
-            return (trigHdlr(this,'input:isTarget') && Ele.isVisible(this))? true:false;
+            return trigHdlr(this,'input:isTarget') && Ele.isVisible(this);
         },
         
         isSerialize: function() {
@@ -144,7 +144,7 @@ Component.Input = function()
         },
         
         isValidate: function() {
-            return (trigHdlr(this,'input:isTarget') && Ele.match(this,"[data-required],[data-pattern]"))? true:false;
+            return trigHdlr(this,'input:isTarget') && Ele.match(this,"[data-required],[data-pattern]");
         },
         
         isFile: function() {
@@ -152,11 +152,11 @@ Component.Input = function()
         },
         
         isCsrf: function() {
-            return (trigHdlr(this,'input:isSystem') && Ele.match(this,"[data-csrf='1']"))? true:false;
+            return trigHdlr(this,'input:isSystem') && Ele.match(this,"[data-csrf='1']");
         },
         
         isGenuine: function() {
-            return (trigHdlr(this,'input:isSystem') && Ele.match(this,"[data-genuine='1']"))? true:false;
+            return trigHdlr(this,'input:isSystem') && Ele.match(this,"[data-genuine='1']");
         },
         
         isSubmit: function() {
@@ -164,7 +164,7 @@ Component.Input = function()
         },
         
         isClickedSubmit: function() {
-            return (trigHdlr(this,'input:isSubmit') && Ele.match(this,"[data-submit-click]"))? true:false;
+            return trigHdlr(this,'input:isSubmit') && Ele.match(this,"[data-submit-click]");
         },
         
         getParent: function() {

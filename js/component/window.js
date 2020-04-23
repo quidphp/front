@@ -20,12 +20,12 @@ Component.Window = function(type,timeout)
     setHdlrs(this,'window:',{
         // retourne vrai si le navigateur courant supporte le touch
         isTouch: function() {
-            return (getData(this,'window-isTouch') === true)? true:false;
+            return getData(this,'window-isTouch') === true;
         },
         
         // retourne vrai si la fenêtre courante est responsive
         isResponsive: function() {
-            return (Win.getDimension().width < 900)? true:false;
+            return Win.getDimension().width < 900;
         },
         
         // permet de scroller la fenêtre

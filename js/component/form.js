@@ -21,7 +21,7 @@ Component.Form = function()
     setHdlrs(this,'form:',{
         
         isSubmitted: function() {
-            return (getData(this,'form-submitted') === 1)? true:false;
+            return getData(this,'form-submitted') === 1;
         },
         
         getFields: function() {
@@ -97,7 +97,7 @@ Component.Form = function()
         },
         
         hasFiles: function() {
-            return (Arr.isNotEmpty(trigHdlr(this,'form:getFiles')))? true:false;
+            return Arr.isNotEmpty(trigHdlr(this,'form:getFiles'));
         },
         
         getClickedSubmits: function() {

@@ -36,7 +36,7 @@ Component.Validate = function()
     });
     
     setHdlr(this,'validate:isEmpty',function() {
-        return (Vari.isEmpty(trigHdlr(this,'validate:getValue')))? true:false;
+        return Vari.isEmpty(trigHdlr(this,'validate:getValue'));
     });
     
     setHdlr(this,'validate:isEmptyAndRequired',function() {
@@ -47,7 +47,7 @@ Component.Validate = function()
         let r = [];
         let validate = null;
         const value = trigHdlr(this,'validate:getValue');
-        const empty = (Vari.isEmpty(value))? true:false;
+        const empty = Vari.isEmpty(value);
         const required = trigHdlr(this,'validate:getRequired');
         const pattern = trigHdlr(this,'validate:getPattern');
         
@@ -68,7 +68,7 @@ Component.Validate = function()
     });
     
     setHdlr(this,'validate:isNotEmptyAndValid',function(type) {
-        return (!trigHdlr(this,'validate:isEmpty') && trigHdlr(this,'validate:isValid',type))? true:false;
+        return !trigHdlr(this,'validate:isEmpty') && trigHdlr(this,'validate:isValid',type);
     });
     
     setHdlr(this,'validate:process',function() {

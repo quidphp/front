@@ -30,7 +30,7 @@ Component.AjaxBlock = function(option)
         
         isReady: function() {
             const node = trigHdlr(this,'ajaxBlock:getStatusNode');
-            return (getAttr(node,"data-status") === 'ready')? true:false;
+            return getAttr(node,"data-status") === 'ready';
         },
         
         shouldSetContent: function() {

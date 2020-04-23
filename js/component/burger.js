@@ -26,7 +26,7 @@ Component.Burger = function(persistent)
         
         isOpen: function() {
             const html = trigHdlr(document,'doc:getHtml');
-            return (getAttr(html,'data-burger') === 'open')? true:false;
+            return getAttr(html,'data-burger') === 'open';
         },
         
         toggle: function() {

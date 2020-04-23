@@ -26,7 +26,7 @@ const Vari = Lemur.Vari = {
         r = (value.length > 0)? false:true;
         
         else if(Scalar.is(value))
-        r = (!value)? true:false;
+        r = !value;
         
         else if(Target.is(value))
         r = false;

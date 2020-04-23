@@ -25,23 +25,44 @@ Component.Plural = function(option)
     // handler
     setHdlrs(this,'plural:',{
         
+        getNone: function() {
+            return getAttr(this,$option.attrNone) || trigHdlr(this,'plural:getSingular');
+        },
+        
+        getSingular: function() {
+            return getAttr(this,$option.attrSingular);
+        },
+        
+        getPlural: function() {
+            let r = null;
+            const singular = trigHdlr(this,'plural:getSingular');
+            const pluralStr = getAttr(this,$option.attrPlural);
+            const pluralInt = getAttr(this,$option.attrPlural,'int');
+            
+            if(pluralInt === 1)
+            {
+                if(Str.is(singular))
+                r = singular+$option.pluralDefault;
+            }
+            
+            else if(Str.is(pluralStr))
+            r = pluralStr;
+            
+            return r;
+        },
+        
         getText: function(count) {
             let r = null;
             Integer.check(count);
-            const singular = getAttr(this,$option.attrSingular);
             
             if(count === 0)
-            r = getAttr(this,$option.attrNone) || singular;
+            r = trigHdlr(this,'plural:getNone');
             
             else if(count === 1)
-            r = singular;
+            r = trigHdlr(this,'plural:getSingular');
             
             else if(count > 1)
-            {
-                r = getAttr(this,$option.attrPlural);
-                if(r === '1')
-                r = singular+$option.pluralDefault;
-            }
+            r = trigHdlr(this,'plural:getPlural');
             
             return Str.check(r);
         },
@@ -52,6 +73,27 @@ Component.Plural = function(option)
             Ele.replaceHtml(this,text);
         }
     });
+    
+    
+    // setup
+    aelOnce(this,'component:setup',function() {
+        initialAttr.call(this);
+    });
+    
+    
+    // initialAttr
+    const initialAttr = function()
+    {
+        const html = getHtml(this);
+        const singular = trigHdlr(this,'plural:getSingular');
+        const plural = trigHdlr(this,'plural:getPlural');
+        
+        if(singular == null)
+        setAttr(this,$option.attrSingular,html);
+        
+        if(plural == null)
+        setAttr(this,$option.attrPlural,true);
+    }
     
     
     // getCount

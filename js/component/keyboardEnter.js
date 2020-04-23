@@ -19,7 +19,7 @@ Component.KeyboardEnter = function(prevent,type)
     
     // handler
     setHdlr(this,'keyboardEnter:prevent',function() {
-        return (prevent === true)? true:false;
+        return prevent === true;
     });        
     
     return this;

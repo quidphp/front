@@ -49,11 +49,11 @@ Component.InitOpenClose = function(option)
         },
         
         canOpen: function() {
-            return (!trigHdlr(this,type+':isOpen') && !trigHdlr(this,type+':isDisabled') && Ele.getData(this,'clickOpen-transitionTimeout') == null)? true:false;
+            return (!trigHdlr(this,type+':isOpen') && !trigHdlr(this,type+':isDisabled') && Ele.getData(this,'clickOpen-transitionTimeout') == null);
         },
         
         canClose: function() {
-            return (trigHdlr(this,type+':isOpen') && !trigHdlr(this,type+':isDisabled') && Ele.getData(this,'clickOpen-transitionTimeout') == null)? true:false;
+            return (trigHdlr(this,type+':isOpen') && !trigHdlr(this,type+':isDisabled') && Ele.getData(this,'clickOpen-transitionTimeout') == null);
         },
         
         disable: function() {

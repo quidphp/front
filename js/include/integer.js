@@ -12,7 +12,7 @@ const IntegerPrimitive = {
     // retourne vrai si la valeur est un int
     is: function(value)
     {
-        return (Num.is(value) && (parseInt(value) === value))? true:false;
+        return Num.is(value) && parseInt(value) === value;
     },
     
     

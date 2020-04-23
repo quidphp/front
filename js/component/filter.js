@@ -44,6 +44,11 @@ Component.Filter = function(option)
     
     // event
     ael(this,'clickOpen:triggerClick',function(clickEvent) {
+        const isEmpty = trigHdlr(this,'clickOpen:isEmpty');
+        
+        if($option.closeUnsetContent === false && isEmpty === false)
+        trigEvt(this,'clickOpen:open');
+        else
         trigHdlr(this,'ajax:init');
     });
     

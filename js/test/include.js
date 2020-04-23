@@ -125,7 +125,7 @@ Test.Include = function()
                 assert(key === 0);
             }
             
-            return (this === 2)? true:false;
+            return this === 2;
         }).length === 1);
         assert(Arr.isEqual(Arr.replace([1,2,2],[4,5],[0]),[0,5,2]));
         assert(Arr.isEqual(Arr.clean([null,undefined,0,'0',[],{},false,true,'',1]),[0,'0',false,true,1]));
@@ -792,7 +792,7 @@ Test.Include = function()
         })['final'] === true);
         assert(Pojo.isEqual(Pojo.find(pojoMapFilter,function(value,key,pojo) {
             assert(pojo === pojoMapFilter);
-            return (Pojo.is(this))? true:false;
+            return Pojo.is(this);
         }),{lol: true}));
         assert(Arr.length(Pojo.arr(pojoMapFilter)) === 5);
         
@@ -900,7 +900,7 @@ Test.Include = function()
         assert(Str.get(1,strVal) === 'é');
         assert(Str.valueFirst('éèè') === 'é');
         assert(Str.find('john',function() {
-            return this != 'j'? true:false;
+            return this != 'j';
         }) === 'o');
         assert(Arr.length(Str.arr('what')) === 4);
         assert(Str.removeAllWhitespace(' ads das sda ') === 'adsdassda');

@@ -352,7 +352,7 @@ Component.History = function(option)
                 if(isValid === true)
                 {
                     if(trigHdlr(window,'windowUnload:isValid') === true)
-                    r = (makeAjax.call(this,state,nodeOrEvent))? true:false;
+                    r = makeAjax.call(this,state,nodeOrEvent) != null;
                     else
                     r = true;
                 }

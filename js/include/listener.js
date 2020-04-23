@@ -46,7 +46,7 @@ const ListenerTarget = new function()
     {
         const $inst = this;
         const handler = function(event) {
-            let go = (delegate == null)? true:false;
+            let go = (delegate == null);
             let context = this;
             
             if(option.once === true && Evt.support.once === false)
@@ -63,10 +63,6 @@ const ListenerTarget = new function()
                 let args = [event];
                 const detail = event.detail;
                 args = Arr.merge(args,detail);
-                
-                if(Debug.is('listener'))
-                console.log('listener',this,type,event,delegate,detail);
-                
                 func.apply(context,args);
             }
         };
@@ -161,12 +157,6 @@ const ListenerTarget = new function()
         
         if(Arr.isNotEmpty(nodes))
         {
-            if(Debug.is('listener'))
-            {
-                let consoleArgs = ['removeListener',nodes,Arr.copy(args).shift()];
-                console.log.apply(this,consoleArgs);
-            }
-            
             Arr.each(nodes,function() {
                 if(Str.isNotEmpty(args))
                 {
@@ -195,9 +185,6 @@ const ListenerTarget = new function()
         if(Arr.isNotEmpty(nodes))
         {
             const event = Evt.createFromType(type,option);
-            
-            if(Debug.is('listener'))
-            console.log('trigger',type,nodes);
             
             Arr.each(nodes,function() {
                 this.dispatchEvent(event);

@@ -18,15 +18,15 @@ Component.BlockEvent = function(type)
     setHdlrs(this,'blockEvent:',{
         
         isRegistered: function(type) {
-            return (Integer.is(getBlock.call(this,type)))? true:false;
+            return Integer.is(getBlock.call(this,type));
         },
         
         isUnblocked: function(type) {
-            return (getBlock.call(this,type) === 0)? true:false;
+            return getBlock.call(this,type) === 0;
         },
         
         isBlocked: function(type) {
-            return (getBlock.call(this,type) === 1)? true:false;
+            return getBlock.call(this,type) === 1;
         },
         
         getObj: function() {
@@ -56,9 +56,6 @@ Component.BlockEvent = function(type)
             Str.check(type,true);
             const blockObj = getBlockObj.call(this);
             
-            if(Debug.is('blockEvent'))
-            console.log('blockEvent:block',type);
-            
             if(Pojo.keyExists(type,blockObj))
             Pojo.setRef(type,1,blockObj);
         },
@@ -75,9 +72,6 @@ Component.BlockEvent = function(type)
         unblock: function(type) {
             Str.check(type,true);
             const blockObj = getBlockObj.call(this);
-            
-            if(Debug.is('blockEvent'))
-            console.log('blockEvent:unblock',type);
             
             if(Pojo.keyExists(type,blockObj))
             Pojo.setRef(type,0,blockObj);

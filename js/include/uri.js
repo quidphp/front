@@ -39,7 +39,7 @@ const Uri = Lemur.Uri = {
     // retourne vrai si l'uri a une extension
     hasExtension: function(uri)
     {
-        return (this.extension(uri) != null)? true:false;
+        return this.extension(uri) != null;
     },
 
 
@@ -135,7 +135,7 @@ const Uri = Lemur.Uri = {
     // retourne vrai si l'uri est la même que la comparaison, que l'uri a un hash et que le hash est identique
     isSameWithHash: function(uri,compare)
     {
-        return (this.hasFragment(uri) && uri === compare)? true:false;
+        return this.hasFragment(uri) && uri === compare;
     },
 
 
@@ -245,7 +245,7 @@ const Uri = Lemur.Uri = {
         if(Str.isNotEmpty(value))
         {
             r = value;
-            const hasHash = (Str.isStart('#',r))? true:false;
+            const hasHash = Str.isStart('#',r);
             
             if(symbol === true)
             r = (!hasHash)? "#"+r:r;

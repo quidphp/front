@@ -44,7 +44,8 @@ Component.FeedSearch = function(option)
         },
         
         getSearchValue: function() {
-            return trigHdlr(trigHdlr(this,'feedSearch:getSearch'),'input:getValueTrim');
+            const search = trigHdlr(this,'feedSearch:getSearch');
+            return trigHdlr(search,'input:getValueTrim');
         },
         
         getOrder: function() {
@@ -52,7 +53,8 @@ Component.FeedSearch = function(option)
         },
         
         getOrderValue: function() {
-            return trigHdlr(trigHdlr(this,'feedSearch:getOrder'),'input:getValueInt');
+            const order = trigHdlr(this,'feedSearch:getOrder');
+            return trigHdlr(order,'input:getValueInt');
         }
     });
     

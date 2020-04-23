@@ -19,7 +19,7 @@ Component.KeyboardEscape = function(prevent,type)
     
     // handler
     setHdlr(this,'keyboardEscape:prevent',function() {
-        return (prevent === true)? true:false;
+        return prevent === true;
     });    
     
     return this;
