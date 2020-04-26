@@ -30,7 +30,7 @@ const DataTarget = {
     allData: function(node,create)
     {
         let r = undefined;
-        this.check(node);
+        this.typecheck(node);
         const dataKey = this.getDataKey();
         let isPojo = Pojo.is(node[dataKey]);
         
@@ -52,10 +52,10 @@ const DataTarget = {
     // envoie une exception si plus d'une node
     getData: function(node,key)
     {
-        Str.check(key);
+        Str.typecheck(key);
         const data = this.allData(node);
         
-        return Pojo.get(key,data);
+        return (data != null)? Pojo.get(key,data):undefined;
     },
     
     
@@ -76,11 +76,11 @@ const DataTarget = {
     // si undefined efface la data
     setData: function(nodes,key,value)
     {
-        nodes = this.wrap(nodes,false);
-        Str.check(key,true);
+        nodes = this.toArray(nodes,false);
+        Str.typecheck(key,true);
         const $inst = this;
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             const data = $inst.allData(this,true);
             
             if(value === undefined)

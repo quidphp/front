@@ -24,9 +24,9 @@ Component.InitOpenClose = function(option)
     
     // check
     const type = $option.type;
-    Str.check(type);
-    Str.check($option.attr);
-    Str.check($option.attrInit);
+    Str.typecheck(type);
+    Str.typecheck($option.attr);
+    Str.typecheck($option.attrInit);
     
     
     // handler
@@ -108,7 +108,7 @@ Component.InitOpenClose = function(option)
     // setTransitionTimeout
     const setTransitionTimeout = function(timeout)
     {
-        Integer.check(timeout);
+        Integer.typecheck(timeout);
         const key = 'clickOpen-transitionTimeout';
         
         const func = Func.timeout(timeout,function() {

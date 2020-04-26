@@ -25,7 +25,7 @@ Component.Timeout = function(type,timeout)
         },
         
         set: function(type) {
-            Str.check(type,true);
+            Str.typecheck(type,true);
             const duration = trigHdlr(this,'timeout:duration',type);
             const timeoutObj = getTimeoutObj.call(this);
             const timeout = Func.timeout(duration,function() {
@@ -41,7 +41,7 @@ Component.Timeout = function(type,timeout)
         },
         
         clear: function(type) {
-            Str.check(type,true);
+            Str.typecheck(type,true);
             const oldTimeout = getTimeout.call(this,type);
             
             if(oldTimeout != null)

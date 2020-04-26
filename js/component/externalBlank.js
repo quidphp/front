@@ -25,16 +25,16 @@ Component.ExternalBlank = function(persistent)
         },
         
         externalWithoutTarget: function() {
-            return Arr.filter(trigHdlr(this,'externalBlank:withoutTarget'),function() {
-                return (Uri.isExternal(getAttr(this,"href")) && !Ele.match(this,"[href^='mailto:']"));
+            return Arr.filter(trigHdlr(this,'externalBlank:withoutTarget'),function(ele) {
+                return (Uri.isExternal(getAttr(ele,"href")) && !Ele.match(ele,"[href^='mailto:']"));
             });
         },
         
         go: function() {
             const anchors = trigHdlr(this,'externalBlank:externalWithoutTarget');
             
-            Arr.each(anchors,function() {
-                setProp(this,'target','_blank');
+            Arr.each(anchors,function(ele) {
+                setProp(ele,'target','_blank');
             });
         }
     });

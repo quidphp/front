@@ -45,8 +45,8 @@ Component.Calendar = function(option)
         },
         
         getSelecteds: function() {
-            return Arr.filter(trigHdlr(this,'calendar:getCells'),function() {
-                return Ele.match(this,".selected");
+            return Arr.filter(trigHdlr(this,'calendar:getCells'),function(ele) {
+                return Ele.match(ele,".selected");
             });
         },
         
@@ -83,15 +83,15 @@ Component.Calendar = function(option)
             
             if(Num.is(value))
             {
-                r = Arr.find(tds,function() {
-                    return Ele.match(this,"[data-timestamp='"+value+"']");
+                r = Arr.find(tds,function(ele) {
+                    return Ele.match(ele,"[data-timestamp='"+value+"']");
                 });
             }
             
             else if(Str.isNotEmpty(value) && value.length == Str.length(format))
             {
-                r = Arr.find(tds,function() {
-                    return Ele.match(this,"[data-format^='"+value+"']");
+                r = Arr.find(tds,function(ele) {
+                    return Ele.match(ele,"[data-format^='"+value+"']");
                 });
             }
             

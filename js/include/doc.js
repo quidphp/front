@@ -48,8 +48,8 @@ const DocTarget = {
         {
             const children = this.children(value);
             
-            Ele.each(children,function() {
-                const dimension = Ele.getDimension(this);
+            Arr.each(children,function(ele) {
+                const dimension = Ele.getDimension(ele);
                 r.width += dimension.width;
                 r.height += dimension.height;
             });

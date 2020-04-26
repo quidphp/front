@@ -16,13 +16,11 @@ Component.InputNumeric = function(option)
     // option
     const $option = Pojo.replace({
         timeout: 500,
-        keyEvent: 'keydown',
-        timeoutHandler: 'inputNumeric:process'
+        keyEvent: 'keydown'
     },option);
     
     
     // bindings
-    Component.Timeout.call(this,$option.keyEvent,$option.timeout);
     Component.ValidatePrevent.call(this,'inputNumeric:change');
     Component.KeyboardArrow.call(this,'vertical');
     Component.InputMemory.call(this);
@@ -83,16 +81,16 @@ Component.InputNumeric = function(option)
             return r;
         },
         
-        setPrev: function() {
+        setPrev: function(change) {
             const value = trigHdlr(this,'inputNumeric:getPrev');
             if(value != null)
-            trigHdlr(this,'inputNumeric:setValue',value,true);
+            trigHdlr(this,'inputNumeric:setValue',value,change);
         },
         
-        setNext: function() {
+        setNext: function(change) {
             const value = trigHdlr(this,'inputNumeric:getNext');
             if(value != null)
-            trigHdlr(this,'inputNumeric:setValue',value,true);
+            trigHdlr(this,'inputNumeric:setValue',value,change);
         },
         
         validateReplace: function(val) {
@@ -111,10 +109,11 @@ Component.InputNumeric = function(option)
         
         validate: function() {
             let r = false;
-            let val = trigHdlr(this,'input:getValueInt');
-
-            if(Integer.is(val))
+            let val = trigHdlr(this,'input:getValue');
+            
+            if(Num.is(val))
             {
+                val = Integer.cast(val);
                 const newVal = trigHdlr(this,'inputNumeric:validateReplace',val);
                 
                 if(newVal != null)
@@ -145,15 +144,11 @@ Component.InputNumeric = function(option)
         }
     });
     
-    setHdlr(this,'timeout:validateEvent',function(event) {
-        return !Evt.isSpecialKeyCode(event);
-    });
-    
-    
+
     // event
-    ael(this,'timeout:'+$option.keyEvent,function() {
-        if(Ele.match(this,":focus"))
-        trigHdlr(this,$option.timeoutHandler);
+    ael(this,$option.keyEvent,function(event) {
+        if(!Evt.isSpecialKeyCode(event))
+        keyboardDebouce.call(this,event);
     });
     
     ael(this,'validate:invalid',function() {
@@ -177,15 +172,24 @@ Component.InputNumeric = function(option)
     
     ael(this,'inputNumeric:change',function() {
         trigHdlr(this,'inputMemory:remember');
-        trigHdlr(this,'timeout:clear',$option.keyEvent);
     });
     
     ael(this,'keyboardArrow:up',function() {
         trigHdlr(this,'inputNumeric:setNext');
+        keyboardDebouce.call(this);
     });
     
     ael(this,'keyboardArrow:down',function() {
         trigHdlr(this,'inputNumeric:setPrev');
+        keyboardDebouce.call(this);
+    });
+    
+    
+    // keyboardDebouce
+    const keyboardDebouce = Func.debounce($option.timeout,function() 
+    {
+        if(Ele.match(this,":focus"))
+        trigEvt(this,'inputNumeric:change');
     });
     
     

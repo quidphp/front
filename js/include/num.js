@@ -104,7 +104,7 @@ const NumPrimitive =  {
     // retourne la variable sous forme de nombre
     cast: function(value)
     {
-        return (this.is(value))? parseFloat(value):null;
+        return (Scalar.isNotBool(value) && value !== '')? parseFloat(value):null;
     },
     
     
@@ -112,7 +112,8 @@ const NumPrimitive =  {
     // retourne le nombre sous forme de string
     str: function(value)
     {
-        return (this.is(value))? Number(value).toString():null;
+        this.typecheck(value);
+        return Number(value).toString();
     }
 }
 
@@ -125,7 +126,7 @@ const NumFormat = {
     // permet de formatter un nombre en forçant le nombre de décimal
     formatDecimal: function(value,decimal,locale)
     {
-        Num.check(value);
+        Num.typecheck(value);
         locale = (Str.isNotEmpty(locale))? locale:'en-US';
         decimal = (Integer.is(decimal))? decimal:2;
         const intl = new Intl.NumberFormat(locale,{ minimumFractionDigits: decimal, maximumFractionDigits: decimal });
@@ -143,13 +144,10 @@ const NumMath = {
     // arrondi le nombre sous forme de int
     round: function(value)
     {
-        let r = null;
         value = this.cast(value);
-        
-        if(value != null)
-        r = Math.round(value);
-        
-        return r;
+        this.typecheck(value);
+
+        return Math.round(value);
     },
     
     
@@ -157,13 +155,10 @@ const NumMath = {
     // amène le nombre au int plus petit
     floor: function(value)
     {
-        let r = null;
         value = this.cast(value);
+        this.typecheck(value);
         
-        if(value != null)
-        r = Math.floor(value);
-        
-        return r;
+        return Math.floor(value);
     },
     
     
@@ -171,12 +166,9 @@ const NumMath = {
     // amène le nombre au int plus grand
     ceil: function(value)
     {
-        let r = null;
         value = this.cast(value);
+        this.typecheck(value);
         
-        if(value != null)
-        r = Math.ceil(value);
-        
-        return r;
+        return Math.ceil(value);
     }
 }

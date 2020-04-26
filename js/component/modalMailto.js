@@ -30,11 +30,11 @@ Component.ModalMailto = function(option)
         getHref: function() {
             const modal = trigHdlr(this,'modalMailto:getModal');
             const href = getAttr(modal,'data-mailto') || $option.href;
-            return Str.check(href,true);
+            return Str.typecheck(href,true);
         },
         
         getQuery: function() {
-            return Str.check($option.query,true);
+            return Str.typecheck($option.query,true);
         }
     });
     

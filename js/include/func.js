@@ -26,9 +26,9 @@ const FuncObj = {
     
     // async
     // comme timeout, mais la durée est automatiquement 0
-    async: function(func) 
+    async: function(func,context) 
     {
-        return this.timeout(0,func);
+        return this.timeout(0,func,context);
     },
     
     
@@ -38,7 +38,7 @@ const FuncObj = {
     // retourne le timeout
     timeout: function(delay,func,context) 
     {
-        Func.check(func);
+        Func.typecheck(func);
         
         if(!Integer.is(delay))
         delay = 0;
@@ -52,8 +52,8 @@ const FuncObj = {
     // retourne une nouvelle fonction
     debounce: function(delay,func) 
     {
-        Integer.check(delay);
-        Func.check(func);
+        Integer.typecheck(delay);
+        Func.typecheck(func);
         const $inst = this;
         let timeout;
         
@@ -76,7 +76,8 @@ const FuncObj = {
     debounceOnce: function(delay,func)
     {
         let once = false;
-        Func.check(func);
+        Func.typecheck(func);
+        
         return this.debounce(delay,function() {
             const args = arguments;
             
@@ -94,8 +95,8 @@ const FuncObj = {
     // retourne une nouvelle fonction
     throttle: function(delay,func) 
     {
-        Integer.check(delay);
-        Func.check(func);
+        Integer.typecheck(delay);
+        Func.typecheck(func);
         const $inst = this;
         let canCall = true;
         

@@ -22,8 +22,8 @@ Component.AbsolutePlaceholder = function()
         
         getChild: function() {
             const childs = Ele.children(this);
-            return Arr.find(childs,function() {
-                return Ele.isVisible(this);
+            return Arr.find(childs,function(ele) {
+                return Ele.isVisible(ele);
             });
         },
         

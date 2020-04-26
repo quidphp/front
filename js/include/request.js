@@ -26,9 +26,15 @@ const Request = Lemur.Request = {
     
     // scheme
     // retourne le scheme courant
-    scheme: function()
+    // possible de retourne avec ou sans le :
+    scheme: function(twoDot)
     {
-        return location.protocol.substr(0, location.protocol.indexOf(':'));
+        let r = location.protocol;
+        
+        if(twoDot !== true)
+        r = r.substr(0, r.indexOf(':'));
+        
+        return r;
     },
 
     

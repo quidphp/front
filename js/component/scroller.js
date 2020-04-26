@@ -38,8 +38,8 @@ Component.Scroller = function(option)
         canScroll: function(top,left) {
             let r = false;
             const current = trigHdlr(this,'scroller:getCurrentScroll');
-            left = Num.ceil(left);
-            top = Num.ceil(top);
+            top = (Num.is(top))? Num.ceil(top):null;
+            left = (Num.is(left))? Num.ceil(left):null;
             
             if(Integer.is(left) && current.scrollableX === true && left >= 0 && left !== current.left && left <= current.width)
             r = true;
@@ -75,8 +75,9 @@ Component.Scroller = function(option)
         go: function(top,left,smooth) {
             let r = null;
             const $this = this;
-            top = Num.ceil(top);
-            left = Num.ceil(left);
+            top = (Num.is(top))? Num.ceil(top):null;
+            left = (Num.is(left))? Num.ceil(left):null;
+            
             const scroller = trigHdlr(this,'scrollChange:getScroller');
             const scrollTo = getScrollTo(top,left,smooth);
             
@@ -137,8 +138,8 @@ Component.Scroller = function(option)
     const getCurrentVerticalTarget = function(targets,offsetType)
     {
         let r = null;
-        Ele.checks(targets);
-        Str.check(offsetType);
+        Ele.typechecks(targets);
+        Str.typecheck(offsetType);
         
         const winDimension = Win.getDimension();
         const currentScroll = trigHdlr(this,'scroller:getCurrentScroll');

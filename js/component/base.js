@@ -23,22 +23,22 @@ Component.Base = function()
     ael(this,'component:enable',function() {
         const inputs = trigHdlr(this,'base:getInputs');
         
-        Ele.each(inputs,function() {
-            if(trigHdlr(this,'input:isBinded'))
+        Arr.each(inputs,function(ele) {
+            if(trigHdlr(ele,'input:isBinded'))
             trigHdlrs(inputs,'input:enable');
             else
-            setProp(this,'disabled',false)
+            setProp(ele,'disabled',false)
         });
     });
     
     ael(this,'component:disable',function() {
         const inputs = trigHdlr(this,'base:getInputs');
         
-        Ele.each(inputs,function() {
-            if(trigHdlr(this,'input:isBinded'))
-            trigHdlr(this,'input:disable');
+        Arr.each(inputs,function(ele) {
+            if(trigHdlr(ele,'input:isBinded'))
+            trigHdlr(ele,'input:disable');
             else
-            setProp(this,'disabled',true);
+            setProp(ele,'disabled',true);
         });
     });
     

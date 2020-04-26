@@ -79,7 +79,6 @@ Component.InputCalendar = function(option)
         
         // components
         Component.KeyboardEnter.call(input,true,$option.keyEvent);
-        Component.Timeout.call(input,$option.keyEvent,$option.timeout);
         
         
         // handler
@@ -94,7 +93,7 @@ Component.InputCalendar = function(option)
         
         
         // event
-        ael(input,'timeout:'+$option.keyEvent,function() {
+        ael(input,$option.keyEvent,function() {
             calendarChange.call(this,true,true);
         });
         
@@ -113,12 +112,12 @@ Component.InputCalendar = function(option)
         
         
         // calendarChange
-        const calendarChange = function(reload,onlyIn) 
+        const calendarChange = Func.debounce($option.timeout,function(reload,onlyIn) 
         {
             const calendar = trigHdlr($this,'inputCalendar:getCalendar');
             const val = trigHdlr(this,'input:getValue');
             trigHdlr(calendar,'calendar:select',val,reload,onlyIn);
-        }
+        });
     }
     
     

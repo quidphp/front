@@ -63,7 +63,7 @@ const Html = Lemur.Html = {
     start: function(tag,value,attr) 
     {
         let r = '';
-        Str.check(tag,true);
+        Str.typecheck(tag,true);
         const isSelfClosing = this.isSelfClosing(tag);
         const attrStr = this.attr(attr,tag,value);
         
@@ -94,7 +94,7 @@ const Html = Lemur.Html = {
     end: function(tag) 
     {
         let r = '';
-        Str.check(tag,true);
+        Str.typecheck(tag,true);
         const isSelfClosing = this.isSelfClosing(tag);
         
         if(isSelfClosing === false)
@@ -176,7 +176,7 @@ const Html = Lemur.Html = {
         const defaultKeyValue = function(key,value) {
             return {
                 key: Str.fromCamelCase('-',key),
-                value: (Bool.is(value))? Integer.fromBool(value):value
+                value: (Bool.is(value))? Bool.toInt(value):value
             } 
         };
         

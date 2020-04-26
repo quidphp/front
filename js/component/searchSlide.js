@@ -20,9 +20,7 @@ Component.SearchSlide = function(option)
         transitionTimeout: 300,
         triggerToggle: false,
         triggerFocusClose: false,
-        inputSearch: {
-            timeoutHandler: 'inputSearch:validate'
-        },
+        inputSearch: { }
     },option);
     
     

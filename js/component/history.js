@@ -124,7 +124,7 @@ Component.History = function(option)
         // permet de faire un replaceState avec un nouveau hash
         // retourne null ou le nouveau state
         replaceHash: function(value,title) {
-            Str.check(value);
+            Str.typecheck(value);
             value = Uri.makeHash(value,true);
             return trigHdlr(this,'history:replaceState',value,title);
         },
@@ -132,7 +132,7 @@ Component.History = function(option)
         // permet de faire un pushState avec un nouveau hash
         // retourne null ou le nouveau state, si null va faire le changement via window.location
         pushHash: function(value,title) {
-            Str.check(value);
+            Str.typecheck(value);
             value = Uri.makeHash(value,true);
             return trigHdlr(this,'history:pushState',value,title);
         },
@@ -371,6 +371,8 @@ Component.History = function(option)
                     if(isHashChange === false)
                     {
                         const targetsTriggered = getTargetsTriggered.call(this,nodeOrEvent);
+                        
+                        if(targetsTriggered != null)
                         toggleAttr(targetsTriggered,$option.attrTriggered,true);
                     }
                     

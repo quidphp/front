@@ -38,7 +38,7 @@ Component.ScrollChange = function(option)
         else if(Str.isNotEmpty($option.scroller))
         r = qs(this,$option.scroller);
         
-        return Target.check(r);
+        return Target.typecheck(r);
     });
     const scroller = Arr.valueFirst(trigHdlrs(this,'scrollChange:getScroller'));
     

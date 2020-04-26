@@ -53,7 +53,7 @@ Component.Plural = function(option)
         
         getText: function(count) {
             let r = null;
-            Integer.check(count);
+            Integer.typecheck(count);
             
             if(count === 0)
             r = trigHdlr(this,'plural:getNone');
@@ -64,7 +64,7 @@ Component.Plural = function(option)
             else if(count > 1)
             r = trigHdlr(this,'plural:getPlural');
             
-            return Str.check(r);
+            return Str.typecheck(r);
         },
         
         set: function(value) {

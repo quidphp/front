@@ -60,7 +60,7 @@ Component.Feed = function()
     // feedSet
     const feedSet = function(data,type)
     {
-        Str.check(data);
+        Str.typecheck(data);
         data = trigHdlr(this,'ajaxBlock:parseContent',data,type);
         
         if(type === 'append')

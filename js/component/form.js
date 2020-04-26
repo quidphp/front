@@ -29,62 +29,62 @@ Component.Form = function()
         },
         
         getSystemFields: function() {
-            return Arr.filter(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isSystem');
+            return Arr.filter(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isSystem');
             });
         },
         
         getTargetFields: function() {
-            return Arr.filter(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isTarget');
+            return Arr.filter(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isTarget');
             });
         },
         
         getSerializeFields: function() {
-            return Arr.filter(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isSerialize');
+            return Arr.filter(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isSerialize');
             });
         },
         
         getTargetVisibleFields: function() {
-            return Arr.filter(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isTargetVisible');
+            return Arr.filter(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isTargetVisible');
             });
         },
         
         getValidateFields: function() {
-            return Arr.filter(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isValidate');
+            return Arr.filter(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isValidate');
             });
         },
         
         getFiles: function() {
-            return Arr.filter(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isFile');
+            return Arr.filter(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isFile');
             });
         },
         
         getSubmits: function() {
-            return Arr.filter(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isSubmit');
+            return Arr.filter(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isSubmit');
             });
         },
         
         getCsrfField: function() {
-            return Arr.find(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isCsrf');
+            return Arr.find(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isCsrf');
             });
         },
         
         getGenuineField: function() {
-            return Arr.find(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isGenuine');
+            return Arr.find(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isGenuine');
             });
         },
         
         getClickedSubmit: function() {
-            return Arr.find(trigHdlr(this,'form:getFields'),function() {
-                return trigHdlr(this,'input:isClickedSubmit');
+            return Arr.find(trigHdlr(this,'form:getFields'),function(ele) {
+                return trigHdlr(ele,'input:isClickedSubmit');
             });
         },
         
@@ -109,8 +109,8 @@ Component.Form = function()
                 
                 if(Str.isNotEmpty(name))
                 {
-                    r = Arr.filter(trigHdlr(this,'form:getSubmits'),function() {
-                        return Ele.match(this,"[name='"+name+"']");
+                    r = Arr.filter(trigHdlr(this,'form:getSubmits'),function(ele) {
+                        return Ele.match(ele,"[name='"+name+"']");
                     });
                 }
             }
@@ -140,8 +140,8 @@ Component.Form = function()
         },
         
         focusFirst: function() {
-            const target = Arr.find(trigHdlr(this,'form:getTargetVisibleFields'),function() {
-                return trigHdlr(this,'input:isEmpty');
+            const target = Arr.find(trigHdlr(this,'form:getTargetVisibleFields'),function(ele) {
+                return trigHdlr(ele,'input:isEmpty');
             });
 
             if(target != null)
@@ -223,8 +223,8 @@ Component.Form = function()
             toggleAttr(this,'data-submit-click',true);
         });
         
-        const submitsConfirm =  Arr.filter(submits,function() {
-            return Ele.match(this,'[data-confirm]');
+        const submitsConfirm =  Arr.filter(submits,function(ele) {
+            return Ele.match(ele,'[data-confirm]');
         });
         Component.Confirm.call(submitsConfirm,'click');
     }
@@ -245,7 +245,7 @@ Component.Form = function()
         setHdlr(this,'validatePrevent:getTargets',function() {
             const targets = trigHdlr(this,'form:getValidateFields');
 
-            Ele.each(targets,function() {
+            Arr.each(targets,function() {
                 if(trigHdlr(this,'input:isValidateSetup') === false)
                 trigSetup(this);
             });

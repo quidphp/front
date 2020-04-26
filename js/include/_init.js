@@ -33,8 +33,8 @@ const Factory = Lemur.Factory = function(prototype)
 // testsuite
 const TestSuite = Lemur.TestSuite = function() 
 {
-    return Pojo.each(Lemur.Test,function(value,key) {
-        return value();
+    return Pojo.each(Lemur.Test,function(suite,key) {
+        return suite();
     });
 }
 

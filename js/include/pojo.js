@@ -23,13 +23,14 @@ const PojoObj = {
         let r = null;
         let args = Array.from(arguments);
         
-        if(args.length > 0 && this.is(args[0]))
+        if(args.length > 0)
         {
-            const $inst = this;
             r = this.copy(args[0]);
+            const $inst = this;
+            const loop = Arr.sliceStart(1,args);
             
-            Arr.each(Arr.sliceStart(1,args),function(value) {
-                if($inst.is(value))
+            Arr.each(loop,function(value) {
+                if(value != null)
                 {
                     $inst.each(value,function(value2,key2) {
                         if($inst.is(r[key2]) && $inst.keyExists(key2,r))

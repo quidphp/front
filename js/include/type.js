@@ -44,11 +44,11 @@ const Type = {
     },
     
     
-    // check
+    // typecheck
     // envoie une erreur si la valeur n'est pas du type
     // si type est true, doit être du type et non vide
     // si type est false, accepte null + undefined
-    check: function(value,type)
+    typecheck: function(value,type)
     {
         if(((type === true && !this.isNotEmpty(value)) || (type !== true && !this.is(value))) && !(type === false && value == null))
         throw new Error(value);
@@ -57,16 +57,16 @@ const Type = {
     },
     
     
-    // checks
+    // typechecks
     // envoie une exception si la valeur n'est pas un tableau contenant des valeurs du type
-    checks: function(value,type)
+    typechecks: function(value,type)
     {
         if(Arr.is(value))
         {
             const $inst = this;
             
             Arr.each(value,function() {
-                $inst.check(this,type);
+                $inst.typecheck(this,type);
             });
         }
         

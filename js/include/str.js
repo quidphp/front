@@ -74,13 +74,9 @@ const StrPrimitive = {
     // retourne l'index de la valeur dans la string
     pos: function(value,string) 
     {
-        let r = null;
-        
-        if(this.is(string))
-        {
-            r = string.indexOf(value);
-            r = (r === -1)? null:r;
-        }
+        this.typecheck(string);
+        let r = string.indexOf(value);
+        r = (r === -1)? null:r;
         
         return r;
     },
@@ -90,7 +86,8 @@ const StrPrimitive = {
     // retourne la chaîne en lower case
     lower: function(value)
     {
-        return (this.is(value))? value.toLowerCase():null;
+        this.typecheck(value);
+        return value.toLowerCase();
     },
     
     
@@ -98,6 +95,7 @@ const StrPrimitive = {
     // met la première lettre de la string lowercase
     lowerFirst: function(value)
     {
+        this.typecheck(value);
         return (this.isNotEmpty(value))? value.charAt(0).toLowerCase() + value.slice(1):null;
     },
     
@@ -106,7 +104,8 @@ const StrPrimitive = {
     // retourne la chaîne en uppercase
     upper: function(value)
     {
-        return (this.is(value))? value.toUpperCase():null;
+        this.typecheck(value);
+        return value.toUpperCase();
     },
     
     
@@ -114,6 +113,7 @@ const StrPrimitive = {
     // met la première lettre de la string uppercase
     upperFirst: function(value)
     {
+        this.typecheck(value);
         return (this.isNotEmpty(value))? value.charAt(0).toUpperCase() + value.slice(1):null;
     },
 
@@ -122,7 +122,8 @@ const StrPrimitive = {
     // trim une string
     trim: function(value)
     {
-        return (this.is(value))? value.trim():null;
+        this.typecheck(value);
+        return value.trim();
     },
     
     
@@ -133,12 +134,12 @@ const StrPrimitive = {
     quote: function(value,double,escape)
     {
         let r = null;
+        this.typecheck(value);
         const quote = (double === true)? '"':"'";
         
         if(escape === true)
         value = Html.escape(value);
         
-        if(this.is(value))
         r = quote+value+quote;
         
         return r;
@@ -149,7 +150,9 @@ const StrPrimitive = {
     // retourne une nouvelle sous chaîne
     sub: function(start,end,string)
     {
-        return (this.is(string) && Integer.is(start))? string.substring(start,(end === true)? undefined:end):null;
+        this.typecheck(string);
+        Integer.typecheck(start);
+        return string.substring(start,(end === true)? undefined:end);
     },
     
     
@@ -158,15 +161,11 @@ const StrPrimitive = {
     // retourne un tableau dans tous les cas
     explode: function(delimiter,value,clean)
     {
-        let r = [];
+        this.typechecks([delimiter,value]);
+        let r = value.split(delimiter);
         
-        if(this.is(delimiter) && this.is(value))
-        {
-            r = value.split(delimiter);
-            
-            if(clean === true)
-            r = Arr.clean(r);
-        }
+        if(clean === true)
+        r = Arr.clean(r);
         
         return r;
     },
@@ -190,7 +189,8 @@ const StrPrimitive = {
     // enlève tous les espaces blancs d'une string
     removeAllWhitespace: function(string)
     {
-        return (this.is(string))? string.replace(/\s/g, ""):null;
+        this.typecheck(string);
+        return string.replace(/\s/g, "");
     },
     
     
@@ -198,17 +198,12 @@ const StrPrimitive = {
     // transforme une string camelcase vers une string avec séparateur
     fromCamelCase: function(delimiter,string)
     {
-        let r = null;
+        this.typecheck(delimiter);
+        string = this.trim(string);
         
-        if(this.is(string) && this.is(delimiter))
-        {
-            string = this.trim(string);
-            r = string.replace(/[\w]([A-Z])/g, function(value) {
-               return value[0] + delimiter + value[1];
-            }).toLowerCase();
-        }
-        
-        return r;
+        return string.replace(/[\w]([A-Z])/g, function(value) {
+           return value[0] + delimiter + value[1];
+        }).toLowerCase();
     },
     
     
@@ -217,20 +212,16 @@ const StrPrimitive = {
     toCamelCase: function(delimiter,string)
     {
         let r = null;
+        const $inst = this;
+        string = this.trim(string);
+        let array = this.explode(delimiter,string,true);
         
-        if(this.is(string) && this.is(delimiter))
-        {
-            const $inst = this;
-            string = this.trim(string);
-            let array = this.explode(delimiter,string,true);
-            
-            array = array.map(function(word,index) {
-                return (index == 0)? $inst.lower(word):$inst.upperFirst(word);
-            });
-            
-            r = array.join('');
-            r = this.removeAllWhitespace(r);
-        }
+        array = Arr.map(array,function(word,index) {
+            return (index == 0)? $inst.lower(word):$inst.upperFirst(word);
+        });
+        
+        r = array.join('');
+        r = this.removeAllWhitespace(r);
         
         return r;
     }

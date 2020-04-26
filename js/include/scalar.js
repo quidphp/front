@@ -45,10 +45,27 @@ const ScalarPrimitive = {
             else if(type === 'num')
             r = Num.cast(r);
             
-            else if(type === 'bool')
-            r = Bool.fromScalar(r);
+            else if(type === 'bool' && Scalar.is(r))
+            r = Scalar.toBool(r);
         }
         
         return r;
-    }
+    },
+    
+    
+    // toBool
+    // retourne un booléean à partir d'un scalar
+    toBool: function(value)
+    {
+        let r = null;
+        this.typecheck(value);
+        
+        if(Arr.in(value,[1,'1',true,'true']))
+        r = true;
+
+        else if(Arr.in(value,[0,'0',false,'false']))
+        r = false;
+        
+        return r;
+    },
 }

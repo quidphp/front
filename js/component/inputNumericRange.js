@@ -15,6 +15,7 @@ Component.InputNumericRange = function(option)
     
     // option
     const $option = Pojo.replace({
+        timeout: 500,
         zero: false
     },option);
     
@@ -131,18 +132,29 @@ Component.InputNumericRange = function(option)
     // bindButtons
     const bindButtons = function()
     {
+        const $this = this;
         const prev = trigHdlr(this,'inputNumericRange:getButtonPrev');
         const input = trigHdlr(this,'inputNumericRange:getInput');
         
         ael(prev,'click',function() {
             trigHdlr(input,'inputNumeric:setPrev');
+            buttonDebounce.call($this);
         });
         
         const next = trigHdlr(this,'inputNumericRange:getButtonNext');
         ael(next,'click',function() {
             trigHdlr(input,'inputNumeric:setNext');
+            buttonDebounce.call($this);
         });
     }
+    
+    
+    // buttonDebounce
+    const buttonDebounce = Func.debounce($option.timeout,function() 
+    {
+        const input = trigHdlr(this,'inputNumericRange:getInput');
+        trigEvt(input,'inputNumeric:change');
+    });
     
     
     // refreshButtons

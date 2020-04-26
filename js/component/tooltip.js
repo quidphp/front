@@ -40,7 +40,7 @@ Component.Tooltip = function(option)
         
         getTarget: function() {
             const r = qs(document,$option.target);
-            return Ele.check(r);
+            return Ele.typecheck(r);
         },
         
         getTargetContent: function() {
@@ -54,7 +54,7 @@ Component.Tooltip = function(option)
         
         getContent: function() {
             const r = getAttr(this,$option.attrContent);
-            return Str.check(r,true);
+            return Str.typecheck(r,true);
         },
         
         show: function() {

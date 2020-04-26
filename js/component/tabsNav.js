@@ -22,7 +22,8 @@ Component.TabsNav = function(option)
         prev: null,
         next: null,
         last: null,
-        keyboardArrow: 'horizontalNotInput'
+        keyboardArrow: 'horizontalNotInput',
+        focusTabIndex: true
     },option);
     
     
@@ -38,7 +39,7 @@ Component.TabsNav = function(option)
             if(Str.isNotEmpty(r))
             r = qsa(this,r);
             
-            return Arr.check(r);
+            return Arr.typecheck(r);
         },
         
         getCurrentNav: function() {
@@ -90,7 +91,12 @@ Component.TabsNav = function(option)
         bindDirection.call(this);
         
         if(Ele.match(this,'[tabindex]'))
-        Component.KeyboardArrow.call(this,$option.keyboardArrow);
+        {
+            Component.KeyboardArrow.call(this,$option.keyboardArrow);
+            
+            if($option.focusTabIndex)
+            Ele.focus(this,true);
+        }
     });
     
     

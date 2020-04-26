@@ -38,15 +38,10 @@ const ObjBase = {
     // retourne la longueur de l'objet
     length: function(value) 
     {
-        let r = null;
-
-        if(this.is(value))
-        {
-            const keys = Object.keys(value);
-            r = keys.length;
-        }
+        this.typecheck(value);
+        const keys = Object.keys(value);
         
-        return r;
+        return keys.length;
     }
 }
 
@@ -75,7 +70,17 @@ const ObjKeyValue = {
     // retourne les clés de l'objet
     keys: function(obj)
     {
-        return (this.is(obj))? Object.keys(obj):null;
+        this.typecheck(obj);
+        return Object.keys(obj);
+    },
+    
+    
+    // values
+    // retourne les valeurs de l'objet
+    values: function(obj)
+    {
+        this.typecheck(obj);
+        return Object.values(obj);
     },
     
     
@@ -83,7 +88,17 @@ const ObjKeyValue = {
     // permet de retourner la valeur d'une propriété d'un objet
     get: function(prop,obj)
     {
+        this.typecheck(obj);
         return (this.keyExists(prop,obj))? obj[prop]:undefined;
+    },
+    
+    
+    // toArray
+    // retourne un array à partir de la valeur
+    toArray: function(value)
+    {
+        this.typecheck(value);
+        return Array.from(this.values(value));
     },
     
     
@@ -126,29 +141,115 @@ const ObjKeyValue = {
     find: function(loop,callback)
     {
         let r = undefined;
+        Func.typecheck(callback);
         
-        if(this.is(loop) && Func.is(callback))
-        {
-            this.each(loop,function(value,key) {
-                const result = callback.call(this,value,key,loop);
-                
-                if(result)
-                {
-                    r = value;
-                    return false;
-                }
-            });
-        }
+        this.each(loop,function(value,key) {
+            const result = callback(value,key);
+            
+            if(result)
+            {
+                r = value;
+                return false;
+            }
+        });
         
         return r;
     },
     
     
-    // values
-    // retourne les valeurs de l'objet
-    values: function(obj)
+    // findKey
+    // retourne la première clé dont la valeur remplit la condition de la closure
+    // la clé est envoyé en deuxième argument
+    findKey: function(loop,callback) 
     {
-        return (this.is(obj))? Object.values(obj):null;
+        let r = null;
+        Func.typecheck(callback);
+        
+        this.each(loop,function(value,key) {
+            if(callback(value,key))
+            {
+                r = key;
+                return false;
+            }
+        });
+
+        return r;
+    },
+    
+    
+    // some
+    // vérifie qu'au moins une entrée de l'objet passe le test de la fonction anonyme
+    some: function(loop,callback)
+    {
+        let r = false;
+        Func.typecheck(callback);
+        
+        this.each(loop,function(value,key) {
+            if(callback(value,key))
+            {
+                r = true;
+                return false;
+            }
+        });
+
+        return r;
+    },
+    
+    
+    // every
+    // vérifie que toutes les entrée de l'objet passe le test de la fonction anonyme
+    every: function(loop,callback)
+    {
+        let r = true;
+        Func.typecheck(callback);
+        
+        this.each(loop,function(value,key) {
+            if(!callback(value,key))
+            return r = false;
+        });
+
+        return r;
+    },
+    
+    
+    // reduce
+    // retourne une valeur simple à partir d'un tableau
+    reduce: function(r,loop,callback)
+    {
+        Func.typecheck(callback);
+        
+        this.each(loop,function(value,key) {
+            r = callback(r,value,key);
+        });
+        
+        return r;
+    },
+    
+    
+    // accumulate
+    // comme reduce, mais le return est automatiquement append
+    // si le callback retourne null, continue
+    accumulate: function(r,loop,callback)
+    {
+        Func.typecheck(callback);
+        
+        this.each(loop,function(value,key) {
+            const result = callback(value,key);
+
+            if(result === null)
+            return true;
+
+            else if(Arr.is(r))
+            r.push(result);
+            
+            else if(Pojo.is(r))
+            r[key] = result;
+            
+            else
+            r += result;
+        });
+
+        return r;
     },
     
     
@@ -184,34 +285,25 @@ const ObjKeyValue = {
     },
     
     
-    // arr
-    // retourne un array à partir de la valeur
-    arr: function(value)
-    {
-        return (this.is(value))? Array.from(this.values(value)):null;
-    },
-    
-    
     // climb
     // permet de grimper dans un objet à partir d'un tableau
     climb: function(array,r) 
     {
-        if(Arr.is(array) && this.is(r))
-        {
-            var i;
-            const $inst = this;
+        Arr.typecheck(array);
+        this.typecheck(r);
+        var i;
+        const $inst = this;
+        
+        Arr.each(array,function(value) {
+            if($inst.keyExists(value,r))
+            r = r[value];
             
-            Arr.each(array,function(value) {
-                if($inst.keyExists(value,r))
-                r = r[value];
-                
-                else
-                {
-                    r = undefined;
-                    return false;
-                }
-            });
-        }
+            else
+            {
+                r = undefined;
+                return false;
+            }
+        });
         
         return r;
     }
@@ -227,27 +319,23 @@ const ObjEach = {
     // retourne true si le loop a complêté
     each: function(loop,callback) 
     {
-        let r = null;
+        let r = true;
+        Func.typecheck(callback);
         let keys = this.keys(loop);
+        let key;
+        let value;
+        let result;
         
-        if(Arr.is(keys) && Func.is(callback))
+        for (var i = 0; i < keys.length; i++) 
         {
-            r = true;
-            let key;
-            let value;
-            let result;
+            key = keys[i];
+            value = loop[key];
+            result = callback.call(value,value,key);
             
-            for (var i = 0; i < keys.length; i++) 
+            if(result === false)
             {
-                key = keys[i];
-                value = loop[key];
-                result = callback.call(value,value,key,loop);
-                
-                if(result === false)
-                {
-                    r = false;
-                    break;
-                }
+                r = false;
+                break;
             }
         }
         
@@ -264,7 +352,8 @@ const ObjCopyFilterMap = {
     // permet de copier un objet
     copy: function(value)
     {
-        return (this.is(value))? Object.assign(this.new(),value):null;
+        this.typecheck(value);
+        return Object.assign(this.new(),value);
     },
     
     
@@ -277,24 +366,20 @@ const ObjCopyFilterMap = {
     
     
     // filter
-    // permet de créer un nouvel objet avec seulement les entrées qui retournent oui
+    // permet de créer un nouvel objet avec seulement les entrées qui retournent true
     filter: function(loop,callback)
     {
-        let r = null;
+        let r = this.new();
+        Func.typecheck(callback);
+        const keepKey = (Array.isArray(r))? false:true;
         
-        if(this.is(loop) && Func.is(callback))
-        {
-            r = this.new();
-            const keepKey = (Array.isArray(r))? false:true;
+        this.each(loop,function(value,key) {
+            const result = callback(value,key);
+            key = (keepKey === false)? r.length:key;
             
-            this.each(loop,function(value,key) {
-                const result = callback.call(this,value,key,loop);
-                key = (keepKey === false)? r.length:key;
-                
-                if(result)
-                r[key] = value;
-            });
-        }
+            if(result)
+            r[key] = value;
+        });
         
         return r;
     },
@@ -304,17 +389,13 @@ const ObjCopyFilterMap = {
     // permet de créer un nouvel objet avec les valeurs changés selon la fonction de rappel
     map: function(loop,callback)
     {
-        let r = null;
+        let r = this.new();
+        Func.typecheck(callback);
         
-        if(this.is(loop) && Func.is(callback))
-        {
-            r = this.new();
-            
-            this.each(loop,function(value,key) {
-                const result = callback.call(this,value,key,loop);
-                r[key] = result;
-            });
-        }
+        this.each(loop,function(value,key) {
+            const result = callback(value,key);
+            r[key] = result;
+        });
         
         return r;
     }
@@ -330,13 +411,8 @@ const ObjWrite = {
     // l'objet retourner est une copie
     set: function(prop,value,obj)
     {
-        let r = null;
-        
-        if(this.is(obj))
-        {
-            r = this.copy(obj);
-            r[prop] = value;
-        }
+        let r = this.copy(obj);
+        r[prop] = value;
         
         return r;
     },
@@ -347,13 +423,8 @@ const ObjWrite = {
     // l'objet retourner est une copie
     unset: function(prop,obj)
     {
-        let r = null;
-        
-        if(this.keyExists(prop,obj))
-        {
-            r = this.copy(obj);
-            delete r[prop];
-        }
+        let r = this.copy(obj);
+        delete r[prop];
         
         return r;
     },
@@ -370,9 +441,11 @@ const ObjWrite = {
         {
             const $inst = this;
             
-            Arr.each(args,function() {
-                if($inst.is(this))
-                r = Object.assign(r,this);
+            Arr.each(args,function(value) {
+                $inst.typecheck(value,false);
+                
+                if(value != null)
+                r = Object.assign(r,value);
             });
         }
         
@@ -390,13 +463,9 @@ const ObjWriteSelf = {
     // l'objet retourner est le même (pas une copie)
     setRef: function(prop,value,obj)
     {
-        let r = null;
-        
-        if(this.is(obj))
-        {
-            r = obj;
-            r[prop] = value;
-        }
+        this.typecheck(obj);
+        let r = obj;
+        r[prop] = value;
         
         return r;
     },
@@ -408,6 +477,7 @@ const ObjWriteSelf = {
     unsetRef: function(prop,obj)
     {
         let r = null;
+        this.typecheck(obj);
         
         if(this.keyExists(prop,obj))
         {

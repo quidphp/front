@@ -23,8 +23,8 @@ Component.NavHash = function(option)
     
     
     // check
-    Str.check($option.type);
-    Str.check($option.child);
+    Str.typecheck($option.type);
+    Str.typecheck($option.child);
     const type = $option.type;
     const child = $option.child;
     
@@ -49,8 +49,8 @@ Component.NavHash = function(option)
             r = Arr.valueFirst(targets);
             
             else
-            r = Arr.find(targets,function() {
-                return (trigHdlr(this,child+':getHash') === value);
+            r = Arr.find(targets,function(ele) {
+                return (trigHdlr(ele,child+':getHash') === value);
             });
             
             return r;

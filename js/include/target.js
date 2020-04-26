@@ -24,16 +24,17 @@ const TargetRoot = {
     are: function(value)
     {
         const $inst = this;
+        value = ArrLike.toArray(value);
         
-        return Arr.each(value,function(v) {
+        return (value != null)? Arr.each(value,function(v) {
             return $inst.is(v);
-        });
+        }):false;
     },
     
     
-    // check
+    // typecheck
     // envoie une exception si la valeur n'est pas une node ou node like
-    check: function(value,type)
+    typecheck: function(value,type)
     {
         let error = false;
         const is = this.is(value);
@@ -48,11 +49,11 @@ const TargetRoot = {
     },
     
     
-    // checks
+    // typechecks
     // envoie une exception si la valeur n'est pas un tableau de nodes ou nodelike
-    checks: function(value,type)
+    typechecks: function(value,type)
     {
-        if(!(this.are(value) || (type === false && (value == null || Arr.isEmpty(value)))))
+        if(!(this.are(value) || (type === false && (value == null || Arr.isEmpty(ArrLike.toArray(value))))))
         throw new Error(value);
         
         return value;
@@ -63,7 +64,7 @@ const TargetRoot = {
     // retourne une propriété d'une node
     getProp: function(node,key)
     {
-        this.check(node);
+        this.typecheck(node);
         return Obj.get(key,node);
     },
     
@@ -72,10 +73,10 @@ const TargetRoot = {
     // permet de changer la propriété sur une node ou plusieurs node
     setProp: function(nodes,key,value)
     {
-        Str.check(key);
-        nodes = this.wrap(nodes,false);
+        Str.typecheck(key);
+        nodes = this.toArray(nodes,false);
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             Obj.setRef(key,value,this);
         });
         
@@ -89,12 +90,12 @@ const TargetRoot = {
     propStr: function(nodes,prop,separator) 
     {
         let r = '';
-        nodes = this.wrap(nodes,true);
-        Str.check(prop,true);
+        nodes = this.toArray(nodes,true);
+        Str.typecheck(prop,true);
         separator = (Str.isNotEmpty(separator))? separator:'-';
         const $inst = this;
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             r += (r.length)? separator:"";
             r += $inst.getProp(this,prop);
         });
@@ -109,12 +110,12 @@ const TargetRoot = {
     propObj: function(nodes,propKey,propValue)
     {
         const r = {};
-        nodes = this.wrap(nodes,true);
+        nodes = this.toArray(nodes,true);
         const $inst = this;
-        Str.check(propKey,true);
-        Str.check(propValue,true);
+        Str.typecheck(propKey,true);
+        Str.typecheck(propValue,true);
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             const key = $inst.getProp(this,propKey);
             const value = $inst.getProp(this,propValue);
             r[key] = value;
@@ -124,17 +125,17 @@ const TargetRoot = {
     },
     
     
-    // wrap
+    // toArray
     // wrap une node ou un node-like dans un array, si ce n'est pas un array
     // transforme une arr like en array
     // possible d'envoyer automatiquement dans dom checks
-    wrap: function(value,args)
+    toArray: function(value,args)
     {
         if(this.is(value))
         value = [value];
         
         else if(ArrLike.is(value))
-        value = ArrLike.arr(value);
+        value = ArrLike.toArray(value);
         
         if(Bool.is(args))
         args = (args === false)? [false]:[];
@@ -142,20 +143,10 @@ const TargetRoot = {
         if(Arr.is(args))
         {
             args = Arr.merge([value],args);
-            value = this.checks.apply(this,args);
+            value = this.typechecks.apply(this,args);
         }
         
         return value;
-    },
-    
-    
-    // each
-    // permet de faire un loop sur une ou plusieurs nodes
-    each: function(loop,callback)
-    {
-        loop = this.wrap(loop,false);
-        
-        return Arr.each(loop,callback);
     }
 }
 

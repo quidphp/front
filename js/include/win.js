@@ -99,6 +99,29 @@ const WinTarget = {
     },
     
     
+    // setScroll
+    // permet de changer le scroll de la window, sans animation
+    setScroll: function(top,left)
+    {
+        left = (left > 0)? left:0;
+        top = (top > 0)? top:0;
+        window.scrollTo(left, top);
+        
+        return;
+    },
+    
+    
+    // focus
+    // permet de mettre le focus sur une window
+    focus: function(node)
+    {
+        this.typecheck(node);
+        node.focus();
+        
+        return;
+    },
+    
+    
     // getDimension
     // retourne la dimension interne de la fênetre
     getDimension: function()

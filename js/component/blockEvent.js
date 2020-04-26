@@ -53,7 +53,7 @@ Component.BlockEvent = function(type)
         },
         
         block: function(type) {
-            Str.check(type,true);
+            Str.typecheck(type,true);
             const blockObj = getBlockObj.call(this);
             
             if(Pojo.keyExists(type,blockObj))
@@ -64,13 +64,13 @@ Component.BlockEvent = function(type)
             const $this = this;
             const blockObj = getBlockObj.call(this);
             
-            Obj.each(blockObj,function(value,type) {
+            Pojo.each(blockObj,function(value,type) {
                 trigHdlr($this,'blockEvent:block',type);
             });
         },
         
         unblock: function(type) {
-            Str.check(type,true);
+            Str.typecheck(type,true);
             const blockObj = getBlockObj.call(this);
             
             if(Pojo.keyExists(type,blockObj))
@@ -81,7 +81,7 @@ Component.BlockEvent = function(type)
             const $this = this;
             const blockObj = trigHdlr(this,'blockEvent:obj');
             
-            Obj.each(blockObj,function(value,type) {
+            Pojo.each(blockObj,function(value,type) {
                 trigHdlr($this,'blockEvent:unblock',type);
             });
         }

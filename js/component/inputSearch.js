@@ -18,14 +18,12 @@ Component.InputSearch = function(option)
         timeout: 500,
         keyEvent: 'keydown',
         useCurrent: true,
-        button: "button[type='button']",
-        timeoutHandler: 'inputSearch:process'
+        button: "button[type='button']"
     },option);
     
     
     // components
     Component.KeyboardEnter.call(this,true,$option.keyEvent);
-    Component.Timeout.call(this,$option.keyEvent,$option.timeout);
     Component.ValidatePrevent.call(this,'inputSearch:change');
     Component.InputMemory.call(this);
     
@@ -85,29 +83,17 @@ Component.InputSearch = function(option)
         
         buttonClick: function() {
             trigHdlr(this,'inputSearch:process');
-        },
-        
-        clearTimeout: function() {
-            trigHdlr(this,'timeout:clear',$option.keyEvent);
         }
     });
-    
-    setHdlr(this,'timeout:validateEvent',function(event) {
-        return !Evt.isSpecialKeyCode(event);
-    });
-    
     
     // event
-    ael(this,'keyboardEnter:blocked',function() {
-        trigHdlr(this,'inputSearch:buttonClick');
+    ael(this,$option.keyEvent,function(event) {
+        if(!Evt.isSpecialKeyCode(event))
+        keyboardDebouce.call(this,event);
     });
     
-    ael(this,'timeout:'+$option.keyEvent,function(event,keyEvent) {
-        if(Ele.match(this,":focus"))
-        {
-            trigHdlr(this,'inputMemory:remember');
-            trigHdlr(this,$option.timeoutHandler);
-        }
+    ael(this,'keyboardEnter:blocked',function() {
+        trigHdlr(this,'inputSearch:buttonClick');
     });
     
     ael(this,'click',function(event) {
@@ -127,6 +113,17 @@ Component.InputSearch = function(option)
     // setup
     aelOnce(this,'component:setup',function() {
         bindButton.call(this);
+    });
+    
+    
+    // keyboardDebouce
+    const keyboardDebouce = Func.debounce($option.timeout,function() 
+    {
+        if(Ele.match(this,":focus"))
+        {
+            trigHdlr(this,'inputMemory:remember');
+            trigHdlr(this,'inputSearch:process');
+        }
     });
     
     

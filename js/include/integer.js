@@ -24,18 +24,19 @@ const IntegerPrimitive = {
     },
     
     
-    // fromBool
-    // retourne un numéro à partir d'un boolean
-    fromBool: function(value)
+    // toBool
+    // retourne un booléean à partir d'un int
+    toBool: function(value)
     {
         let r = null;
+        this.typecheck(value);
+        
+        if(value === 1)
+        r = true;
 
-        if(value === true)
-        r = 1;
-
-        else if(value === false)
-        r = 0;
-
+        else if(value === 0)
+        r = false;
+        
         return r;
     },
     
@@ -45,7 +46,8 @@ const IntegerPrimitive = {
     toggle: function(value)
     {
         let r = null;
-
+        this.typecheck(value);
+        
         if(value === 1)
         r = 0;
 
@@ -69,7 +71,7 @@ const IntegerPrimitive = {
             const length = Math.floor((max - min) / inc) + 1;
             const arr = Array(length).fill(min);
             
-            r = arr.map(function(x,y) {
+            r = Arr.map(arr,function(x,y) {
                 return x + y * inc;
             });
         }

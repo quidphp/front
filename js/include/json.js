@@ -20,6 +20,6 @@ const Json = Lemur.Json = {
     // decode une valeur à partir d'un json
     decode: function(value) 
     {
-        return JSON.parse(value);
+        return JSON.parse(Str.typecheck(value));
     }
 }

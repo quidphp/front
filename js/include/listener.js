@@ -14,8 +14,8 @@ const ListenerTarget = new function()
     this.addListener = function(nodes,type,func,register,delegate,option) 
     {
         let r = null;
-        Str.check(type,true);
-        nodes = this.wrap(nodes,false);
+        Str.typecheck(type,true);
+        nodes = this.toArray(nodes,false);
         const $inst = this;
         
         if(Arr.isNotEmpty(nodes))
@@ -111,9 +111,9 @@ const ListenerTarget = new function()
     // ceci permet de le retirer par la suite
     this.registerListener = function(node,register,type,handler,option) 
     {
-        Str.check(type,true);
+        Str.typecheck(type,true);
         register = (register === true)? type:register;
-        Str.check(register,true);
+        Str.typecheck(register,true);
         
         const data = this.getOrSetData(node,'rel',{});
         const entry = [type,handler,option];
@@ -152,7 +152,7 @@ const ListenerTarget = new function()
     // args est le tableau retournée par addListener (contient type, handler et option)
     this.removeListener = function(nodes,args)
     {
-        nodes = this.wrap(nodes,false);
+        nodes = this.toArray(nodes,false);
         const $inst = this;
         
         if(Arr.isNotEmpty(nodes))
@@ -179,8 +179,8 @@ const ListenerTarget = new function()
     // utilisé par triggerBubble et triggerNoBubble pour envoyer des événements
     this.trigger = function(nodes,type,option)
     {
-        Str.check(type,true);
-        nodes = this.wrap(nodes,false);
+        Str.typecheck(type,true);
+        nodes = this.toArray(nodes,false);
         
         if(Arr.isNotEmpty(nodes))
         {

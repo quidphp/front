@@ -16,34 +16,19 @@ const BoolPrimitive = {
     },
     
     
-    // fromInt
-    // retourne un booléean à partir d'un int
-    fromInt: function(value)
+    // toInt
+    // retourne un numéro à partir d'un boolean
+    toInt: function(value)
     {
         let r = null;
+        this.typecheck(value);
         
-        if(value === 1)
-        r = true;
+        if(value === true)
+        r = 1;
 
-        else if(value === 0)
-        r = false;
-        
-        return r;
-    },
-    
-    
-    // fromScalar
-    // retourne un booléean à partir d'un scalar
-    fromScalar: function(value)
-    {
-        let r = null;
-        
-        if(Arr.in(value,[1,'1',true,'true']))
-        r = true;
+        else if(value === false)
+        r = 0;
 
-        else if(Arr.in(value,[0,'0',false,'false']))
-        r = false;
-        
         return r;
     },
     
@@ -53,7 +38,8 @@ const BoolPrimitive = {
     toggle: function(value)
     {
         let r = null;
-
+        this.typecheck(value);
+        
         if(value === true)
         r = false;
 

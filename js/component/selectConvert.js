@@ -4,9 +4,9 @@
  * License: https://github.com/quidphp/front/blob/master/LICENSE
  */
  
-// FakeSelectConvert
+// selectConvert
 // script to convert a select menu to a fakeSelect component
-Component.FakeSelectConvert = function()
+Component.SelectConvert = function()
 {
     // not empty
     if(Vari.isEmpty(this)) 
@@ -14,7 +14,7 @@ Component.FakeSelectConvert = function()
     
     
     // handler
-    setHdlr(this,'fakeSelectConvert:isBindable',function() {
+    setHdlr(this,'selectConvert:isBindable',function() {
         let r = false;
         
         if(trigHdlr(this,'input:getTag') === 'select')
@@ -29,7 +29,7 @@ Component.FakeSelectConvert = function()
     
     // setup
     aelOnce(this,'component:setup',function() {
-        if(trigHdlr(this,'fakeSelectConvert:isBindable'))
+        if(trigHdlr(this,'selectConvert:isBindable'))
         createFakeSelect.call(this);
     });
     
@@ -72,11 +72,11 @@ Component.FakeSelectConvert = function()
         r += Html.start('div',null,{class: 'options', tabindex: 0});
         r += Html.start('ul');
         
-        Arr.each(options,function() {
-            const val = Str.cast(getProp(this,'value'));
-            const text = Ele.getText(this) || "&nbsp;";
+        Arr.each(options,function(ele) {
+            const val = Str.cast(getProp(ele,'value'));
+            const text = Ele.getText(ele) || "&nbsp;";
             
-            const currentAttr = Ele.attr(this,'data-');
+            const currentAttr = Ele.attr(ele,'data-');
             const dataAttr = {};
             if(val != null)
             {

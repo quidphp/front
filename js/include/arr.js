@@ -32,7 +32,9 @@ const ArrBase = {
     // retourne un tableau avec clés du présent tableau
     keys: function(array)
     {
-        return (this.is(array))? Array.from(Array.prototype.keys.call(array)):null;
+        this.typecheck(array);
+        
+        return Array.from(Array.prototype.keys.call(array));
     },
     
     
@@ -40,7 +42,8 @@ const ArrBase = {
     // retourne le première valeur dans le tableau
     valueFirst: function(array)
     {
-        return (this.is(array) && array.length)? array[0]:undefined;
+        this.typecheck(array);
+        return (array.length)? array[0]:undefined;
     },
     
     
@@ -48,7 +51,8 @@ const ArrBase = {
     // retourne la dernière valeur dans le tableau
     valueLast: function(array)
     {
-        return (this.is(array) && array.length)? array[array.length-1]:undefined;
+        this.typecheck(array);
+        return (array.length)? array[array.length-1]:undefined;
     },
     
     
@@ -56,7 +60,8 @@ const ArrBase = {
     // retourne la première clé d'un tableau
     keyFirst: function(array)
     {
-        return (this.is(array) && array.length)? 0:undefined;
+        this.typecheck(array);
+        return (array.length)? 0:undefined;
     },
     
     
@@ -64,7 +69,8 @@ const ArrBase = {
     // retourne la dernière clé d'un tableau
     keyLast: function(array)
     {
-        return (this.is(array) && array.length)? array.length-1:undefined;
+        this.typecheck(array);
+        return (array.length)? array.length-1:undefined;
     },
     
     
@@ -73,12 +79,10 @@ const ArrBase = {
     search: function(value,array) 
     {
         let r = null;
+        this.typecheck(array);
         
-        if(this.is(array))
-        {
-            r = Array.prototype.indexOf.call(array,value);
-            r = (r === -1)? null:r;
-        }
+        r = Array.prototype.indexOf.call(array,value);
+        r = (r === -1)? null:r;
         
         return r;
     },
@@ -89,13 +93,11 @@ const ArrBase = {
     slice: function(start,end,array)
     {
         let r = null;
+        this.typecheck(array);
         
-        if(this.is(array))
-        {
-            start = Integer.is(start)? start:0;
-            end = Integer.is(end)? end:undefined;
-            r = Array.prototype.slice.call(array,start,end);
-        }
+        start = Integer.is(start)? start:0;
+        end = Integer.is(end)? end:undefined;
+        r = Array.prototype.slice.call(array,start,end);
         
         return r;
     },
@@ -114,12 +116,10 @@ const ArrBase = {
     merge: function(array)
     {
         let r = null;
+        this.typecheck(array);
         
-        if(this.is(array))
-        {
-            const args = ArrLike.sliceStart(1,arguments);
-            r = Array.prototype.concat.apply(array,args);
-        }
+        const args = ArrLike.sliceStart(1,arguments);
+        r = Array.prototype.concat.apply(array,args);
         
         return r;
     },
@@ -129,8 +129,8 @@ const ArrBase = {
     // retourne un nouveau tableau avec les valeurs vides retirés
     clean: function(array)
     {
-        return this.filter(array,function() {
-            return Vari.isNotReallyEmpty(this);
+        return this.filter(array,function(ele) {
+            return Vari.isNotReallyEmpty(ele);
         });
     },
     
@@ -142,6 +142,95 @@ const ArrBase = {
         return this.filter(array,function(v) {
             return (v === value)? false:true;
         });
+    },
+    
+
+    // find
+    // retourne la première valeur de l'objet dont le callback retourne true, utilise la méthode du prototype
+    find: function(array,callback) {
+        let r = null;
+        this.typecheck(array);
+        Func.typecheck(callback);
+        
+        if(this.is(array))
+        r = Array.prototype.find.call(array,callback);
+        
+        return r;
+    },
+    
+    
+    // some
+    // vérifie qu'au moins une entrée du tableau passe le test de la fonction anonyme
+    some: function(array,callback)
+    {
+        let r = null;
+        this.typecheck(array);
+        Func.typecheck(callback);
+        
+        if(this.is(array))
+        r = Array.prototype.some.call(array,callback);
+        
+        return r;
+    },
+    
+    
+    // every
+    // vérifie que toutes les entrée du tableau passe le test de la fonction anonyme
+    every: function(array,callback)
+    {
+        let r = null;
+        this.typecheck(array);
+        Func.typecheck(callback);
+        
+        if(this.is(array))
+        r = Array.prototype.every.call(array,callback);
+        
+        return r;
+    },
+    
+    
+    // map
+    // permet de créer un nouvel objet avec les valeurs changés selon la fonction de rappel, utilise la méthode du prototype
+    map: function(array,callback)
+    {
+        let r = null;
+        this.typecheck(array);
+        Func.typecheck(callback);
+        
+        if(this.is(array))
+        r = Array.prototype.map.call(array,callback);
+        
+        return r;
+    },
+    
+    
+    // filter
+    // permet de créer un nouvel objet avec seulement les entrées qui retournent true, utilise la méthode du prototype
+    filter: function(array,callback)
+    {
+        let r = null;
+        this.typecheck(array);
+        Func.typecheck(callback);
+        
+        if(this.is(array))
+        r = Array.prototype.filter.call(array,callback);
+        
+        return r;
+    },
+    
+    
+    // reduce
+    // retourne une valeur simple à partir d'un tableau
+    // changement de l'ordre des arguments, de même la clé est envoyé au callback en troisième argument
+    reduce: function(r,array,callback)
+    {
+        this.typecheck(array);
+        Func.typecheck(callback);
+        
+        if(this.is(array))
+        r = Array.prototype.reduce.call(array,callback,r);
+        
+        return r;
     },
     
     
@@ -163,20 +252,17 @@ const ArrWriteSelf = {
     // le premier tableau est modifié
     mergeRef: function(array)
     {
-        let r = null;
+        this.typecheck(array);
+        let r = array;
+        const inst = this;
+        const args = ArrLike.sliceStart(1,arguments);
         
-        if(this.is(array))
-        {
-            r = array;
-            const inst = this;
+        this.each(args,function(value) {
+            if(!Arr.is(value))
+            value = [value];
             
-            this.each(ArrLike.sliceStart(1,arguments),function(value) {
-                if(!Arr.is(value))
-                value = [value];
-                
-                Array.prototype.push.apply(r,value);
-            });
-        }
+            Array.prototype.push.apply(r,value);
+        });
         
         return r;
     },
@@ -186,7 +272,8 @@ const ArrWriteSelf = {
     // permet de renverser le tableau courant
     reverseRef: function(array)
     {
-        return (this.is(array))? array.reverse():null;
+        this.typecheck(array);
+        return array.reverse();
     },
     
     
@@ -197,15 +284,13 @@ const ArrWriteSelf = {
     {
         let r = null;
         let index = this.search(value,array);
+        this.typecheck(array);
         
-        if(this.is(array))
-        {
-            let args = [index,1];
-            if(typeof(replace) !== 'undefined')
-            args.push(replace);
-            
-            r = Array.prototype.splice.apply(array,args);
-        }
+        let args = [index,1];
+        if(typeof(replace) !== 'undefined')
+        args.push(replace);
+        
+        r = Array.prototype.splice.apply(array,args);
         
         return r;
     }
@@ -219,17 +304,17 @@ const ArrLoop = {
     // permet de lancer un callback sur chaque element du tableau avec timeout différent (selon index)
     timeouts: function(array,timeout,indexTimeout,callback) 
     {
-        Integer.check(timeout);
-        Integer.check(indexTimeout);
-        Func.check(callback);
+        Integer.typecheck(timeout);
+        Integer.typecheck(indexTimeout);
+        Func.typecheck(callback);
         
-        return this.each(array, function(value, index) {
+        return Arr.each(array, function(value, index) {
             const funcTimeout = timeout + (index * indexTimeout);
             
             const funcWrap = function() {
-                callback.call(this,value,index,funcTimeout);
+                callback(value,index,funcTimeout);
             }
-            Func.timeout(funcTimeout,funcWrap,this);
+            Func.timeout(funcTimeout,funcWrap);
         });
     },
     
@@ -238,19 +323,19 @@ const ArrLoop = {
     // permet d'appeler une méthode de callback différents selon si l'élément est odd ou even
     oddEven: function(array,funcOdd,funcEven) 
     {
-        Func.checks([funcOdd,funcEven],false);
+        Func.typechecks([funcOdd,funcEven],false);
         
-        return this.each(array, function(value,index) {
+        return Arr.each(array, function(value,index) {
             const key = index + 1;
             
             if(Num.isOdd(key))
             {
                 if(funcOdd != null)
-                funcOdd.call(this,index)
+                funcOdd(value,index)
             }
             
             else if(funcEven != null)
-            funcEven.call(this,index);
+            funcEven(value,index);
         });
     }
 }

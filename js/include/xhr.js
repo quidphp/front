@@ -17,7 +17,7 @@ const Xhr = Lemur.Xhr = new function()
     this.isStatusSuccess = function(value)
     {
         let r = false;
-        Integer.check(value);
+        Integer.typecheck(value);
         
         if(value >= 200 && value < 400)
         r = true;
@@ -87,7 +87,7 @@ const Xhr = Lemur.Xhr = new function()
     const callEvent = function(type,xhr,config,extraEvents)
     {
         const configCallback = Pojo.get(type,config);
-        const extraCallback = Pojo.get(type,extraEvents);
+        const extraCallback = (Pojo.is(extraEvents))? Pojo.get(type,extraEvents):null;
         const args = ArrLike.sliceStart(4,arguments);
         args.push(xhr);
         
@@ -105,7 +105,7 @@ const Xhr = Lemur.Xhr = new function()
     // retounre un tableau avec la string comme url
     this.configFromString = function(value)
     {
-        Str.check(value,true);
+        Str.typecheck(value,true);
         return {
             url: value
         };
@@ -138,7 +138,7 @@ const Xhr = Lemur.Xhr = new function()
         if(Pojo.is(config.data))
         {
             const parse = Uri.parse(config.url);
-            const query = Uri.query(config.data).toString();
+            const query = Uri.makeQuery(config.data).toString();
             parse.search = query;
             config.url = parse.toString();
         }
@@ -304,6 +304,7 @@ const Xhr = Lemur.Xhr = new function()
             if(parse != null)
             {
                 const ajaxParse = Nod.scopedQuery(parse,".ajax-parse-error");
+                if(ajaxParse != null)
                 html = Ele.getOuterHtml(ajaxParse);
                 
                 if(Vari.isEmpty(html))

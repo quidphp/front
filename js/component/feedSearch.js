@@ -139,7 +139,6 @@ Component.FeedSearch = function(option)
         // components
         Component.InputSearch.call(search,$option.inputSearch);
         
-        
         // event
         ael(search,'inputSearch:change',function() {
             trigEvt($this,'ajax:init');

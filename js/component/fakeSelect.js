@@ -34,14 +34,14 @@ Component.FakeSelect = function()
         },
         
         getChoice: function(value) {
-            return Arr.find(trigHdlr(this,'fakeSelect:getChoices'),function() {
-                return Str.isEqual(getAttr(this,'data-value'),value);
+            return Arr.find(trigHdlr(this,'fakeSelect:getChoices'),function(ele) {
+                return Str.isEqual(getAttr(ele,'data-value'),value);
             });
         },
         
         getSelected: function() {
-            return Arr.find(trigHdlr(this,'fakeSelect:getChoices'),function() {
-                return (getAttr(this,'data-selected','int') === 1);
+            return Arr.find(trigHdlr(this,'fakeSelect:getChoices'),function(ele) {
+                return (getAttr(ele,'data-selected','int') === 1);
             });
         },
         

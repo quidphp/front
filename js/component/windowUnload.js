@@ -26,18 +26,20 @@ Component.WindowUnload = function(type,timeout)
         },
         
         addNode: function(node) {
+            node = Ele.toArray(node,false);
             const nodes = trigHdlr(this,'windowUnload:getNodes');
             
-            Ele.each(node,function() {
-                nodes.push(this);
+            Arr.each(node,function(ele) {
+                nodes.push(ele);
             });
         },
         
         removeNode: function(node) {
+            node = Ele.toArray(node,false);
             const nodes = trigHdlr(this,'windowUnload:getNodes');
-            
-            Ele.each(node,function() {
-                Arr.spliceValue(this,nodes);
+
+            Arr.each(node,function(ele) {
+                Arr.spliceValue(ele,nodes);
             });
         },
         
@@ -49,8 +51,8 @@ Component.WindowUnload = function(type,timeout)
             let r = null;
             const nodes = trigHdlr(this,'windowUnload:getNodes');
             
-            Arr.each(nodes,function() {
-                r = trigHdlr(this,'windowUnload:getText');
+            Arr.each(nodes,function(ele) {
+                r = trigHdlr(ele,'windowUnload:getText');
                 
                 if(Str.isNotEmpty(r))
                 return false;

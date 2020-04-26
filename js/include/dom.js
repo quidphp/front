@@ -74,7 +74,7 @@ const Dom = Lemur.Dom = {
     // fait quelques modifications à une string html pour éviter des injections
     safeHtml: function(html)
     {
-        Str.check(html);
+        Str.typecheck(html);
         html = html.replace(/<\!DOCTYPE[^>]*>/i, '');
         html = html.replace(/<(html|head|body|script|noscript)([\s\>])/gi,'<div data-tag="$1"$2');
         html = html.replace(/<\/(html|head|body|script|noscript)\>/gi,'</div>');
@@ -115,7 +115,7 @@ const Dom = Lemur.Dom = {
     querySelector: function(value,html)
     {
         let r = undefined;
-        Str.check(value);
+        Str.typecheck(value);
         const nodes = this.parse(html);
         
         if(Arr.isNotEmpty(nodes))

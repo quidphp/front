@@ -23,5 +23,14 @@ const ArrLikeRead = {
         }
         
         return r;
-    }
+    },
+    
+    
+    // toArray
+    // retourne la même valeur si c'est un tableau, sinon converti le array like
+    // moins stricte que le toArray de obj
+    toArray: function(value) 
+    {
+        return Arr.is(value)? value:(this.is(value) ? Array.from(value):null);
+    },
 }

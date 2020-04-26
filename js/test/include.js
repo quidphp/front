@@ -81,9 +81,9 @@ Test.Include = function()
         assert(Arr.isNotEmpty([1,2,3]));
         assert(!Arr.isNotEmpty([]));
         assert(!Arr.isEmpty(''));
-        assert(Arr.isEqual(Arr.check([]),[]));
-        assert(Arr.isEqual(Arr.check([1],true),[1]));
-        assert(Arr.check(undefined,false) === undefined);
+        assert(Arr.isEqual(Arr.typecheck([]),[]));
+        assert(Arr.isEqual(Arr.typecheck([1],true),[1]));
+        assert(Arr.typecheck(undefined,false) === undefined);
         assert(Arr.isEqual([],[]));
         assert(!Arr.isEqual({},{}));
         let arr = [3,2,3,1,5];
@@ -98,14 +98,12 @@ Test.Include = function()
         assert(Vari.isEqual(Arr.copy([1,2,3]),[1,2,3]));
         let arrCopy = [1,2,3];
         assert(Arr.copy(arrCopy) !== arrCopy);
-        assert(Arr.each([1,2,3],function(value,key,array) {
-            assert(Arr.length(array) === 3);
+        assert(Arr.each([1,2,3],function(value,key) {
             assert(value === this);
             arrKey = key;
         }));
         assert(arrKey === 2);
         assert(Arr.length([1,2,3]) === 3);
-        assert(Arr.length({test: 2}) === null);
         assert(Arr.isEqual(Arr.set(1,'z',['a','b','c']),['a','z','c']));
         assert(Arr.isEqual(arrCopy,[1,2,3]));
         assert(Arr.setRef(2,4,arrCopy) === arrCopy);
@@ -117,26 +115,64 @@ Test.Include = function()
         assert(Arr.length(mergeRef) === 9);
         assert(Arr.isEqual(arrCopy,[1,2,4]));
         assert(Arr.length(Arr.merge([1,2,3],[4,5,6],arguments,selectorAll)) === 8);
+        assert(Arr.some([1,'2',3],function(value,index,arr) {
+            assert(Arr.is(arr));
+            return Str.is(value);
+        }));
+        assert(!Arr.some([1,'2',3],function(value,index,arr) {
+            return Obj.is(value);
+        }));
+        assert(!Arr.every([1,'2',3],function(value,index,arr) {
+            assert(Arr.is(arr));
+            return Str.is(value);
+        }));
+        assert(Arr.every([1,2,3],function(value,index,arr) {
+            return Integer.is(value);
+        }));
+        assert(Arr.find([1,2,3],function(value,index,arr) {
+            assert(Integer.is(value));
+            assert(Integer.is(index));
+            assert(Arr.is(arr));
+            return value === 2;
+        }) === 2);
+        assert(Arr.isEqual(Arr.map([1,2,3],function(value,index,arr) {
+            assert(Arr.is(arr));
+            return index;
+        }),[0,1,2]));
         assert(Arr.filter([1,2,3],function(value,key,array) {
-            assert(Arr.length(array) === 3);
-            if(this === 1)
-            {
-                assert(value === 1);
-                assert(key === 0);
-            }
-            
-            return this === 2;
+            if(value === 1)
+            assert(key === 0);
+            assert(Arr.is(arr));
+            return value === 2;
         }).length === 1);
+        assert(Arr.reduce("",['test','ok','what'],function(r,value,index,arr) {
+            assert(Arr.is(arr));
+            return r += index+value;
+        }) === '0test1ok2what');
         assert(Arr.isEqual(Arr.replace([1,2,2],[4,5],[0]),[0,5,2]));
         assert(Arr.isEqual(Arr.clean([null,undefined,0,'0',[],{},false,true,'',1]),[0,'0',false,true,1]));
-        assert(Arr.timeouts([1,2,3],2000,2000,function() {
-            assert(Integer.is(this));
+        assert(Arr.timeouts([1,2,3],2000,2000,function(value) {
+            assert(Integer.is(value));
         }));
-        assert(Arr.oddEven([1,2,3],function() {
-            assert(this !== 2);
-        },function() {
-            assert(this === 2);
+        assert(Arr.oddEven([1,2,3],function(value) {
+            assert(value !== 2);
+        },function(value) {
+            assert(value === 2);
         }));
+        assert(Arr.findKey([3,4,5],function(value,index,arr) {
+            assert(arr == null);
+            return (value === 4);
+        }) === 1);
+        assert(Arr.accumulate(0,[2,3,4],function(value,index,arr) {
+            assert(arr == null);
+            return value;
+        }) === 9);
+        assert(Arr.accumulate('',['eh','ok','what'],function(value,index) {
+            return value;
+        }) === 'ehokwhat');
+        assert(Arr.isEqual(Arr.accumulate([],['eh','ok','what'],function(value,index) {
+            return index+value;
+        }),["0eh","1ok","2what"]));
         
         // arrLike
         assert(!ArrLike.is([]));
@@ -147,33 +183,42 @@ Test.Include = function()
         assert(!ArrLike.is('str'));
         assert(ArrLike.is(selectorAll));
         assert(!ArrLike.is(null));
-        assert(Arr.is(ArrLike.arr(selectorAll)));
+        assert(Arr.is(ArrLike.toArray(selectorAll)));
         assert(ArrLike.search('bla',selectorAll) === null);
         assert(ArrLike.in(selectorAll[0],selectorAll));
         assert(ArrLike.sliceStart(0,selectorAll).length === 1);
         assert(ArrLike.isNotEmpty(selectorAll));
         assert(ArrLike.isEmpty(arguments));
         assert(!ArrLike.isNotEmpty(arguments));
-        assert(ArrLike.check(arguments) === arguments);
-        assert(ArrLike.check(undefined,false) === undefined);
+        assert(ArrLike.typecheck(arguments) === arguments);
+        assert(ArrLike.typecheck(undefined,false) === undefined);
         assert(ArrLike.length(arguments) === 0);
         assert(ArrLike.length(selectorAll) === 1);
         assert(ArrLike.keys(selectorAll).length === 1);
         assert(ArrLike.keyExists('what',selectorAll) === false);
         assert(Arr.is(ArrLike.copy(selectorAll)));
-        assert(Arr.filter(selectorAll,function() {
-            return true;
-        }) === null);
         assert(ArrLike.filter(selectorAll,function() {
             return true;
         }) !== selectorAll);
         assert(Arr.isEmpty(ArrLike.filter(selectorAll,function() {
             return false;
         })));
-        assert(Arr.valueFirst(ArrLike.map(selectorAll,function(value,key,array) {
-            assert(ArrLike.length(array) === 1);
+        assert(Arr.valueFirst(ArrLike.map(selectorAll,function(value,key) {
+            assert(ArrLike.length(selectorAll) === 1);
             return 'WHAT';
         })) === 'WHAT');
+        assert(Ele.is(ArrLike.find(selectorAll,function(value,index,arr) {
+            assert(Ele.is(value));
+            assert(Integer.is(index));
+            assert(arr === selectorAll);
+            return true;
+        })));
+        assert(!ArrLike.is(ArrLike.map(selectorAll,function(value,index,arr) {
+            assert(!Arr.is(arr));
+            return value;
+        })));
+        assert(ArrLike.toArray(selectorAll) !== selectorAll);
+        assert(ArrLike.toArray(arrCopy) === arrCopy);
         
         // bool
         assert(!Bool.is('true'));
@@ -181,19 +226,15 @@ Test.Include = function()
         assert(!Bool.is(null));
         assert(!Bool.is(1));
         assert(Bool.is(true));
-        assert(Bool.fromInt(1) === true);
-        assert(Bool.fromInt(0) === false);
-        assert(Bool.fromScalar(1) === true);
-        assert(Bool.fromScalar('true') === true);
-        assert(Bool.fromScalar(0) === false);
-        assert(Bool.fromScalar(false) === false);
         assert(Bool.toggle(false) === true);
         assert(Bool.isEmpty(false));
         assert(!Bool.isEmpty(0));
         assert(Bool.isNotEmpty(true));
-        assert(Bool.check(null,false) === null);
-        assert(Bool.check(false) === false);
-        assert(Bool.check(true,false) === true);
+        assert(Bool.toInt(true) === 1);
+        assert(Bool.toInt(false) === 0);
+        assert(Bool.typecheck(null,false) === null);
+        assert(Bool.typecheck(false) === false);
+        assert(Bool.typecheck(true,false) === true);
         
         // browser
         assert(Bool.is(Browser.isOldIe()));
@@ -242,7 +283,7 @@ Test.Include = function()
         Doc.setHtml(fragment,template,true);
         assert(Str.isStart('<form',Doc.getHtml(fragment)));
         assert(Str.isStart('<form',Doc.getHtml(template)));
-        assert(Doc.check(document) === document);
+        assert(Doc.typecheck(document) === document);
         assert(Doc.are([document,fragment]));
         assert(Arr.length(Doc.scopedQueryAll(fragment,"input")) === 4);
         assert(Arr.length(Doc.scopedQueryAll(template,"input")) === 4);
@@ -280,7 +321,7 @@ Test.Include = function()
         assert(!Ele.is(document));
         assert(Ele.is(htmlNode));
         assert(Ele.are([selectorOne]));
-        assert(!Ele.are(selectorAll));
+        assert(Ele.are(selectorAll));
         assert(!Ele.are([htmlNode,true]));
         assert(!Ele.are(htmlNode));
         assert(!Ele.isEmpty(selectorOne));
@@ -293,7 +334,10 @@ Test.Include = function()
         assert(!Ele.isFocused(htmlNode));
         assert(!Ele.isFocusable(htmlNode));
         assert(Ele.isFocusable(inputNode));
-        assert(Ele.matchAll(htmlNode,'html'));
+        assert(Ele.some([htmlNode,divNode],'html'));
+        assert(!Ele.some([htmlNode,divNode],'body'));
+        assert(!Ele.every([htmlNode,divNode],'html'));
+        assert(Ele.every(htmlNode,'html'));
         assert(Ele.tag(htmlNode) === 'html');
         assert(Str.isNotEmpty(Ele.getOuterHtml(htmlNode)));
         assert(Obj.isNotEmpty(Ele.getBoundingRect(htmlNode)));
@@ -440,8 +484,8 @@ Test.Include = function()
         assert(Pojo.isEqual(Ele.getDimension(hiddenNode,'block'),Ele.getDimension(hiddenNode,true)));
         assert(Ele.getDimension(hiddenNode,'inline').width < Ele.getDimension(hiddenNode,true).width);
         assert(Ele.getDimension(hiddenNode).width === 0);
-        assert(Ele.oddEven(hiddenNode,function() {
-            assert(this === hiddenNode);
+        assert(Ele.oddEven([hiddenNode],function(value) {
+            assert(value === hiddenNode);
         }));
         
         // evt
@@ -454,8 +498,8 @@ Test.Include = function()
         assert(!Func.is('test'));
         assert(Func.is(noop));
         assert(Func.length(noop) === 0);
-        Func.check(noop);
-        Func.check(null,false);
+        Func.typecheck(noop);
+        Func.typecheck(null,false);
         assert(Integer.is(Func.timeout(null,function() {
             assert(true);
         })));
@@ -534,15 +578,13 @@ Test.Include = function()
         assert(Integer.cast(4) === 4);
         assert(Integer.cast(2.3) === 2);
         assert(Integer.cast('') === null);
-        assert(Integer.fromBool(true) === 1);
-        assert(Integer.fromBool(null) === null);
-        assert(Integer.fromBool(false) === 0);
+        assert(Integer.toBool(1) === true);
+        assert(Integer.toBool(0) === false);
         assert(Integer.toggle(1) === 0);
         assert(Integer.toggle(2) === null);
         assert(Integer.is(Integer.unique()));
         assert(Integer.unique() !== Integer.unique());
         assert(Integer.str(40) === '40');
-        assert(Integer.str(40.2) === null);
         assert(Integer.isEmpty(0));
         assert(!Integer.isEmpty('0'));
         assert(!Integer.isNotEmpty('1'));
@@ -556,9 +598,9 @@ Test.Include = function()
         assert(Integer.isNegative(-1));
         assert(!Integer.isNegative(0));
         assert(Integer.isNegative(0,true));
-        assert(Integer.check(1) === 1);
-        assert(Integer.check(0) === 0);
-        assert(Integer.check(null,false) === null);
+        assert(Integer.typecheck(1) === 1);
+        assert(Integer.typecheck(0) === 0);
+        assert(Integer.typecheck(null,false) === null);
         assert(Arr.length(Integer.range(0,100,1)) === 101);
         assert(Arr.length(Integer.range(1,100,1)) === 100);
         assert(Arr.length(Integer.range(2,18,3)) === 6);
@@ -618,12 +660,13 @@ Test.Include = function()
         assert(Num.is(2.2));
         assert(!Num.isNan(2));
         assert(Num.cast('1.2') === 1.2);
-        assert(Num.cast('1,2') === null);
+        assert(Num.cast('1,2') === 1);
         assert(Num.cast(1) === 1);
         assert(Num.cast(1.2) === 1.2);
         assert(Num.cast(null) === null);
         assert(Num.cast([]) === null);
         assert(Num.str('2.3') === '2.3');
+        assert(Num.cast("4.3px") === 4.3);
         assert(Num.str(4) === '4');
         assert(Num.str(2.3) === '2.3');
         assert(Num.isEmpty('0'));
@@ -635,8 +678,8 @@ Test.Include = function()
         assert(!Num.isPositive('0'));
         assert(Num.isPositive('0',true));
         assert(Num.isNegative('-2.2'));
-        assert(Num.check('0') === '0');
-        assert(Num.check(2.1,true) === 2.1);
+        assert(Num.typecheck('0') === '0');
+        assert(Num.typecheck(2.1,true) === 2.1);
         assert(Num.isOdd(1));
         assert(!Num.isEven(1));
         assert(Num.isEven(2));
@@ -645,7 +688,6 @@ Test.Include = function()
         assert(Num.isEven(0));
         assert(Num.formatDecimal(2) === '2.00');
         assert(Num.formatDecimal(2.034) === '2.03');
-        assert(Num.round("4.2px") === null);
         assert(Num.round("4.2") === 4);
         assert(Num.round(4.2) === 4);
         assert(Num.round(4) === 4);
@@ -751,9 +793,8 @@ Test.Include = function()
         assert(!Pojo.is(undefined));
         let replace = {test:2, ok: {what: true}};
         let pojoGetSet = {};
-        assert(Pojo.isEqual(Pojo.replaceRecursive({test:2, ok: {what: true}},null,false,{ok: {james: false}}),{test: 2, ok: {what: true, james: false}}));
-        assert(Pojo.replaceRecursive([true],{test: 2}) === null);
-        assert(Pojo.isEqual(Pojo.replaceRecursive({test: 2},{test: { ok: 3}},'meh',{test: { ok: {ok: 1}, ok2: [1,2,3]}}),{test: {ok: {ok: 1}, ok2: [1, 2, 3]}}));
+        assert(Pojo.isEqual(Pojo.replaceRecursive({test:2, ok: {what: true}},null,{ok: {james: false}}),{test: 2, ok: {what: true, james: false}}));
+        assert(Pojo.isEqual(Pojo.replaceRecursive({test: 2},{test: { ok: 3}},{test: { ok: {ok: 1}, ok2: [1,2,3]}}),{test: {ok: {ok: 1}, ok2: [1, 2, 3]}}));
         assert(Pojo.climb(['test','what'],{test: {what: 'LOL'}}) === 'LOL');
         assert(Pojo.climb(['test','whatz'],{test: {what: 'LOL'}}) === undefined);
         assert(Pojo.isEqual(Pojo.replace(replace,{ok: {james: false}}),{test: 2, ok: {james: false}}));
@@ -783,23 +824,44 @@ Test.Include = function()
         assert(Pojo.valueLast(replace) === replace.ok);
         assert(Pojo.get('what',pojoGetSet) === undefined);
         let pojoMapFilter = { test: 3, ok: 'what', james: { lol: true}, final: null, undef: undefined};
-        assert(Pojo.length(Pojo.filter(pojoMapFilter,function() {
-            return (Pojo.is(this))? false:true;
+        assert(Pojo.length(Pojo.filter(pojoMapFilter,function(value) {
+            return (Pojo.is(value))? false:true;
         })) === 4);
         assert(Pojo.length(pojoMapFilter) === 5);
-        assert(Pojo.map(pojoMapFilter,function() {
-            return (Pojo.is(this))? false:true;
+        assert(Pojo.map(pojoMapFilter,function(value) {
+            return (Pojo.is(value))? false:true;
         })['final'] === true);
-        assert(Pojo.isEqual(Pojo.find(pojoMapFilter,function(value,key,pojo) {
-            assert(pojo === pojoMapFilter);
-            return Pojo.is(this);
+        assert(Pojo.isEqual(Pojo.find(pojoMapFilter,function(value,key) {
+            return Pojo.is(value);
         }),{lol: true}));
-        assert(Arr.length(Pojo.arr(pojoMapFilter)) === 5);
+        assert(Arr.length(Pojo.toArray(pojoMapFilter)) === 5);
+        assert(Pojo.findKey({james: 3, test: '4'},function(value,index) {
+            return Str.is(value);
+        }) === 'test');
+        assert(Pojo.isEqual(Pojo.accumulate({},{james: 3, test: '4'},function(value,index) {
+            return index;
+        }),{james: 'james', test: 'test'}));
+        assert(!Pojo.some({james: 3, james2: 'ok'},function(value) {
+            return Arr.is(value);
+        }));
+        assert(Pojo.some({james: 3, james2: 'ok'},function(value) {
+            return Str.is(value);
+        }));
+        assert(!Pojo.every({james: 3, james2: 'ok'},function(value) {
+            return Str.is(value);
+        }));
+        assert(Pojo.every({james: 3, james2: 4},function(value,key) {
+            return Integer.is(value) && Str.is(key);
+        }));
+        assert(Pojo.reduce("",{james: 'test', ok: 'OK'},function(r,value,key) {
+            return r += value+key;
+        }) === 'testjamesOKok');
         
         // request
         assert(Str.isNotEmpty(Request.relative()));
         assert(Request.absolute() !== Request.relative());
         assert(Str.isNotEmpty(Request.scheme()));
+        assert(Request.scheme() !== Request.scheme(true));
         assert(Str.is(Request.fragment()) || Request.fragment() === null);
         assert(Obj.is(Request.parse()));
         assert(Str.isNotEmpty(Request.parse().hostname));
@@ -817,14 +879,20 @@ Test.Include = function()
         assert(Scalar.isEmpty(false));
         assert(Scalar.isNotEmpty(1));
         assert(!Scalar.isNotEmpty(false));
-        assert(Scalar.check('') === '');
-        assert(Scalar.check(true,true) === true);
-        assert(Scalar.check(false) === false);
-        assert(Scalar.check(null,false) === null);
+        assert(Scalar.typecheck('') === '');
+        assert(Scalar.typecheck(true,true) === true);
+        assert(Scalar.typecheck(false) === false);
+        assert(Scalar.typecheck(null,false) === null);
         assert(Scalar.cast('2.4','int') === 2);
         assert(Scalar.cast('1','bool') === true);
         assert(Scalar.cast('2.4','num') === 2.4);
-        
+        assert(Scalar.cast('5d','int') === 5);
+        assert(Scalar.cast('5d','bool') === null);
+        assert(Scalar.toBool(1) === true);
+        assert(Scalar.toBool('true') === true);
+        assert(Scalar.toBool(0) === false);
+        assert(Scalar.toBool(false) === false);
+
         // selector
         
         // str
@@ -833,7 +901,7 @@ Test.Include = function()
         assert(!Str.is([]));
         assert(!Str.is(null));
         assert(Str.are(['test','ok']));
-        assert(Arr.length(Str.checks(['test','ok',null],false)) === 3);
+        assert(Arr.length(Str.typechecks(['test','ok',null],false)) === 3);
         assert(Str.isStart('a','as'));
         assert(!Str.isStart(3,'3s'));
         assert(Str.isEnd('s','as'));
@@ -864,7 +932,6 @@ Test.Include = function()
         assert(Str.quote('what',true) === '"what"');
         assert(Str.quote('what') === "'what'");
         assert(Str.quote("L'article\"de",false,true) === "'L&#39;article&quot;de'");
-        assert(Str.quote(2) === null);
         assert(Str.sub(2,true,'what') === 'at');
         assert(Str.sub(2,true,'éèà') === 'à');
         assert(Obj.isEqual(Str.explode('-','la-vie-ok'),['la','vie','ok']));
@@ -877,11 +944,11 @@ Test.Include = function()
         assert(isEmpty(''));
         assert(!Str.isNotEmpty(''));
         assert(Str.isNotEmpty('as'));
-        assert(Str.check('ok') === 'ok');
-        assert(Str.check('') === '');
-        assert(Str.check(null,false) === null);
-        assert(Str.check(undefined,false) === undefined);
-        assert(Str.check('',false) === '');
+        assert(Str.typecheck('ok') === 'ok');
+        assert(Str.typecheck('') === '');
+        assert(Str.typecheck(null,false) === null);
+        assert(Str.typecheck(undefined,false) === undefined);
+        assert(Str.typecheck('',false) === '');
         let val = null;
         assert(Str.each('abcde',function(value) {
             assert(value === this);
@@ -899,10 +966,10 @@ Test.Include = function()
         let strVal = 'wéè';
         assert(Str.get(1,strVal) === 'é');
         assert(Str.valueFirst('éèè') === 'é');
-        assert(Str.find('john',function() {
-            return this != 'j';
+        assert(Str.find('john',function(ele) {
+            return ele != 'j';
         }) === 'o');
-        assert(Arr.length(Str.arr('what')) === 4);
+        assert(Arr.length(Str.toArray('what')) === 4);
         assert(Str.removeAllWhitespace(' ads das sda ') === 'adsdassda');
         assert(Str.fromCamelCase('-','data') === 'data')
         assert(Str.fromCamelCase('-','marginTopRight') === 'margin-top-right');
@@ -911,6 +978,12 @@ Test.Include = function()
         assert(Str.toCamelCase(' ',' margin top right ') === 'marginTopRight');
         assert(Str.toCamelCase('_',' margin top right ') === 'margintopright');
         assert(Str.toCamelCase('-','-margin--top--right-') === 'marginTopRight');
+        assert(Str.every("aaaa",function(value,key) {
+            return (value === 'a' && Num.is(key))
+        }));
+        assert(Str.reduce("","aaaa",function(r,value,key) {
+            return r += value+key;
+        }) === 'a0a1a2a3');
         
         // target
         assert(Target.is(document));
@@ -919,12 +992,12 @@ Test.Include = function()
         assert(Target.is(divNode));
         assert(Target.are([window,document]));
         assert(Target.is(textNode));
-        assert(Target.check(fragment) === fragment);
+        assert(Target.typecheck(fragment) === fragment);
         const arrFragment = [fragment];
-        assert(Target.checks(arrFragment) === arrFragment);
-        assert(Arr.length(Target.wrap(selectorAll)) === 1);
-        assert(Target.wrap(arrFragment) === arrFragment);
-        assert(Arr.length(Target.wrap(htmlNode)) === 1);
+        assert(Target.typechecks(arrFragment) === arrFragment);
+        assert(Arr.length(Target.toArray(selectorAll)) === 1);
+        assert(Target.toArray(arrFragment) === arrFragment);
+        assert(Arr.length(Target.toArray(htmlNode)) === 1);
         assert(Integer.is(Target.getProp(window,'outerHeight')));
         
         // type
@@ -960,6 +1033,11 @@ Test.Include = function()
         assert(!Str.isEnd("#james",Uri.absolute("testok.php#james")));
         assert(Str.isEnd("#james",Uri.absolute("testok.php#james",true)));
         assert(Uri.absolute("http://google.com/testok.php") === "http://google.com/testok.php");
+        assert(Uri.path("http://google.com/testok.php?ok=2#meh") === '/testok.php');
+        assert(Uri.query("http://google.com/testok.php?ok=2#meh") === 'ok=2');
+        assert(Uri.query("http://google.com/testok.php") === '');
+        assert(Uri.fragment("http://google.com/testok.php?ok=2#meh") === 'meh');
+        assert(Uri.fragment("http://google.com/testok.php") === '');
         assert(Uri.extension("http://google.com/ok.jpg?v=2#what") === 'jpg');
         assert(Uri.build(Uri.parse("/test.ok?t=2#hash"),false,true) === '/test.ok?t=2#hash');
         assert(Uri.build(Uri.parse("hash"),false,true) === '/hash');
@@ -967,6 +1045,18 @@ Test.Include = function()
         assert(Uri.build(Uri.parse("https://google.com/ok?v=2#what"),true,false) === "https://google.com/ok?v=2");
         assert(Uri.build(Uri.parse("https://google.com/ok?v=2#what"),false,false) === "/ok?v=2");
         assert(Uri.build(Uri.parse("https://google.com/ok?v=2#what"),false,true) === "/ok?v=2#what");
+        assert(Uri.build({pathname: "/testd", search: { james: "OKé", test: 3}}) === '/testd?james=OK%C3%A9&test=3');
+        assert(Uri.build({pathname: "/testd", search: "james=OKé&test=3"}) === '/testd?james=OK%C3%A9&test=3');
+        assert(Uri.build({pathname: "/testd", search: Uri.makeQuery({ james: "OKé", test: 3})}) === '/testd?james=OK%C3%A9&test=3');
+        assert(Uri.build({pathname: "/meh", hash: "OK"},true,true) !== '/meh#OK');
+        assert(Uri.build({pathname: "/meh", hash: "OK"},false,true) === '/meh#OK');
+        const query = Uri.makeQuery('?q=URLUtils.searchéParams&topic=api');
+        const query2 = Uri.makeQuery({q: 'oké', what: 2});
+        const query3 = Uri.makeQuery({q: "la vi+e est bèlle"});
+        assert(query instanceof URLSearchParams);
+        assert(query.toString() === 'q=URLUtils.search%C3%A9Params&topic=api');
+        assert(query2.toString() === 'q=ok%C3%A9&what=2');
+        assert(query3.toString() === 'q=la+vi%2Be+est+b%C3%A8lle');
         assert(Uri.makeHash(undefined,true) === '#');
         assert(Uri.makeHash(undefined,false) === '');
         assert(Uri.makeHash("james",true) === '#james');
@@ -976,12 +1066,6 @@ Test.Include = function()
         assert(Uri.getMailto('mailto:test@test.com') === 'test@test.com');
         assert(Uri.getMailto('test@test.com') === 'test@test.com');
         assert(Uri.getMailto('mailto:testtest.com') === null);
-        const query = Uri.query('?q=URLUtils.searchéParams&topic=api');
-        const query2 = Uri.query({q: 'oké', what: 2});
-        const query3 = Uri.query({q: "la vi+e est bèlle"});
-        assert(query.toString() === 'q=URLUtils.search%C3%A9Params&topic=api');
-        assert(query2.toString() === 'q=ok%C3%A9&what=2');
-        assert(query3.toString() === 'q=la+vi%2Be+est+b%C3%A8lle');
         
         // validate
         assert(Validate.isNumericDash("213-123"));

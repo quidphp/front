@@ -105,8 +105,8 @@ const EleTarget = {
     // retourne vrai si la node a l'attribut
     hasAttr: function(node,value)
     {
-        this.check(node);
-        Str.check(value);
+        this.typecheck(node);
+        Str.typecheck(value);
         
         return node.hasAttribute(value);
     },
@@ -116,8 +116,8 @@ const EleTarget = {
     // retourne vrai si la node a la classe
     hasClass: function(node,value)
     {
-        this.check(node);
-        Str.check(value);
+        this.typecheck(node);
+        Str.typecheck(value);
         
         return node.classList.contains(value);
     },
@@ -142,7 +142,7 @@ const EleTarget = {
     css: function(node,start,pseudo)
     {
         const r = {};
-        this.check(node);
+        this.typecheck(node);
         const style = window.getComputedStyle(node,pseudo);
 
         for (var i = 0; i < style.length; i++) {
@@ -161,8 +161,8 @@ const EleTarget = {
     getCss: function(node,key,cast,pseudo)
     {
         let r = undefined;
-        this.check(node);
-        Str.check(key);
+        this.typecheck(node);
+        Str.typecheck(key);
         
         // fix pour ie11 qui retourne mauvais computed style pour width/height (box-model)
         if(Browser.isIe11() && Arr.in(key,['width','height']))
@@ -188,12 +188,13 @@ const EleTarget = {
     attr: function(node,start)
     {
         const r = {};
-        this.check(node);
+        this.typecheck(node);
         const attr = node.attributes;
         
-        ArrLike.each(attr,function() {
-            if(start == null || Str.isStart(start,this.name))
-            r[this.name] = this.value;
+        ArrLike.each(attr,function(value) {
+            const name = value.name;
+            if(start == null || Str.isStart(start,name))
+            r[name] = value.value;
         });
         
         return r;
@@ -245,7 +246,7 @@ const EleTarget = {
     getValue: function(node,trim,cast)
     {
         let r = undefined;
-        this.check(node);
+        this.typecheck(node);
         
         r = node.value;
         r = Str.cast(r);
@@ -265,7 +266,7 @@ const EleTarget = {
     // il est possible de retourner la dimension si on change de façon temporaire le display
     getDimension: function(node,display)
     {
-        this.check(node);
+        this.typecheck(node);
         display = (display === true)? 'block':display;
         const displayToggle = Str.isNotEmpty(display);
         let currentDisplay, currentWidth, currentHeight;
@@ -300,7 +301,7 @@ const EleTarget = {
     // retourne l'objet bounding rect pour la node
     getBoundingRect: function(node)
     {
-        this.check(node);
+        this.typecheck(node);
         return node.getBoundingClientRect();
     },
     
@@ -311,7 +312,7 @@ const EleTarget = {
     getScroll: function(node)
     {
         let r = null;
-        this.check(node);
+        this.typecheck(node);
         const tag = this.tag(node);
         
         // scrollTop n'est pas sur la tag HTML dans IE
@@ -363,7 +364,7 @@ const EleTarget = {
     // retourne un objet avec les données pour le offset de la node (par rapport à son parent scrollable)
     getOffsetParent: function(node)
     {
-        this.check(node);
+        this.typecheck(node);
         
         return {
             top: Num.ceil(node.offsetTop),
@@ -404,16 +405,16 @@ const EleTarget = {
     // si undefined, efface l'attribut
     setAttr: function(nodes,key,value)
     {
-        nodes = this.wrap(nodes,false);
-        Str.check(key,true);
+        nodes = this.toArray(nodes,false);
+        Str.typecheck(key,true);
         
         if(Obj.is(value))
         value = Json.encode(value);
         
         if(Bool.is(value))
-        value = Integer.fromBool(value);
+        value = Bool.toInt(value);
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             if(value === undefined)
             this.removeAttribute(key);
             else
@@ -437,12 +438,12 @@ const EleTarget = {
     // l'atttribut est toujours présent, si true ou inexistant valeur est 1, sinon valeur est 0
     toggleAttr: function(nodes,key,bool)
     {
-        nodes = this.wrap(nodes,false);
-        Str.check(key,true);
+        nodes = this.toArray(nodes,false);
+        Str.typecheck(key,true);
         const $inst = this;
         
-        this.each(nodes,function() {
-            let value = Integer.fromBool(bool);
+        Arr.each(nodes,function() {
+            let value = (Bool.is(bool))? Bool.toInt(bool):null;
             
             if(value == null)
             {
@@ -462,10 +463,11 @@ const EleTarget = {
     // possible de retirer les attributs existants
     setsAttr: function(nodes,value)
     {
-        Pojo.check(value);
+        nodes = this.toArray(nodes,false);
+        Pojo.typecheck(value);
         const $inst = this;
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             const $this = this;
             
             Pojo.each(value,function(v,k) {
@@ -481,8 +483,10 @@ const EleTarget = {
     // permet de retirer tous les attributs à une ou plusieurs nodes
     emptyAttr: function(nodes)
     {
+        nodes = this.toArray(nodes,false);
         const $inst = this;
-        this.each(nodes,function() {
+        
+        Arr.each(nodes,function() {
             const $this = this;
             
             ArrLike.each(this.attributes,function(value) {
@@ -499,10 +503,11 @@ const EleTarget = {
     // ajoute un id aux éléments contenus dans l'objet qui n'en ont pas
     addId: function(nodes,value)
     {
-        Str.check(value);
+        nodes = this.toArray(nodes,false);
+        Str.typecheck(value);
         const $inst = this;
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             if(!$inst.match(this,"[id]"))
             {
                 const newId = value+Integer.unique();
@@ -518,8 +523,8 @@ const EleTarget = {
     // permet de changer une valeur inline du css
     setCss: function(node,key,value)
     {
-        this.check(node);
-        Str.check(key);
+        this.typecheck(node);
+        Str.typecheck(key);
         key = Str.toCamelCase('-',key);
         
         if(value == null)
@@ -536,7 +541,7 @@ const EleTarget = {
     // si la valeur est un objet, encode en json
     setValue: function(node,value)
     {
-        this.check(node);
+        this.typecheck(node);
         value = Str.cast(value,true);
         node.value = value;
         
@@ -548,10 +553,10 @@ const EleTarget = {
     // permet d'ajouter ou enlever une classe sur une ou plusieurs nodes
     toggleClass: function(nodes,value,bool)
     {
-        nodes = this.wrap(nodes,false);
-        Str.check(value,true);
+        nodes = this.toArray(nodes,false);
+        Str.typecheck(value,true);
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             this.classList.toggle(value,bool);
         });
         
@@ -587,7 +592,7 @@ const EleTarget = {
     // permet de changer les valeurs du scroll
     setScroll: function(node,top,left)
     {
-        this.check(node);
+        this.typecheck(node);
         
         if(Num.is(top))
         node.scrollTop = (top > 0)? top:0;
@@ -599,6 +604,29 @@ const EleTarget = {
     },
     
 
+    // focus
+    // permet de mettre le focus sur une node
+    // possible de tenter de prevent le scroll
+    focus: function(node,preventScroll)
+    {
+        this.typecheck(node);
+        
+        if(preventScroll === true)
+        {
+            const scroll = Win.getScroll();
+            node.focus();
+            Func.timeout(0,function() {
+                Win.setScroll(scroll.top,scroll.left);
+            });
+        }
+        
+        else
+        node.focus();
+        
+        return;
+    },
+    
+    
     // getUri
     // retourne l'uri à partir d'une node
     getUri: function(node)
@@ -622,13 +650,13 @@ const EleTarget = {
     serialize: function(nodes,keyProp,valueProp)
     {
         let r = '';
-        nodes = Ele.wrap(nodes,true);
-        const query = Uri.query();
+        nodes = this.toArray(nodes,true);
+        const query = Uri.makeQuery();
         keyProp = (Str.is(keyProp))? keyProp:'name';
         valueProp = (Str.is(valueProp))? valueProp:'value';
         const $inst = this;
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             const key = $inst.getProp(this,keyProp);
             const value = $inst.getProp(this,valueProp);
             query.append(key,value);
@@ -644,7 +672,7 @@ const EleTarget = {
     // ajout une ou plusieurs nodes comme premiers enfant de la node
     prepend: function(node,value)
     {
-        this.check(node);
+        this.typecheck(node);
         value = Dom.htmlNodes(value);
         node.prepend.apply(node,value);
         
@@ -656,7 +684,7 @@ const EleTarget = {
     // ajoute du contenu html comme dernier enfant de la node
     append: function(node,value)
     {
-        this.check(node);
+        this.typecheck(node);
         value = Dom.htmlNodes(value);
         node.append.apply(node,value);
         
@@ -669,10 +697,10 @@ const EleTarget = {
     insertBefore: function(node,value)
     {
         const r = [];
-        this.check(node);
+        this.typecheck(node);
         value = Dom.htmlNodes(value);
         
-        this.each(value,function() {
+        Arr.each(value,function() {
             r.push(node.insertAdjacentElement('beforebegin',this));
         });
         
@@ -685,10 +713,10 @@ const EleTarget = {
     insertAfter: function(node,value)
     {
         const r = [];
-        this.check(node);
+        this.typecheck(node);
         value = Dom.htmlNodes(value);
         
-        this.each(value,function() {
+        Arr.each(value,function() {
             r.push(node.insertAdjacentElement('afterend',this));
         });
         
@@ -701,7 +729,7 @@ const EleTarget = {
     wrapAll: function(nodes,value)
     {
         let r = null;
-        nodes = this.wrap(nodes,true);
+        nodes = this.toArray(nodes,true);
         value = Dom.htmlNodes(value);
         
         if(Arr.isNotEmpty(value))

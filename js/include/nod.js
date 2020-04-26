@@ -59,7 +59,7 @@ const NodTarget = {
     // ne retourne aucune balise html
     getText: function(node)
     {
-        this.check(node);
+        this.typecheck(node);
         return (node.textContent != null)? node.textContent:undefined;
     },
     
@@ -68,8 +68,8 @@ const NodTarget = {
     // permet de changer contenu texte d'une balise
     setText: function(node,value)
     {
-        this.check(node);
-        Str.check(value,false);
+        this.typecheck(node);
+        Str.typecheck(value,false);
         
         if(node.textContent != null)
         {
@@ -85,7 +85,7 @@ const NodTarget = {
     // clone une node ou un document
     clone: function(value)
     {
-        this.check(value);
+        this.typecheck(value);
         return value.cloneNode(true);
     },
     
@@ -96,8 +96,9 @@ const NodTarget = {
     {
         const r = [];
         const $inst = this;
+        const nodes = this.toArray(value,false);
         
-        this.each(value,function() {
+        Arr.each(value,function() {
             r.push($inst.clone(this));
         });
         
@@ -110,9 +111,9 @@ const NodTarget = {
     // utilise arguments
     remove: function(value) 
     {
-        const nodes = this.wrap(value,false);
+        const nodes = this.toArray(value,false);
         
-        this.each(nodes,function() {
+        Arr.each(nodes,function() {
             this.remove();
         });
         
@@ -158,13 +159,13 @@ const EleDocTarget = {
     // efface tous les enfants et ajoute la ou les nouvelles nodes
     setHtml: function(node,value,clone)
     {
-        this.check(node);
+        this.typecheck(node);
         node = this.realNode(node);
         const children = Nod.children(node,null,true);
         value = Dom.htmlNodes(value,clone);
         Nod.remove(children);
         
-        Nod.each(value,function() {
+        Arr.each(value,function() {
             node.appendChild(this);
         });
         
@@ -178,7 +179,7 @@ const EleDocTarget = {
     // il faut absolument fournir une string
     replaceHtml: function(node,value)
     {
-        Str.check(value);
+        Str.typecheck(value);
         const current = this.getHtml(node);
         
         const newElement = document.createElement('div');
@@ -197,8 +198,9 @@ const EleDocTarget = {
     getOuterHtml: function(nodes)
     {
         let r = '';
+        nodes = Nod.toArray(nodes,false);
         
-        Nod.each(nodes,function() {
+        Arr.each(nodes,function() {
             let content = '';
             
             if(this.outerHTML != null)
@@ -219,22 +221,11 @@ const EleDocTarget = {
 // objet pour les méthodes communes entre node et window
 const EleWinTarget = {
     
-    // focus
-    // permet de mettre le focus sur une node ou window
-    focus: function(node)
-    {
-        this.check(node);
-        node.focus();
-        
-        return;
-    },
-    
-    
     // blur
     // permet de retirer le focus d'une node ou window
     blur: function(node)
     {
-        this.check(node);
+        this.typecheck(node);
         node.blur();
         
         return;

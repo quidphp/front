@@ -14,17 +14,17 @@ Component.ValidatePrevent = function(type)
     
     
     // handler
-    setHdlr(this,'validatePrevent:getTargets',function(event) {
-        return this;
+    setHdlr(this,'validatePrevent:getTargets',function() {
+        return [this];
     });
     
-    setHdlr(this,'validatePrevent:trigger',function(event) {
+    setHdlr(this,'validatePrevent:trigger',function() {
         let r = true;
         const targets = trigHdlr(this,'validatePrevent:getTargets');
         
         if(Vari.isNotEmpty(targets))
         {
-            Ele.each(targets,function() {
+            Arr.each(targets,function() {
                 const val = trigHdlr(this,"validate:trigger");
                 
                 if(val === false)

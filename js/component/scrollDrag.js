@@ -40,8 +40,8 @@ Component.ScrollDrag = function(option)
         
         getChildren: function() {
             const childs = Ele.children(this);
-            return Arr.find(childs,function() {
-                return Ele.isVisible(this);
+            return Arr.find(childs,function(ele) {
+                return Ele.isVisible(ele);
             });
         },
         

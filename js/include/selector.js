@@ -14,7 +14,7 @@ const SelectorTarget = {
     {
         let r = null;
         node = this.realNode(node);
-        Nod.check(node,false);
+        Nod.typecheck(node,false);
         
         if(node != null)
         {
@@ -33,7 +33,7 @@ const SelectorTarget = {
     {
         let r = null;
         node = this.realNode(node);
-        Nod.check(node,false);
+        Nod.typecheck(node,false);
         
         if(node != null)
         {
@@ -41,7 +41,7 @@ const SelectorTarget = {
             r = node.querySelectorAll(selector);
             
             if(r instanceof NodeList)
-            r = ArrLike.arr(r);
+            r = ArrLike.toArray(r);
         }
 
         return r;
@@ -55,11 +55,12 @@ const SelectorTarget = {
     {
         let r = null;
         const $inst = this;
+        nodes = this.toArray(nodes,false);
         
         if(nodes != null)
         {
             r = [];
-            this.each(nodes,function() {
+            Arr.each(nodes,function() {
                 Arr.mergeRef(r,$inst.scopedQueryAll(this,selector));
             });
         }
@@ -73,8 +74,8 @@ const SelectorTarget = {
     closest: function(node,value)
     {
         node = this.realNode(node);
-        Nod.check(node);
-        Str.check(value);
+        this.typecheck(node);
+        Str.typecheck(value);
         
         return node.closest(value);
     },
@@ -94,40 +95,52 @@ const SelectorTarget = {
     match: function(node,value)
     {
         node = this.realNode(node);
-        Nod.check(node);
-        Str.check(value);
+        Nod.typecheck(node);
+        Str.typecheck(value);
         
         return (Doc.is(node))? false:node.matches(value);
     },
     
     
-    // matchAll
-    // retourne vrai si toutes les nodes retournent vrai au pattern
-    matchAll: function(nodes,value)
+    // some
+    // retourne vrai si au moins une node retourne vrai au pattern
+    some: function(nodes,value)
     {
-        let r = false;
+        Str.typecheck(value);
+        nodes = this.toArray(nodes,false);
         const $inst = this;
         
-        this.each(nodes,function() {
-            return r = $inst.match(this,value);
+        return Arr.some(nodes,function(ele) {
+            return $inst.match(ele,value);
         });
+    },
+    
+    
+    // every
+    // retourne vrai si toutes les nodes retournent vrai au pattern
+    every: function(nodes,value)
+    {
+        Str.typecheck(value);
+        nodes = this.toArray(nodes,false);
+        const $inst = this;
         
-        return r;
+        return Arr.every(nodes,function(ele) {
+            return $inst.match(ele,value);
+        });
     },
     
     
     // filter
     // permet de filtrer les nodes d'un tableau qui match le pattern
-    // possible aussi de donner une fonction pour que ce soit le même comportement que arr filter
     filter: function(nodes,value)
     {
-        nodes = this.wrap(nodes,false);
+        Str.typecheck(value);
+        nodes = this.toArray(nodes,false);
         const $inst = this;
-        const func = (Func.is(value))? value:function() {
-            return $inst.match(this,value);
-        };
         
-        return Arr.filter(nodes,func);
+        return Arr.filter(nodes,function(ele) {
+            return $inst.match(ele,value);
+        });
     },
     
     
@@ -135,12 +148,12 @@ const SelectorTarget = {
     // retourne la première valeur d'un tableau qui match le pattern
     find: function(nodes,value)
     {
-        nodes = this.wrap(nodes,false);
-        Str.check(value);
+        Str.typecheck(value);
+        nodes = this.toArray(nodes,false);
         const $inst = this;
         
-        return Arr.find(nodes,function() {
-            return $inst.match(this,value);
+        return Arr.find(nodes,function(ele) {
+            return $inst.match(ele,value);
         });
     },
     
@@ -151,7 +164,7 @@ const SelectorTarget = {
     {
         let r = null;
         node = this.realNode(node);
-        Nod.check(node);
+        Nod.typecheck(node);
         const parent = node.parentNode;
         
         if(Nod.is(parent))
@@ -171,7 +184,7 @@ const SelectorTarget = {
     {
         let r = [];
         node = this.realNode(node);
-        Nod.check(node);
+        Nod.typecheck(node);
         
         while (node = Nod.parent(node)) 
         {
@@ -192,12 +205,12 @@ const SelectorTarget = {
     {
         let r = null;
         node = this.realNode(node);
-        Nod.check(node);
+        this.typecheck(node);
         const sibling = node.previousElementSibling;
         
-        if(Nod.is(sibling))
+        if(this.is(sibling))
         {
-            if(value == null || Nod.match(sibling,value))
+            if(value == null || this.match(sibling,value))
             r = sibling;
         }
         
@@ -212,14 +225,14 @@ const SelectorTarget = {
     {
         let r = [];
         node = this.realNode(node);
-        Nod.check(node);
+        this.typecheck(node);
         
-        while (node = Nod.prev(node)) 
+        while (node = this.prev(node)) 
         {
-            if(until != null && Nod.match(node,until))
+            if(until != null && this.match(node,until))
             break;
             
-            if(value == null || Nod.match(node,value))
+            if(value == null || this.match(node,value))
             r.push(node);
         }
         
@@ -233,12 +246,12 @@ const SelectorTarget = {
     {
         let r = null;
         node = this.realNode(node);
-        Nod.check(node);
+        this.typecheck(node);
         const sibling = node.nextElementSibling;
         
-        if(Nod.is(sibling,true))
+        if(this.is(sibling,true))
         {
-            if(value == null || Nod.match(sibling,value))
+            if(value == null || this.match(sibling,value))
             r = sibling;
         }
         
@@ -253,14 +266,14 @@ const SelectorTarget = {
     {
         let r = [];
         node = this.realNode(node);
-        Nod.check(node);
+        this.typecheck(node);
         
-        while (node = Nod.next(node)) 
+        while (node = this.next(node)) 
         {
-            if(until != null && Nod.match(node,until))
+            if(until != null && this.match(node,until))
             break;
             
-            if(value == null || Nod.match(node,value))
+            if(value == null || this.match(node,value))
             r.push(node);
         }
         
@@ -276,17 +289,17 @@ const SelectorTarget = {
     {
         let r = null;
         node = this.realNode(node);
-        Nod.check(node);
+        Nod.typecheck(node);
         const hasChildren = (node.children != null);
         let childs;
         
         if(withTextNodes === true)
-        childs = ArrLike.arr(node.childNodes);
+        childs = ArrLike.toArray(node.childNodes);
         
         else
         {
             if(hasChildren === true)
-            childs = ArrLike.arr(node.children);
+            childs = ArrLike.toArray(node.children);
             
             else
             {

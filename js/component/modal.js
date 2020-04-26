@@ -54,7 +54,7 @@ Component.Modal = function(option)
         },
         
         set: function(html,anchors,route,uri) {
-            Str.check(html,true);
+            Str.typecheck(html,true);
             setModalAttr.call(this,anchors,route,uri);
             trigHdlr(this,'clickOpen:setTargetContent',html);
             trigEvt(this,'clickOpen:open');
@@ -155,9 +155,9 @@ Component.Modal = function(option)
             uri = Ele.getUri(anchors);
         }
         
-        Str.check(route,true);
+        Str.typecheck(route,true);
         
-        anchors = Ele.wrap(anchors,false);
+        anchors = Ele.toArray(anchors,false);
         setData(this,'data-anchor',anchors);
         
         setAttr(this,'data-route',route);

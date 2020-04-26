@@ -13,7 +13,7 @@ const HandlerTarget = {
     isTriggerHandlerEqual: function(nodes,type,equal)
     {
         let r = false;
-        nodes = this.wrap(nodes,false);
+        nodes = this.toArray(nodes,false);
         const args = Arr.merge([type],ArrLike.sliceStart(3,arguments));
         const $inst = this;
         
@@ -45,7 +45,10 @@ const HandlerTarget = {
     // envoie une erreur si plusieurs nodes
     getHandler: function(node,type) 
     {
-        return Pojo.get(type,this.allHandler(node));
+        Str.typecheck(type);
+        const handlers = this.allHandler(node);
+        
+        return (handlers != null)? Pojo.get(type,handlers):undefined;
     },
     
     
@@ -53,9 +56,9 @@ const HandlerTarget = {
     // permet d'emmagasiné une handler dans chaque node fournit en argument
     setHandler: function(nodes,type,handler) 
     {
-        Str.check(type,true);
-        Func.check(handler);
-        nodes = this.wrap(nodes,false);
+        Str.typecheck(type,true);
+        Func.typecheck(handler);
+        nodes = this.toArray(nodes,false);
         const $inst = this;
         
         if(Arr.isNotEmpty(nodes))
@@ -74,8 +77,8 @@ const HandlerTarget = {
     // permet d'ajouter plusieurs handlers à partir d'un objet
     setsHandler: function(nodes,typeStart,obj)
     {
-        Str.check(typeStart,true);
-        Pojo.check(obj);
+        Str.typecheck(typeStart,true);
+        Pojo.typecheck(obj);
         const $inst = this;
         
         Pojo.each(obj,function(value,key) {
@@ -91,8 +94,8 @@ const HandlerTarget = {
     // permet de retirer un handler emmagasiné dans une ou plusiuers node
     removeHandler: function(nodes,type) 
     {
-        Str.check(type,true);
-        nodes = this.wrap(nodes,false);
+        Str.typecheck(type,true);
+        nodes = this.toArray(nodes,false);
         const $inst = this;
         
         if(Arr.isNotEmpty(nodes))
@@ -113,8 +116,8 @@ const HandlerTarget = {
     triggerHandler: function(node,type) 
     {
         let r = undefined;
-        this.check(node,false);
-        Str.check(type,true);
+        this.typecheck(node,false);
+        Str.typecheck(type,true);
         
         if(node != null)
         {
@@ -137,7 +140,7 @@ const HandlerTarget = {
     triggersHandler: function(nodes,type)
     {
         let r = null;
-        nodes = this.wrap(nodes,false);
+        nodes = this.toArray(nodes,false);
         const $inst = this;
         
         if(Arr.isNotEmpty(nodes))

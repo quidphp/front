@@ -155,21 +155,41 @@ const Uri = Lemur.Uri = {
     },
     
     
+    // path
+    // retourne le pathname de l'uri
+    path: function(uri)
+    {
+        return this.parse(uri).pathname;
+    },
+    
+    
+    // query
+    // retourne le query de l'uri sans le ?
+    query: function(uri)
+    {
+        return this.makeQuery(this.parse(uri).search).toString();
+    },
+    
+    
+    // fragment
+    // retourne le hash de l'uri sans le symbole
+    fragment: function(uri)
+    {
+        return this.makeHash(this.parse(uri).hash,false);
+    },
+    
+    
     // extension
     // retourne l'extension du path de l'uri
     extension: function(uri)
     {
         let r = null;
+        const parse = this.parse(uri);
+        const regex = /(?:\.([^.]+))?$/;
+        const result = regex.exec(parse.pathname);
         
-        if(Str.is(uri))
-        {
-            const regex = /(?:\.([^.]+))?$/;
-            const parse = this.parse(uri);
-            const result = regex.exec(parse.pathname);
-            
-            if(Arr.is(result) && result.length === 2)
-            r = result[1];
-        }
+        if(Arr.is(result) && result.length === 2)
+        r = result[1];
         
         return r;
     },
@@ -180,7 +200,7 @@ const Uri = Lemur.Uri = {
     // ne marche pas bien sur ie11
     parse: function(uri)
     {
-        Str.check(uri);
+        Str.typecheck(uri);
         const schemeHost = Request.schemeHost();
         
         if(Str.isStart("#",uri))
@@ -190,9 +210,43 @@ const Uri = Lemur.Uri = {
     },
 
     
-    // query
+    // build
+    // prend un objet parse et retourne une string uri
+    // possible de retourner une string relative ou absolute
+    // possible d'inclure ou non le hash
+    build: function(parse,absolute,hash)
+    {
+        let r = '';
+        Obj.typecheck(parse);
+        
+        if(absolute === true)
+        {
+            r += (Str.is(parse.protocol))? parse.protocol:Request.scheme(true);
+            r += "//";
+            r += (Str.is(parse.host))? parse.host:Request.host();
+        }
+        
+        r += parse.pathname;
+        
+        if(parse.search)
+        {
+            const searchParams = (parse.search instanceof URLSearchParams)? parse.search:this.makeQuery(parse.search);
+            const query = searchParams.toString();
+            
+            if(Str.isNotEmpty(query))
+            r += "?"+query;
+        }
+
+        if(parse.hash && hash === true)
+        r += this.makeHash(parse.hash,true);
+
+        return r;
+    },
+    
+    
+    // makeQuery
     // permet de retourner un objet urlSearchParams à partir d'une string ou un object
-    query: function(value)
+    makeQuery: function(value)
     {
         const r = (Str.is(value))? new URLSearchParams(value):new URLSearchParams();
         
@@ -204,34 +258,6 @@ const Uri = Lemur.Uri = {
             });
         }
         
-        return r;
-    },
-    
-    
-    // build
-    // prend un objet parse et retourne une string uri
-    // possible de retourner une string relative ou absolute
-    // possible d'inclure ou non le hash
-    build: function(parse,absolute,hash)
-    {
-        let r = '';
-        Obj.check(parse);
-        
-        if(absolute === true)
-        {
-            r += parse.protocol;
-            r += "//";
-            r += parse.host;
-        }
-        
-        r += parse.pathname;
-        
-        if(parse.search)
-        r += parse.search;
-
-        if(parse.hash && hash === true)
-        r += parse.hash;
-
         return r;
     },
     

@@ -26,9 +26,9 @@ Component.NavIndex = function(option)
     
     
     // check
-    Str.check($option.type);
-    Str.check($option.child);
-    Str.check($option.childActive);
+    Str.typecheck($option.type);
+    Str.typecheck($option.child);
+    Str.typecheck($option.childActive);
     const type = $option.type;
     const child = $option.child;
     
@@ -71,7 +71,7 @@ Component.NavIndex = function(option)
     // go true
     if($option.go == null)
     $option.go = defaultChange;
-    Func.check($option.go);
+    Func.typecheck($option.go);
     
     
     // handler
@@ -87,7 +87,7 @@ Component.NavIndex = function(option)
             if(Str.isNotEmpty(r))
             r = qsa(this,r);
             
-            Arr.check(r);
+            Arr.typecheck(r);
             trigEvt(this,type+':bindChilds',r);
             
             return r;
@@ -99,8 +99,8 @@ Component.NavIndex = function(option)
         
         getCurrent: function() {
             const targets = trigHdlr(this,type+':getTargets');
-            return Arr.find(targets,function() {
-                return trigHdlr(this,child+':'+$option.childActive);
+            return Arr.find(targets,function(ele) {
+                return trigHdlr(ele,child+':'+$option.childActive);
             });
         },
         
@@ -191,6 +191,7 @@ Component.NavIndex = function(option)
     const bindChilds = function(value)
     {
         const $this = this;
+        value = Ele.toArray(value,false);
         
         const handlers = {
             isEmpty: function() {
@@ -202,14 +203,14 @@ Component.NavIndex = function(option)
             }
         };
         
-        Arr.each(value,function() {
-            if(!trigHdlr(this,child+':isBinded'))
+        Arr.each(value,function(ele) {
+            if(!trigHdlr(ele,child+':isBinded'))
             {
                 // components
-                Component.InitOpenClose.call(this,Pojo.replace($option,{type: child}));
+                Component.InitOpenClose.call(ele,Pojo.replace($option,{type: child}));
                 
                 // handler
-                setHdlrs(this,child+':',handlers);
+                setHdlrs(ele,child+':',handlers);
             }
         });
     }
