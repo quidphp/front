@@ -105,10 +105,7 @@ const EleTarget = {
     // retourne vrai si la node a l'attribut
     hasAttr: function(node,value)
     {
-        this.typecheck(node);
-        Str.typecheck(value);
-        
-        return node.hasAttribute(value);
+        return (this.is(node) && Str.is(value))? node.hasAttribute(value):false;
     },
     
     
@@ -116,10 +113,7 @@ const EleTarget = {
     // retourne vrai si la node a la classe
     hasClass: function(node,value)
     {
-        this.typecheck(node);
-        Str.typecheck(value);
-        
-        return node.classList.contains(value);
+        return (this.is(node) && Str.is(value))? node.classList.contains(value):false;
     },
     
     
@@ -221,6 +215,7 @@ const EleTarget = {
     getAttr: function(node,key,cast)
     {
         let r = undefined;
+        this.typecheck(node);
         
         if(this.hasAttr(node,key))
         {
@@ -405,7 +400,7 @@ const EleTarget = {
     // si undefined, efface l'attribut
     setAttr: function(nodes,key,value)
     {
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         Str.typecheck(key,true);
         
         if(Obj.is(value))
@@ -414,11 +409,11 @@ const EleTarget = {
         if(Bool.is(value))
         value = Bool.toInt(value);
         
-        Arr.each(nodes,function() {
+        Arr.each(nodes,function(ele) {
             if(value === undefined)
-            this.removeAttribute(key);
+            ele.removeAttribute(key);
             else
-            this.setAttribute(key,value);
+            ele.setAttribute(key,value);
         });
         
         return;
@@ -438,20 +433,21 @@ const EleTarget = {
     // l'atttribut est toujours présent, si true ou inexistant valeur est 1, sinon valeur est 0
     toggleAttr: function(nodes,key,bool)
     {
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         Str.typecheck(key,true);
         const $inst = this;
+        const defaultValue = (Bool.is(bool))? Bool.toInt(bool):null;
         
-        Arr.each(nodes,function() {
-            let value = (Bool.is(bool))? Bool.toInt(bool):null;
+        Arr.each(nodes,function(ele) {
+            let value = defaultValue;
             
             if(value == null)
             {
-                value = $inst.getAttr(this,key,'int');
+                value = $inst.getAttr(ele,key,'int');
                 value = (value === 1)? false:true;
             }
             
-            $inst.setAttr(this,key,value);
+            $inst.setAttr(ele,key,value);
         });
         
         return;
@@ -463,15 +459,13 @@ const EleTarget = {
     // possible de retirer les attributs existants
     setsAttr: function(nodes,value)
     {
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         Pojo.typecheck(value);
         const $inst = this;
         
-        Arr.each(nodes,function() {
-            const $this = this;
-            
+        Arr.each(nodes,function(ele) {            
             Pojo.each(value,function(v,k) {
-                $inst.setAttr($this,k,v);
+                $inst.setAttr(ele,k,v);
             });
         });
         
@@ -483,15 +477,13 @@ const EleTarget = {
     // permet de retirer tous les attributs à une ou plusieurs nodes
     emptyAttr: function(nodes)
     {
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
-        Arr.each(nodes,function() {
-            const $this = this;
-            
-            ArrLike.each(this.attributes,function(value) {
+        Arr.each(nodes,function(ele) {
+            ArrLike.each(ele.attributes,function(value) {
                 if(value != null)
-                $inst.removeAttr($this,value.name);
+                $inst.removeAttr(ele,value.name);
             });
         });
         
@@ -503,15 +495,15 @@ const EleTarget = {
     // ajoute un id aux éléments contenus dans l'objet qui n'en ont pas
     addId: function(nodes,value)
     {
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         Str.typecheck(value);
         const $inst = this;
         
-        Arr.each(nodes,function() {
-            if(!$inst.match(this,"[id]"))
+        Arr.each(nodes,function(ele) {
+            if(!$inst.match(ele,"[id]"))
             {
                 const newId = value+Integer.unique();
-                $inst.setProp(this,'id',newId);
+                $inst.setProp(ele,'id',newId);
             }
         });
         
@@ -553,11 +545,11 @@ const EleTarget = {
     // permet d'ajouter ou enlever une classe sur une ou plusieurs nodes
     toggleClass: function(nodes,value,bool)
     {
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         Str.typecheck(value,true);
         
-        Arr.each(nodes,function() {
-            this.classList.toggle(value,bool);
+        Arr.each(nodes,function(ele) {
+            ele.classList.toggle(value,bool);
         });
         
         return;
@@ -568,6 +560,8 @@ const EleTarget = {
     // permet de changer la largeur et hauteur de la node
     setDimension: function(node,width,height)
     {
+        this.typecheck(node);
+        
         if(Scalar.is(width))
         {
             width = (width === true)? this.getDimension(node,width).width:width;
@@ -650,15 +644,15 @@ const EleTarget = {
     serialize: function(nodes,keyProp,valueProp)
     {
         let r = '';
-        nodes = this.toArray(nodes,true);
+        nodes = this.toArray(nodes);
         const query = Uri.makeQuery();
         keyProp = (Str.is(keyProp))? keyProp:'name';
         valueProp = (Str.is(valueProp))? valueProp:'value';
         const $inst = this;
         
-        Arr.each(nodes,function() {
-            const key = $inst.getProp(this,keyProp);
-            const value = $inst.getProp(this,valueProp);
+        Arr.each(nodes,function(ele) {
+            const key = $inst.getProp(ele,keyProp);
+            const value = $inst.getProp(ele,valueProp);
             query.append(key,value);
         });
         
@@ -696,15 +690,12 @@ const EleTarget = {
     // permet d'insérer une ou plusieurs node avant une autre
     insertBefore: function(node,value)
     {
-        const r = [];
         this.typecheck(node);
         value = Dom.htmlNodes(value);
         
-        Arr.each(value,function() {
-            r.push(node.insertAdjacentElement('beforebegin',this));
+        return Arr.accumulate([],value,function(ele) {
+            return node.insertAdjacentElement('beforebegin',ele);
         });
-        
-        return r;
     },
 
 
@@ -712,15 +703,12 @@ const EleTarget = {
     // permet d'insérer une ou plusieurs node après une autre
     insertAfter: function(node,value)
     {
-        const r = [];
         this.typecheck(node);
         value = Dom.htmlNodes(value);
         
-        Arr.each(value,function() {
-            r.push(node.insertAdjacentElement('afterend',this));
+        return Arr.accumulate([],value,function(ele) {
+            return node.insertAdjacentElement('afterend',ele);
         });
-        
-        return r;
     },
 
 

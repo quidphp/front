@@ -94,15 +94,12 @@ const NodTarget = {
     // permet de cloner un tableau de nodes ou document
     clones: function(value)
     {
-        const r = [];
         const $inst = this;
-        const nodes = this.toArray(value,false);
+        const nodes = this.toArray(value);
         
-        Arr.each(value,function() {
-            r.push($inst.clone(this));
+        return Arr.accumulate([],value,function(ele) {
+            return $inst.clone(ele);
         });
-        
-        return r;
     },
     
     
@@ -111,10 +108,10 @@ const NodTarget = {
     // utilise arguments
     remove: function(value) 
     {
-        const nodes = this.toArray(value,false);
+        const nodes = this.toArray(value);
         
-        Arr.each(nodes,function() {
-            this.remove();
+        Arr.each(nodes,function(ele) {
+            ele.remove();
         });
         
         return;
@@ -165,8 +162,8 @@ const EleDocTarget = {
         value = Dom.htmlNodes(value,clone);
         Nod.remove(children);
         
-        Arr.each(value,function() {
-            node.appendChild(this);
+        Arr.each(value,function(ele) {
+            node.appendChild(ele);
         });
         
         return;
@@ -197,22 +194,19 @@ const EleDocTarget = {
     // retourne le outerHtml d'une ou plusieurs nodes
     getOuterHtml: function(nodes)
     {
-        let r = '';
-        nodes = Nod.toArray(nodes,false);
+        nodes = Nod.toArray(nodes);
         
-        Arr.each(nodes,function() {
+        return Arr.accumulate('',nodes,function(ele) {
             let content = '';
             
-            if(this.outerHTML != null)
-            content = this.outerHTML;
+            if(ele.outerHTML != null)
+            content = ele.outerHTML;
             
-            else if(this.textContent != null)
-            content = this.textContent;
+            else if(ele.textContent != null)
+            content = ele.textContent;
             
-            r += content;
+            return content;
         });
-
-        return r;
     }
 }
 

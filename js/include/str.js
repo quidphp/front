@@ -70,6 +70,24 @@ const StrPrimitive = {
     },
     
     
+    // toNum
+    // retourne la string sous forme de nombre
+    toNum: function(value) 
+    {
+        this.typecheck(value);
+        return Num.cast(value);
+    },
+    
+    
+    // toInt
+    // retourne la string sous forme de integer
+    toInt: function(value) 
+    {
+        this.typecheck(value);
+        return Integer.cast(value);
+    },
+    
+    
     // pos
     // retourne l'index de la valeur dans la string
     pos: function(value,string) 

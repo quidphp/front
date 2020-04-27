@@ -292,6 +292,7 @@ const Uri = Lemur.Uri = {
     getMailto: function(value)
     {
         let r = null;
+        Str.typecheck(value);
         
         if(Str.isNotEmpty(value))
         {

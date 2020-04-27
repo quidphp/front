@@ -21,6 +21,7 @@ Component.FeedSearch = function(option)
         result: '.results',
         search: "input[type='text']",
         order: ".order select",
+        keyboardArrow: true,
         inputSearch: {}
     },option);
     
@@ -29,7 +30,7 @@ Component.FeedSearch = function(option)
     Component.Feed.call(this);
     Component.HrefReplaceChar.call(this);
     Component.Focusable.call(this);
-    Component.KeyboardArrow.call(this,'vertical');
+    Component.KeyboardArrow.call(this,$option.keyboardArrow);
     
     
     // handler
@@ -45,7 +46,7 @@ Component.FeedSearch = function(option)
         
         getSearchValue: function() {
             const search = trigHdlr(this,'feedSearch:getSearch');
-            return trigHdlr(search,'input:getValueTrim');
+            return (search != null)? trigHdlr(search,'input:getValueTrim'):null;
         },
         
         getOrder: function() {
@@ -54,7 +55,7 @@ Component.FeedSearch = function(option)
         
         getOrderValue: function() {
             const order = trigHdlr(this,'feedSearch:getOrder');
-            return trigHdlr(order,'input:getValueInt');
+            return (order != null)? trigHdlr(order,'input:getValueInt'):null;
         }
     });
     
@@ -125,16 +126,20 @@ Component.FeedSearch = function(option)
     
     // setup
     aelOnce(this,'component:setup',function() {
-        bindSearch.call(this);
-        bindOrder.call(this);
+        const search = trigHdlr(this,'feedSearch:getSearch');
+        if(search != null)
+        bindSearch.call(this,search);
+        
+        const order = trigHdlr(this,'feedSearch:getOrder');
+        if(order != null)
+        bindOrder.call(this,order);
     });
     
     
     // bindSearch
-    const bindSearch = function()
+    const bindSearch = function(search)
     {
         const $this = this;
-        const search = trigHdlr(this,'feedSearch:getSearch');
         
         // components
         Component.InputSearch.call(search,$option.inputSearch);
@@ -153,10 +158,9 @@ Component.FeedSearch = function(option)
     
     
     // bindOrder
-    const bindOrder = function()
+    const bindOrder = function(order)
     {
         const $this = this;
-        const order = trigHdlr(this,'feedSearch:getOrder');
         
         // event
         ael(order,'change',function() {

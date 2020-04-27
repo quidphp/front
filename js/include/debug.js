@@ -12,14 +12,6 @@ const Debug = Lemur.Debug = new function()
     let debug = false;
     
     
-    // is
-    // retourne vrai si la valeur pour le débogagge est le même
-    this.is = function(value)
-    {
-        return debug === true || debug === value;
-    }
-    
-    
     // status
     // active ou désactive le débogagge
     this.status = (function()
@@ -31,6 +23,14 @@ const Debug = Lemur.Debug = new function()
             return debug;
         }
     })()
+    
+    
+    // is
+    // retourne vrai si la valeur pour le débogagge est le même
+    this.is = function(value)
+    {
+        return debug === true || debug === value;
+    }
     
     
     // assertThrow

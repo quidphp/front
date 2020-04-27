@@ -14,7 +14,7 @@ const SelectorTarget = {
     {
         let r = null;
         node = this.realNode(node);
-        Nod.typecheck(node,false);
+        Nod.typecheck(node);
         
         if(node != null)
         {
@@ -33,7 +33,7 @@ const SelectorTarget = {
     {
         let r = null;
         node = this.realNode(node);
-        Nod.typecheck(node,false);
+        Nod.typecheck(node);
         
         if(node != null)
         {
@@ -55,13 +55,13 @@ const SelectorTarget = {
     {
         let r = null;
         const $inst = this;
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         
         if(nodes != null)
         {
             r = [];
-            Arr.each(nodes,function() {
-                Arr.mergeRef(r,$inst.scopedQueryAll(this,selector));
+            Arr.each(nodes,function(ele) {
+                Arr.mergeRef(r,$inst.scopedQueryAll(ele,selector));
             });
         }
         
@@ -107,7 +107,7 @@ const SelectorTarget = {
     some: function(nodes,value)
     {
         Str.typecheck(value);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
         return Arr.some(nodes,function(ele) {
@@ -121,7 +121,7 @@ const SelectorTarget = {
     every: function(nodes,value)
     {
         Str.typecheck(value);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
         return Arr.every(nodes,function(ele) {
@@ -135,7 +135,7 @@ const SelectorTarget = {
     filter: function(nodes,value)
     {
         Str.typecheck(value);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
         return Arr.filter(nodes,function(ele) {
@@ -149,7 +149,7 @@ const SelectorTarget = {
     find: function(nodes,value)
     {
         Str.typecheck(value);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
         return Arr.find(nodes,function(ele) {
@@ -303,10 +303,8 @@ const SelectorTarget = {
             
             else
             {
-                childs = [];
-                ArrLike.each(node.childNodes,function(value) {
-                    if(Ele.is(value))
-                    childs.push(value);
+                childs = ArrLike.accumulate([],node.childNodes,function(value) {
+                    return (Ele.is(value))? value:null;
                 });
             }
         }

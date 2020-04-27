@@ -24,13 +24,21 @@ const Validate = Lemur.Validate = {
     },
     
     
+    // isRegexStr
+    // retourne vrai si une valeur un regex ou instance de RegExp
+    isRegexStr: function(value)
+    {
+        return (Str.isNotEmpty(value) || value instanceof RegExp);
+    },
+    
+    
     // regex
     // permet de lancer un test d'expression régulière
     regex: function(value,exp)
     {
         let r = false;
         
-        if(Str.is(value) && exp)
+        if(Str.is(value) && this.isRegexStr(exp))
         {
             const regex = new RegExp(exp);
             

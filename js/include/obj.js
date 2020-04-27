@@ -259,12 +259,11 @@ const ObjKeyValue = {
     // possible de quote les valeurs (à ce moment html escape est utilisé)
     str: function(obj,separator,separator2,quote) 
     {
-        let r = '';
         const $inst = this;
         separator = (Str.is(separator))? separator:'=';
         separator2 = (Str.is(separator2))? separator2:' ';
         
-        this.each(obj,function(value,key) {
+        return this.reduce('',obj,function(r,value,key) {
             if(Str.isNotEmpty(key))
             {
                 value = Str.cast(value,true);
@@ -278,10 +277,10 @@ const ObjKeyValue = {
                 r += key;
                 r += separator;
                 r += value;
+                
+                return r;
             }
         });
-
-        return r;
     },
     
     
@@ -330,7 +329,7 @@ const ObjEach = {
         {
             key = keys[i];
             value = loop[key];
-            result = callback.call(value,value,key);
+            result = callback(value,key);
             
             if(result === false)
             {

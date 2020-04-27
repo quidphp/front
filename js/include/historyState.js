@@ -49,27 +49,22 @@ const HistoryState = Lemur.HistoryState = {
     // retourne un objet état d'historique (avec url absolute, title et timestamp)
     make: function(value,title,noEmptyHash) 
     {
-        let r = null;
+        Str.typecheck(value);
         
-        if(Str.is(value))
-        {
-            let uri = Uri.absolute(value,true);
-            const valueEndsHash = Str.isEnd('#',value);
-            const uriEndsHash = Str.isEnd('#',uri);
-            
-            if(noEmptyHash === true && uriEndsHash === true)
-            uri = uri.slice(0,-1);
-            
-            else if(noEmptyHash !== true && valueEndsHash === true && uriEndsHash === false)
-            uri += "#";
-            
-            r = {
-                url: uri,
-                title: title || null,
-                timestamp: Datetime.now()
-            };
-        }
+        let uri = Uri.absolute(value,true);
+        const valueEndsHash = Str.isEnd('#',value);
+        const uriEndsHash = Str.isEnd('#',uri);
         
-        return r;
+        if(noEmptyHash === true && uriEndsHash === true)
+        uri = uri.slice(0,-1);
+        
+        else if(noEmptyHash !== true && valueEndsHash === true && uriEndsHash === false)
+        uri += "#";
+        
+        return {
+            url: uri,
+            title: title || null,
+            timestamp: Datetime.now()
+        };
     }
 }

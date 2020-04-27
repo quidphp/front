@@ -6,8 +6,13 @@
  
 // event
 // script containing event management functions
-const Evt = Lemur.Evt = {
-   
+const EvtPrimitive = {
+    
+    // specialKeyCode
+    // code de clavier spécial
+    specialKeyCode: [10,13,27,37,38,39,40],
+    
+    
     // support
     // retourne un objet indiquant si le browser support passive et once
     support: (function() {
@@ -40,17 +45,22 @@ const Evt = Lemur.Evt = {
     })(),
     
     
+    // is
+    // retourne vrai si la valeur est un événement
+    is: function(value) {
+        return value instanceof Event;
+    },
+    
+    
     // isSpecialKeyCode
     // retourne vrai si l'event a un keyCode et que celui-ci est tab, enter, escape, ou arrow
     isSpecialKeyCode: function(event)
     {
         let r = false;
+        this.typecheck(event);
         
-        if(event instanceof Event && Integer.is(event.keyCode))
-        {
-            if(Arr.in(event.keyCode,[10,13,27,37,38,39,40]))
-            r = true;
-        }
+        if(Integer.is(event.keyCode) && Arr.in(event.keyCode,this.specialKeyCode))
+        r = true;
         
         return r;
     },
@@ -60,16 +70,15 @@ const Evt = Lemur.Evt = {
     // permet de faire un prevent default et stop propagation à un événement
     preventStop: function(event,immediate)
     {
-        if(event instanceof Event)
-        {
-            event.preventDefault();
-            
-            if(immediate === true)
-            event.stopImmediatePropagation();
-            
-            else
-            event.stopPropagation();
-        }
+        this.typecheck(event);
+        
+        event.preventDefault();
+        
+        if(immediate === true)
+        event.stopImmediatePropagation();
+        
+        else
+        event.stopPropagation();
         
         return false;
     },
@@ -80,15 +89,11 @@ const Evt = Lemur.Evt = {
     // un nom de type avec un . ou : est custom
     nameFromType: function(type)
     {
-        let r = null;
+        Str.typecheck(type,true);
+        let r = 'event';
         
-        if(Str.isNotEmpty(type) && type.length)
-        {
-            r = 'event';
-            
-            if(Str.in('.',type) || Str.in(':',type))
-            r = 'customEvent';
-        }
+        if(Str.in('.',type) || Str.in(':',type))
+        r = 'customEvent';
         
         return r;
     },
@@ -101,14 +106,11 @@ const Evt = Lemur.Evt = {
         let r = null;
         const name = this.nameFromType(type);
         
-        if(name != null)
-        {
-            if(name === 'customEvent')
-            r = new CustomEvent(type,option);
-            
-            else if(name === 'event')
-            r = new Event(type,option);
-        }
+        if(name === 'customEvent')
+        r = new CustomEvent(type,option);
+        
+        else if(name === 'event')
+        r = new Event(type,option);
         
         return r;
     },
@@ -120,8 +122,9 @@ const Evt = Lemur.Evt = {
     getTriggerTarget: function(event)
     {
         let r = null;
+        this.typecheck(event);
         
-        if(Obj.is(event) && event.target)
+        if(event.target)
         {
             if(event.triggerTarget != null)
             r = event.triggerTarget;

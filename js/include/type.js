@@ -22,9 +22,9 @@ const Type = {
     {
         const $inst = this;
         
-        return Arr.each(value,function(v) {
+        return (Arr.is(value))? Arr.each(value,function(v) {
             return $inst.is(v);
-        });
+        }):false;
     },
     
     
@@ -65,8 +65,8 @@ const Type = {
         {
             const $inst = this;
             
-            Arr.each(value,function() {
-                $inst.typecheck(this,type);
+            Arr.each(value,function(ele) {
+                $inst.typecheck(ele,type);
             });
         }
         
@@ -86,7 +86,10 @@ const ArrLike = Lemur.ArrLike = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopy
 // bool
 const Bool = Lemur.Bool = Factory(Type,BoolPrimitive);
 
-// handler
+// evt
+const Evt = Lemur.Evt = Factory(Type,EvtPrimitive);
+
+// func
 const Func = Lemur.Func = Factory(Type,ObjBase,FuncObj);
 
 // integer

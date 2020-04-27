@@ -12,21 +12,15 @@ const HandlerTarget = {
     // retourne vrai si la handler de chaque node retourne la valeur donné en argument
     isTriggerHandlerEqual: function(nodes,type,equal)
     {
-        let r = false;
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const args = Arr.merge([type],ArrLike.sliceStart(3,arguments));
         const $inst = this;
         
-        Arr.each(nodes,function(index) {
-            const funcArgs = Arr.merge([this],args);
+        return Arr.every(nodes,function(ele) {
+            const funcArgs = Arr.merge([ele],args);
             const result = $inst.triggerHandler.apply($inst,funcArgs);
-            r = (result === equal);
-            
-            if(r === false)
-            return false;
+            return (result === equal);
         });
-        
-        return r;
     },
     
     
@@ -36,6 +30,7 @@ const HandlerTarget = {
     // envoie une erreur si plusieurs nodes
     allHandler: function(node,create)
     {
+        this.typecheck(node);
         return this.getOrSetData(node,'_handler_',(create === true)? {}:undefined);
     },
     
@@ -58,16 +53,13 @@ const HandlerTarget = {
     {
         Str.typecheck(type,true);
         Func.typecheck(handler);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
-        if(Arr.isNotEmpty(nodes))
-        {
-            Arr.each(nodes,function() {
-                const all = $inst.allHandler(this,true);
-                Pojo.setRef(type,handler,all);
-            });
-        }
+        Arr.each(nodes,function(ele) {
+            const all = $inst.allHandler(ele,true);
+            Pojo.setRef(type,handler,all);
+        });
         
         return;
     },
@@ -95,16 +87,13 @@ const HandlerTarget = {
     removeHandler: function(nodes,type) 
     {
         Str.typecheck(type,true);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
-        if(Arr.isNotEmpty(nodes))
-        {
-            Arr.each(nodes,function() {
-                const all = $inst.allHandler(this,true);
-                Pojo.unsetRef(type,all);
-            });
-        }
+        Arr.each(nodes,function(ele) {
+            const all = $inst.allHandler(ele,true);
+            Pojo.unsetRef(type,all);
+        });
         
         return;
     },
@@ -116,18 +105,14 @@ const HandlerTarget = {
     triggerHandler: function(node,type) 
     {
         let r = undefined;
-        this.typecheck(node,false);
+        this.typecheck(node);
         Str.typecheck(type,true);
+        const handler = this.getHandler(node,type);
         
-        if(node != null)
+        if(Func.is(handler))
         {
-            const handler = this.getHandler(node,type);
-            
-            if(Func.is(handler))
-            {
-                const args = ArrLike.sliceStart(2,arguments);
-                r = handler.apply(node,args);
-            }
+            const args = ArrLike.sliceStart(2,arguments);
+            r = handler.apply(node,args);
         }
         
         return r;
@@ -140,19 +125,13 @@ const HandlerTarget = {
     triggersHandler: function(nodes,type)
     {
         let r = null;
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
+        const args = ArrLike.sliceStart(2,arguments);
         
-        if(Arr.isNotEmpty(nodes))
-        {
-            r = [];
-            const args = ArrLike.sliceStart(2,arguments);
-            
-            Arr.each(nodes,function() {
-                let result = $inst.triggerHandler.apply($inst,Arr.merge([this,type],args));
-                r.push(result);
-            });
-        }
+        r = Arr.accumulate([],nodes,function(ele) {
+            return $inst.triggerHandler.apply($inst,Arr.merge([ele,type],args));
+        });
 
         return r;
     }

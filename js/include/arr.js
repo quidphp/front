@@ -308,7 +308,7 @@ const ArrLoop = {
         Integer.typecheck(indexTimeout);
         Func.typecheck(callback);
         
-        return Arr.each(array, function(value, index) {
+        return Arr.each(array,function(value, index) {
             const funcTimeout = timeout + (index * indexTimeout);
             
             const funcWrap = function() {
@@ -325,7 +325,7 @@ const ArrLoop = {
     {
         Func.typechecks([funcOdd,funcEven],false);
         
-        return Arr.each(array, function(value,index) {
+        return Arr.each(array,function(value,index) {
             const key = index + 1;
             
             if(Num.isOdd(key))

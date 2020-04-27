@@ -32,7 +32,7 @@ const Request = Lemur.Request = {
         let r = location.protocol;
         
         if(twoDot !== true)
-        r = r.substr(0, r.indexOf(':'));
+        r = r.substring(0, Str.pos(':',r));
         
         return r;
     },

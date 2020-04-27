@@ -15,7 +15,7 @@ const ListenerTarget = new function()
     {
         let r = null;
         Str.typecheck(type,true);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
         if(Arr.isNotEmpty(nodes))
@@ -25,82 +25,15 @@ const ListenerTarget = new function()
             
             const handler = addListenerHandler.call(this,type,func,delegate,thirdArg,option);
             
-            Arr.each(nodes,function() {
-                this.addEventListener(type,handler,thirdArg);
+            Arr.each(nodes,function(ele) {
+                ele.addEventListener(type,handler,thirdArg);
                 
                 if(Str.isNotEmpty(register) || register === true)
-                $inst.registerListener(this,register,type,handler,thirdArg);
+                $inst.registerListener(ele,register,type,handler,thirdArg);
             });
             
             r = [type,handler,thirdArg];
         }
-        
-        return r;
-    }
-    
-    
-    // addListenerHandler
-    // retourne le handler utilisé par addListener
-    // ajoute le support pour once si non supporté par le navigateur
-    const addListenerHandler = function(type,func,delegate,thirdArg,option) 
-    {
-        const $inst = this;
-        const handler = function(event) {
-            let go = (delegate == null);
-            let context = this;
-            
-            if(option.once === true && Evt.support.once === false)
-            $inst.removeListener(event.target,[type,handler,thirdArg]);
-            
-            if(Str.isNotEmpty(delegate) && event.target != null)
-            {
-                go = prepareDelegate.call(this,event,delegate);
-                context = event.triggerTarget;
-            }
-            
-            if(go === true)
-            {
-                let args = [event];
-                const detail = event.detail;
-                args = Arr.merge(args,detail);
-                func.apply(context,args);
-            }
-        };
-        
-        return handler;
-    }
-    
-    
-    // prepareDelegate
-    // handlertion protégé
-    // gère la délégation et le changement à l'objet event
-    const prepareDelegate = function(event,delegate)
-    {
-        let r = false;
-        const context = event.target;
-        const nodes = Nod.scopedQueryAll(this,delegate);
-        const delegateTarget = this;
-        let triggerTarget = context;
-        
-        if(Arr.in(context,nodes))
-        r = true;
-        
-        else
-        {
-            let query;
-            
-            Arr.each(nodes,function(node) {
-                if(node.contains(context))
-                {
-                    triggerTarget = Nod.closest(context,delegate);
-                    r = true;
-                    return false;
-                }
-            });
-        }
-        
-        event.delegateTarget = delegateTarget;
-        event.triggerTarget = triggerTarget;
         
         return r;
     }
@@ -152,24 +85,21 @@ const ListenerTarget = new function()
     // args est le tableau retournée par addListener (contient type, handler et option)
     this.removeListener = function(nodes,args)
     {
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         const $inst = this;
         
-        if(Arr.isNotEmpty(nodes))
-        {
-            Arr.each(nodes,function() {
-                if(Str.isNotEmpty(args))
-                {
-                    const key = args;
-                    const data = $inst.getData(this,'rel');
-                    args = Pojo.get(key,data);
-                    Pojo.unsetRef(key,data);
-                }
-                
-                if(Arr.is(args))
-                this.removeEventListener.apply(this,args);
-            });
-        }
+        Arr.each(nodes,function(ele) {
+            if(Str.isNotEmpty(args))
+            {
+                const key = args;
+                const data = $inst.getData(ele,'rel');
+                args = Pojo.get(key,data);
+                Pojo.unsetRef(key,data);
+            }
+            
+            if(Arr.is(args))
+            ele.removeEventListener.apply(ele,args);
+        });
         
         return;
     }
@@ -180,14 +110,14 @@ const ListenerTarget = new function()
     this.trigger = function(nodes,type,option)
     {
         Str.typecheck(type,true);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         
         if(Arr.isNotEmpty(nodes))
         {
             const event = Evt.createFromType(type,option);
             
-            Arr.each(nodes,function() {
-                this.dispatchEvent(event);
+            Arr.each(nodes,function(ele) {
+                ele.dispatchEvent(event);
             });
         }
         
@@ -243,5 +173,69 @@ const ListenerTarget = new function()
     {
         const args = Arr.merge([nodes,'component:teardown'],ArrLike.sliceStart(1,arguments));
         return this.triggerNoBubble.apply(this,args);
+    }
+    
+    
+    // addListenerHandler
+    // retourne le handler utilisé par addListener
+    // ajoute le support pour once si non supporté par le navigateur
+    const addListenerHandler = function(type,func,delegate,thirdArg,option) 
+    {
+        const $inst = this;
+        const handler = function(event) {
+            let go = (delegate == null);
+            let context = this;
+            
+            if(option.once === true && Evt.support.once === false)
+            $inst.removeListener(event.target,[type,handler,thirdArg]);
+            
+            if(Str.isNotEmpty(delegate) && event.target != null)
+            {
+                go = prepareDelegate.call(this,event,delegate);
+                context = event.triggerTarget;
+            }
+            
+            if(go === true)
+            {
+                let args = [event];
+                const detail = event.detail;
+                args = Arr.merge(args,detail);
+                func.apply(context,args);
+            }
+        };
+        
+        return handler;
+    }
+    
+    
+    // prepareDelegate
+    // handlertion protégé
+    // gère la délégation et le changement à l'objet event
+    const prepareDelegate = function(event,delegate)
+    {
+        let r = false;
+        const context = event.target;
+        const nodes = Nod.scopedQueryAll(this,delegate);
+        const delegateTarget = this;
+        let triggerTarget = context;
+        
+        if(Arr.in(context,nodes))
+        r = true;
+        
+        else
+        {
+            r = Arr.some(nodes,function(node) {
+                if(node.contains(context))
+                {
+                    triggerTarget = Nod.closest(context,delegate);
+                    return true;
+                }
+            });
+        }
+        
+        event.delegateTarget = delegateTarget;
+        event.triggerTarget = triggerTarget;
+        
+        return r;
     }
 };

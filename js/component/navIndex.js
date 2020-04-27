@@ -46,9 +46,9 @@ Component.NavIndex = function(option)
             r = true;
             trigEvt(this,type+':beforeChange',target,current,context,targets);
             
-            Arr.each(targets,function() {
-                if(this !== target)
-                trigEvt(this,child+':close',context);
+            Arr.each(targets,function(ele) {
+                if(ele !== target)
+                trigEvt(ele,child+':close',context);
             }); 
             
             const promise = trigHdlr(this,type+':getPromise',target,current,context,targets);

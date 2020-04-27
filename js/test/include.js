@@ -99,7 +99,7 @@ Test.Include = function()
         let arrCopy = [1,2,3];
         assert(Arr.copy(arrCopy) !== arrCopy);
         assert(Arr.each([1,2,3],function(value,key) {
-            assert(value === this);
+            assert(value !== this);
             arrKey = key;
         }));
         assert(arrKey === 2);
@@ -311,6 +311,7 @@ Test.Include = function()
         assert(Dom.selectorInput(true) === "input,select,textarea,button");
         
         // ele
+        assert(Arr.isEqual(Ele.typechecks([]),[]));
         assert(Ele.hasData(divNode,'what') === false);
         assert(Ele.getData(divNode,'what') === undefined);
         assert(Ele.allData(divNode) === undefined);
@@ -756,7 +757,7 @@ Test.Include = function()
         let objKey;
         let objVal;
         assert(Obj.each({test: 'ok', what: 3},function(value,key) {
-            assert(value === this);
+            assert(value !== this);
             objKey = key;
             objVal = value;
         }));
@@ -951,7 +952,7 @@ Test.Include = function()
         assert(Str.typecheck('',false) === '');
         let val = null;
         assert(Str.each('abcde',function(value) {
-            assert(value === this);
+            assert(value !== this);
             val = value;
         }));
         assert(Arr.isEqual(Str.keys('whaé'),['0','1','2','3']));
@@ -984,6 +985,10 @@ Test.Include = function()
         assert(Str.reduce("","aaaa",function(r,value,key) {
             return r += value+key;
         }) === 'a0a1a2a3');
+        assert(Str.toNum("30MB") === 30);
+        assert(Str.toNum("1,4") === 1);
+        assert(Str.toNum("1.4") === 1.4);
+        assert(Str.toInt("1,4") === 1);
         
         // target
         assert(Target.is(document));
@@ -1074,6 +1079,8 @@ Test.Include = function()
         assert(Validate.isEmail("test@test.com"));
         assert(!Validate.isEmail("testtest.com"));
         assert(Validate.isEmail('bla@bla.zzzzzzz'));
+        assert(Validate.isRegexStr("bla"));
+        assert(Validate.isRegexStr(new RegExp("/asd/")));
         assert(Validate.regex("212","^[0-9\-]+$"))
         assert(!Validate.trigger('test',true,"^[0-9\-]+$"));
         assert(!Validate.trigger('abc-de',true,"^[0-9\-]+$"));

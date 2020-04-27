@@ -157,10 +157,10 @@ Component.Scroller = function(option)
             
             else
             {
-                Arr.each(targets,function() {
+                Arr.each(targets,function(ele) {
                     let keep = false;
-                    const offset = Ele[offsetFunc](this);
-                    const dimension = Ele.getDimension(this);
+                    const offset = Ele[offsetFunc](ele);
+                    const dimension = Ele.getDimension(ele);
                     
                     const offsetTop = offset.top;
                     const height = dimension.height;
@@ -173,7 +173,7 @@ Component.Scroller = function(option)
                     
                     if(keep === true)
                     {
-                        r = this;
+                        r = ele;
                         return false;
                     }
                 });

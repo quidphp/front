@@ -29,8 +29,8 @@ Component.WindowUnload = function(type,timeout)
             node = Ele.toArray(node,false);
             const nodes = trigHdlr(this,'windowUnload:getNodes');
             
-            Arr.each(node,function(ele) {
-                nodes.push(ele);
+            Arr.accumulate(nodes,node,function(ele) {
+                return ele;
             });
         },
         

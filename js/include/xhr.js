@@ -16,11 +16,23 @@ const Xhr = Lemur.Xhr = new function()
     // retourne vrai si le statut est un succès
     this.isStatusSuccess = function(value)
     {
+        return (Integer.is(value) && value >= 200 && value < 400);
+    }
+    
+    
+    // isResponseJson
+    // retourne vrai si la réponse du xhr a un content type de json
+    this.isResponseJson = function(xhr) 
+    {
         let r = false;
-        Integer.typecheck(value);
         
-        if(value >= 200 && value < 400)
-        r = true;
+        if(xhr instanceof XMLHttpRequest)
+        {
+            const contentType = xhr.getResponseHeader('Content-Type');
+            
+            if(Str.in('/json',contentType))
+            r = true;
+        }
         
         return r;
     }
@@ -31,53 +43,60 @@ const Xhr = Lemur.Xhr = new function()
     // retourne null ou un objet promise ajax
     this.trigger = function(config,extraEvents)
     {
-        let r = null;
         config = prepareConfig(config);
+        Str.typecheck(config.url,true);
         
-        if(Str.isNotEmpty(config.url))
-        {
-            const xhr = new XMLHttpRequest();
-            xhr.open(config.method, config.url, true);
-            xhr.timeout = config.timeout;
-            xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
-            
-            xhr.ontimeout = function() {
-                callEvent('error',xhr,config,extraEvents);
-            };
-            xhr.onreadystatechange = function() {
-                if(this.readyState === XMLHttpRequest.DONE)
-                {
-                    const isSuccess = $inst.isStatusSuccess(this.status);
-                    
-                    if(isSuccess === false)
-                    callEvent('error',xhr,config,extraEvents);
-                    
-                    else if(isSuccess === true)
-                    callEvent('success',xhr,config,extraEvents);
-                    
-                    callEvent('complete',xhr,config,extraEvents);
-                }
-            };
-            
-            if(xhr.upload != null)
+        const xhr = new XMLHttpRequest();
+        xhr.open(config.method, config.url, true);
+        xhr.timeout = config.timeout;
+        xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
+        
+        xhr.ontimeout = function() {
+            callEvent('error',xhr,config,extraEvents);
+        };
+        xhr.onreadystatechange = function() {
+            if(this.readyState === XMLHttpRequest.DONE)
             {
-                xhr.upload.addEventListener("progress",function(event) {
-                    if(Func.is(config.progress) && event.lengthComputable === true)
-                    {
-                        const percent = parseInt((event.loaded / event.total * 100));
-                        callEvent('progress',xhr,config,extraEvents,percent,event);
-                    }
-                });
+                const isSuccess = $inst.isStatusSuccess(this.status);
+                
+                if(isSuccess === false)
+                callEvent('error',xhr,config,extraEvents);
+                
+                else if(isSuccess === true)
+                callEvent('success',xhr,config,extraEvents);
+                
+                callEvent('complete',xhr,config,extraEvents);
             }
-            
-            // before
-            callEvent('before',xhr,config,extraEvents);
-
-            xhr.send(config.data);
-            r = xhr;
+        };
+        
+        if(xhr.upload != null)
+        {
+            xhr.upload.addEventListener("progress",function(event) {
+                if(Func.is(config.progress) && event.lengthComputable === true)
+                {
+                    const percent = parseInt((event.loaded / event.total * 100));
+                    callEvent('progress',xhr,config,extraEvents,percent,event);
+                }
+            });
         }
         
-        return r;
+        // before
+        callEvent('before',xhr,config,extraEvents);
+
+        xhr.send(config.data);
+        
+        return xhr;
+    }
+    
+    
+    // configFromString
+    // retounre un tableau avec la string comme url
+    this.configFromString = function(value)
+    {
+        Str.typecheck(value,true);
+        return {
+            url: value
+        };
     }
     
     
@@ -100,18 +119,7 @@ const Xhr = Lemur.Xhr = new function()
         return;
     }
     
-    
-    // configFromString
-    // retounre un tableau avec la string comme url
-    this.configFromString = function(value)
-    {
-        Str.typecheck(value,true);
-        return {
-            url: value
-        };
-    }
-    
-    
+
     // defaultConfig
     // retourne la configuration par défaut pour une requête ajax
     const defaultConfig = function()
@@ -154,28 +162,92 @@ const Xhr = Lemur.Xhr = new function()
     // retourne null si ajax:confirm est false
     this.configFromNode = function(node,config,events)
     {
-        let r = null;
+        Ele.typecheck(node);
         
-        if(Ele.is(node))
-        {
-            r = (Pojo.is(config))? config:{};
-            const tagName = Ele.tag(node);
-            
-            if(r.url == null)
-            r = configNodeUrl(r,node);
+        let r = (Pojo.is(config))? config:{};
+        const tagName = Ele.tag(node);
+        
+        if(r.url == null)
+        r = configNodeUrl(r,node);
 
-            if(r.method == null)
-            r = configNodeMethod(r,node,tagName);
-            
-            if(r.data == null)
-            r = configNodeData(r,node,tagName);
-            
-            if(events === true)
-            r = this.configNodeEvents(node,r);
-            
-            r = prepareConfig(r);
-        }
+        if(r.method == null)
+        r = configNodeMethod(r,node,tagName);
         
+        if(r.data == null)
+        r = configNodeData(r,node,tagName);
+        
+        if(events === true)
+        r = this.configNodeEvents(node,r);
+        
+        r = prepareConfig(r);
+        
+        return r;
+    }
+    
+    
+    // configNodeEvents
+    // fait la configuration des événements à envoyer à la node pour la requête ajax
+    this.configNodeEvents = function(node,config)
+    {
+        Ele.typecheck(node);
+        Pojo.typecheck(config);
+        
+        config.before = function(xhr) {
+            Target.triggerHandler(node,'ajax:before',xhr);
+        };
+        
+        config.progress = function(percent,event,xhr) {
+            Target.triggerHandler(node,'ajax:progress',percent,event,xhr);
+        };
+        
+        config.success = function(xhr) {
+            const responseText = (Str.isNotEmpty(xhr.responseText) && Xhr.isResponseJson(xhr))? Json.decode(xhr.responseText):xhr.responseText;
+            Target.triggerHandler(node,'ajax:success',responseText,xhr);
+        };
+        
+        config.error = function(xhr) {
+            const parsedError = $inst.parseError(xhr.responseText);
+            Target.triggerHandler(node,'ajax:error',parsedError,xhr);
+        };
+        
+        config.complete = function(xhr) {
+            Target.triggerHandler(node,'ajax:complete',xhr);
+        };
+        
+        return config;
+    }
+    
+
+    // parseError
+    // cette méthode gère l'affichage pour un xhr en erreur
+    this.parseError = function(responseText)
+    {
+        let r = '';
+        
+        if(Str.isNotEmpty(responseText))
+        {
+            r = responseText;
+            let html;
+            const parse = Dom.parseOne(responseText);
+
+            if(parse != null)
+            {
+                const ajaxParse = Nod.scopedQuery(parse,".ajax-parse-error");
+                if(ajaxParse != null)
+                html = Ele.getOuterHtml(ajaxParse);
+                
+                if(Vari.isEmpty(html))
+                {
+                    const body = Nod.scopedQuery(parse,"body,[data-tag='body']");
+                    if(body != null)
+                    html = Ele.getHtml(body);
+                }
+                
+                if(Str.isNotEmpty(html))
+                r = html;
+            }
+        }
+
         return r;
     }
     
@@ -237,88 +309,6 @@ const Xhr = Lemur.Xhr = new function()
             r.data = formData;
         }
         
-        return r;
-    }
-    
-    
-    // configNodeEvents
-    // fait la configuration des événements à envoyer à la node pour la requête ajax
-    this.configNodeEvents = function(node,config)
-    {
-        config.before = function(xhr) {
-            Target.triggerHandler(node,'ajax:before',xhr);
-        };
-        
-        config.progress = function(percent,event,xhr) {
-            Target.triggerHandler(node,'ajax:progress',percent,event,xhr);
-        };
-        
-        config.success = function(xhr) {
-            const responseText = (Str.isNotEmpty(xhr.responseText) && Xhr.isResponseJson(xhr))? Json.decode(xhr.responseText):xhr.responseText;
-            Target.triggerHandler(node,'ajax:success',responseText,xhr);
-        };
-        
-        config.error = function(xhr) {
-            const parsedError = $inst.parseError(xhr.responseText);
-            Target.triggerHandler(node,'ajax:error',parsedError,xhr);
-        };
-        
-        config.complete = function(xhr) {
-            Target.triggerHandler(node,'ajax:complete',xhr);
-        };
-        
-        return config;
-    }
-    
-    
-    // isResponseJson
-    // retourne vrai si la réponse du xhr a un content type de json
-    this.isResponseJson = function(xhr) 
-    {
-        let r = false;
-        
-        if(xhr instanceof XMLHttpRequest)
-        {
-            const contentType = xhr.getResponseHeader('Content-Type');
-            
-            if(Str.in('/json',contentType))
-            r = true;
-        }
-        
-        return r;
-    }
-    
-    
-    // parseError
-    // cette méthode gère l'affichage pour un xhr en erreur
-    this.parseError = function(responseText)
-    {
-        let r = '';
-        
-        if(Str.isNotEmpty(responseText))
-        {
-            r = responseText;
-            let html;
-            const parse = Dom.parseOne(responseText);
-
-            if(parse != null)
-            {
-                const ajaxParse = Nod.scopedQuery(parse,".ajax-parse-error");
-                if(ajaxParse != null)
-                html = Ele.getOuterHtml(ajaxParse);
-                
-                if(Vari.isEmpty(html))
-                {
-                    const body = Nod.scopedQuery(parse,"body,[data-tag='body']");
-                    if(body != null)
-                    html = Ele.getHtml(body);
-                }
-                
-                if(Str.isNotEmpty(html))
-                r = html;
-            }
-        }
-
         return r;
     }
 }

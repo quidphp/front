@@ -26,14 +26,14 @@ const TargetRoot = {
         const $inst = this;
         value = ArrLike.toArray(value);
         
-        return (value != null)? Arr.each(value,function(v) {
+        return (Arr.is(value))? Arr.every(value,function(v) {
             return $inst.is(v);
         }):false;
     },
     
     
     // typecheck
-    // envoie une exception si la valeur n'est pas une node ou node like
+    // envoie une exception si la valeur n'est pas une node
     typecheck: function(value,type)
     {
         let error = false;
@@ -50,10 +50,16 @@ const TargetRoot = {
     
     
     // typechecks
-    // envoie une exception si la valeur n'est pas un tableau de nodes ou nodelike
+    // envoie une exception si la valeur n'est pas un tableau de nodes
     typechecks: function(value,type)
     {
-        if(!(this.are(value) || (type === false && (value == null || Arr.isEmpty(ArrLike.toArray(value))))))
+        let error = false;
+        const are = this.are(value);
+        
+        if(!are || (are === true && type === true && Arr.isEmpty(value)))
+        error = true;
+        
+        if(error === true)
         throw new Error(value);
         
         return value;
@@ -74,10 +80,10 @@ const TargetRoot = {
     setProp: function(nodes,key,value)
     {
         Str.typecheck(key);
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         
-        Arr.each(nodes,function() {
-            Obj.setRef(key,value,this);
+        Arr.each(nodes,function(ele) {
+            Obj.setRef(key,value,ele);
         });
         
         return;
@@ -89,18 +95,15 @@ const TargetRoot = {
     // un séparateur peut être fourni, sinon utilise -
     propStr: function(nodes,prop,separator) 
     {
-        let r = '';
-        nodes = this.toArray(nodes,true);
+        nodes = this.toArray(nodes);
         Str.typecheck(prop,true);
         separator = (Str.isNotEmpty(separator))? separator:'-';
         const $inst = this;
         
-        Arr.each(nodes,function() {
+        return Arr.reduce('',nodes,function(r,ele) {
             r += (r.length)? separator:"";
-            r += $inst.getProp(this,prop);
+            return r += $inst.getProp(ele,prop);
         });
-        
-        return r;
     },
     
     
@@ -110,14 +113,14 @@ const TargetRoot = {
     propObj: function(nodes,propKey,propValue)
     {
         const r = {};
-        nodes = this.toArray(nodes,true);
+        nodes = this.toArray(nodes);
         const $inst = this;
         Str.typecheck(propKey,true);
         Str.typecheck(propValue,true);
         
-        Arr.each(nodes,function() {
-            const key = $inst.getProp(this,propKey);
-            const value = $inst.getProp(this,propValue);
+        Arr.each(nodes,function(ele) {
+            const key = $inst.getProp(ele,propKey);
+            const value = $inst.getProp(ele,propValue);
             r[key] = value;
         });
         
@@ -128,8 +131,10 @@ const TargetRoot = {
     // toArray
     // wrap une node ou un node-like dans un array, si ce n'est pas un array
     // transforme une arr like en array
-    // possible d'envoyer automatiquement dans dom checks
-    toArray: function(value,args)
+    // transform null en array vide
+    // envoie automatiquement dans le typecheck
+    // les array vide passent le typecheck
+    toArray: function(value)
     {
         if(this.is(value))
         value = [value];
@@ -137,16 +142,10 @@ const TargetRoot = {
         else if(ArrLike.is(value))
         value = ArrLike.toArray(value);
         
-        if(Bool.is(args))
-        args = (args === false)? [false]:[];
+        else if(value == null)
+        value = [];
         
-        if(Arr.is(args))
-        {
-            args = Arr.merge([value],args);
-            value = this.typechecks.apply(this,args);
-        }
-        
-        return value;
+        return this.typechecks.call(this,value);
     }
 }
 

@@ -245,9 +245,9 @@ Component.Form = function()
         setHdlr(this,'validatePrevent:getTargets',function() {
             const targets = trigHdlr(this,'form:getValidateFields');
 
-            Arr.each(targets,function() {
-                if(trigHdlr(this,'input:isValidateSetup') === false)
-                trigSetup(this);
+            Arr.each(targets,function(ele) {
+                if(trigHdlr(ele,'input:isValidateSetup') === false)
+                trigSetup(ele);
             });
             
             return targets;

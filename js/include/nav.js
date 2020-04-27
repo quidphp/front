@@ -61,7 +61,7 @@ const Nav = Lemur.Nav = {
     getPrev: function(value,max,loop)
     {
         let r = null;
-        
+
         if(Integer.isPositive(max))
         {
             const last = (max - 1);

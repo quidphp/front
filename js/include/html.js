@@ -46,15 +46,11 @@ const Html = Lemur.Html = {
     {
         let r = null;
         const $inst = this;
+        Str.typecheck(value);
         
-        if(Str.is(value))
-        {
-            r = value.replace(/[&<>"']/g,function(value) {
-                return $inst.htmlEscapes[value];
-            });
-        }
-        
-        return r;
+        return value.replace(/[&<>"']/g,function(value) {
+            return $inst.htmlEscapes[value];
+        });
     },
     
     
@@ -173,6 +169,8 @@ const Html = Lemur.Html = {
     prepareAttr: function(attr)
     {
         let r = {};
+        Pojo.typecheck(attr);
+        
         const defaultKeyValue = function(key,value) {
             return {
                 key: Str.fromCamelCase('-',key),
@@ -267,5 +265,5 @@ const Html = Lemur.Html = {
     button: function(value,attr) 
     {
         return this.tag('button',value,Pojo.replace({type: 'button'}, attr));
-    },
+    }
 };

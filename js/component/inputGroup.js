@@ -26,10 +26,8 @@ Component.InputGroup = function()
             
             if(Arr.isNotEmpty(group))
             {
-                r = [];
-                Arr.each(group,function() {
-                    const value = trigHdlr(this,'input:getValue');
-                    r.push(value);
+                r = Arr.accumulate([],group,function(ele) {
+                    return trigHdlr(ele,'input:getValue');
                 });
             }
             
@@ -58,10 +56,8 @@ Component.InputGroup = function()
             
             if(Arr.isNotEmpty(group))
             {
-                r = [];
-                Arr.each(group,function() {
-                    if(trigHdlr(this,'inputGroup:isChecked'))
-                    r.push(this);
+                r = Arr.accumulate([],group,function(ele) {
+                    return (trigHdlr(ele,'inputGroup:isChecked'))? ele:null;
                 });
             }
             

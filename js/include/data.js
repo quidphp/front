@@ -76,12 +76,12 @@ const DataTarget = {
     // si undefined efface la data
     setData: function(nodes,key,value)
     {
-        nodes = this.toArray(nodes,false);
+        nodes = this.toArray(nodes);
         Str.typecheck(key,true);
         const $inst = this;
         
-        Arr.each(nodes,function() {
-            const data = $inst.allData(this,true);
+        Arr.each(nodes,function(ele) {
+            const data = $inst.allData(ele,true);
             
             if(value === undefined)
             Pojo.unsetRef(key,data);

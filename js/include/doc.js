@@ -36,6 +36,7 @@ const DocTarget = {
     // retourne la dimension du document, c'est à dire la dimension des premiers enfants du document
     getDimension: function(value)
     {
+        this.typecheck(value);
         const r = { width: 0, height: 0 };
         
         if(this.isCurrent(value))

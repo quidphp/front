@@ -152,9 +152,8 @@ const Dom = Lemur.Dom = {
             bodyAttr: null
         };
         
-        Arr.each(r.doc,function() {
-            if(Ele.is(this))
-            r.docEle.push(this);
+        Arr.accumulate(r.docEle,r.doc,function(ele) {
+            return (Ele.is(ele))? ele:null;
         });
         
         r.html = Ele.find(r.docEle,"[data-tag='html']") || Arr.valueFirst(r.docEle);

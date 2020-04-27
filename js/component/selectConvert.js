@@ -72,7 +72,8 @@ Component.SelectConvert = function()
         r += Html.start('div',null,{class: 'options', tabindex: 0});
         r += Html.start('ul');
         
-        Arr.each(options,function(ele) {
+        r = Arr.accumulate(r,options,function(ele) {
+            let html = '';
             const val = Str.cast(getProp(ele,'value'));
             const text = Ele.getText(ele) || "&nbsp;";
             
@@ -87,9 +88,11 @@ Component.SelectConvert = function()
             }
             const attr = Pojo.replace(currentAttr,{data: dataAttr});
             
-            r += Html.start('li');
-            r += Html.button(text,attr);
-            r += Html.end('li');
+            html += Html.start('li');
+            html += Html.button(text,attr);
+            html += Html.end('li');
+            
+            return html;
         });
         
         r += Html.end('ul');
