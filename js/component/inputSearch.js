@@ -18,6 +18,7 @@ Component.InputSearch = function(option)
         timeout: 500,
         keyEvent: 'keydown',
         useCurrent: true,
+        keypressTrigger: true,
         button: "button[type='button']"
     },option);
     
@@ -119,7 +120,9 @@ Component.InputSearch = function(option)
     // keyboardDebouce
     const keyboardDebouce = Func.debounce($option.timeout,function() 
     {
-        if(Ele.match(this,":focus"))
+        const validate = trigHdlr(this,'inputSearch:validate');
+        
+        if((validate === false || $option.keypressTrigger) && Ele.match(this,":focus"))
         {
             trigHdlr(this,'inputMemory:remember');
             trigHdlr(this,'inputSearch:process');

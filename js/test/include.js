@@ -1160,6 +1160,7 @@ Test.Include = function()
         assert(!ArrLike.is(formData));
         assert(Pojo.length(Xhr.configFromNode(htmlNode)) === 4);
         assert(Pojo.length(Xhr.configFromNode(htmlNode,null,true)) === 9);
+        assert(Xhr.pojoToFormData({ test: "ok", hjames: 3}) instanceof FormData);
         assert(Xhr.parseError('<html><body><div>TEST</div></body></html>','error') === '<div>TEST</div>');
         assert(Xhr.parseError('<html><body><div class="ajax-parse-error"><div>TEST</div></div></body></html>','error') === '<div class="ajax-parse-error"><div>TEST</div></div>');
         assert(Xhr.parseError('') === '');

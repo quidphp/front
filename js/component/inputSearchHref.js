@@ -13,8 +13,14 @@ Component.InputSearchHref = function(option)
     return null;
     
     
+    // option
+    const $option = Pojo.replace({
+        keypressTrigger: false
+    },option);
+    
+    
     // component
-    Component.InputSearch.call(this,option);
+    Component.InputSearch.call(this,$option);
     
     
     // handler

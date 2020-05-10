@@ -43,7 +43,7 @@ const Xhr = Lemur.Xhr = new function()
     // retourne null ou un objet promise ajax
     this.trigger = function(config,extraEvents)
     {
-        config = prepareConfig(config);
+        config = prepareConfig.call(this,config);
         Str.typecheck(config.url,true);
         
         const xhr = new XMLHttpRequest();
@@ -82,7 +82,7 @@ const Xhr = Lemur.Xhr = new function()
         
         // before
         callEvent('before',xhr,config,extraEvents);
-
+        
         xhr.send(config.data);
         
         return xhr;
@@ -145,13 +145,20 @@ const Xhr = Lemur.Xhr = new function()
         
         if(Pojo.is(config.data))
         {
-            const parse = Uri.parse(config.url);
-            const query = Uri.makeQuery(config.data).toString();
-            parse.search = query;
-            config.url = parse.toString();
+            if(config.method === 'GET')
+            {
+                const parse = Uri.parse(config.url);
+                const query = Uri.makeQuery(config.data).toString();
+                parse.search = query;
+                config.url = parse.toString();
+            }
+            
+            else if(config.method === 'POST')
+            config.data = this.pojoToFormData(config.data);
         }
         
-        config.data = (config.data instanceof FormData)? config.data:null;
+        if(!config.data instanceof FormData)
+        config.data = null;
         
         return config;
     }
@@ -179,7 +186,7 @@ const Xhr = Lemur.Xhr = new function()
         if(events === true)
         r = this.configNodeEvents(node,r);
         
-        r = prepareConfig(r);
+        r = prepareConfig.call(this,r);
         
         return r;
     }
@@ -217,7 +224,22 @@ const Xhr = Lemur.Xhr = new function()
         return config;
     }
     
-
+    
+    // pojoToFormData
+    // permet de transformer un pojo en formData
+    this.pojoToFormData = function(value)
+    {
+        Pojo.typecheck(value);
+        const r = new FormData();
+        
+        Pojo.each(value,function(val,key) {
+            r.append(key,val);
+        });
+        
+        return r;
+    }
+    
+    
     // parseError
     // cette méthode gère l'affichage pour un xhr en erreur
     this.parseError = function(responseText)
