@@ -174,8 +174,10 @@ const EleDocTarget = {
     // comme setHtml, mais le html est seulement remplacer si différent
     // utilise une balise pour avoir le même encodage que la string
     // il faut absolument fournir une string
+    // retourne vrai si le html a été changé
     replaceHtml: function(node,value)
     {
+        let r = false;
         Str.typecheck(value);
         const current = this.getHtml(node);
         
@@ -184,9 +186,12 @@ const EleDocTarget = {
         const newValue = this.getHtml(newElement);
         
         if(current !== newValue)
-        this.setHtml(node,value);
+        {
+            r = true;
+            this.setHtml(node,value);
+        }
         
-        return;
+        return r;
     },
     
     

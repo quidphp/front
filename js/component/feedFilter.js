@@ -108,7 +108,7 @@ Component.FeedFilter = function(option)
     {
         const $this = this;
         const feed = trigHdlr(this,'feedFilter:getTargetFeed');
-        Component.AjaxBlock.call(anchor,{autoUnbind: true});
+        Component.AjaxBlock.call(anchor,{unmount: true});
         
         setHdlr(anchor,'ajaxBlock:getStatusNode',function(event) {
             return feed;

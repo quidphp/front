@@ -16,7 +16,8 @@ Component.AjaxBlock = function(option)
     // option
     const $option = Pojo.replace({
         ajaxEvent: 'click',
-        autoUnbind: false
+        mount: true,
+        unmount: false
     },option);
     
     
@@ -82,11 +83,10 @@ Component.AjaxBlock = function(option)
                 const node = trigHdlr(this,'ajaxBlock:getStatusNode');
                 setAttr(node,"data-status",'error');
                 
-                if($option.autoUnbind === true && !trigHdlr(this,'ajaxBlock:isEmptyContentNode'))
                 trigEvt(this,'ajaxBlock:unmountContent');
-                
                 trigHdlr(this,'ajaxBlock:setContent',parsedError,true);
                 trigEvt(this,'ajaxBlock:beforeMount',parsedError,true);
+                trigEvt(this,'ajaxBlock:mountContent');
                 trigEvt(this,'ajaxBlock:error',parsedError,xhr);
             }
         },
@@ -97,9 +97,7 @@ Component.AjaxBlock = function(option)
                 const node = trigHdlr(this,'ajaxBlock:getStatusNode');
                 setAttr(node,"data-status",'ready');
                 
-                if($option.autoUnbind === true && !trigHdlr(this,'ajaxBlock:isEmptyContentNode'))
                 trigEvt(this,'ajaxBlock:unmountContent');
-                
                 trigHdlr(this,'ajaxBlock:setContent',data,false);
                 trigEvt(this,'ajaxBlock:beforeMount',data,false);
                 trigEvt(this,'ajaxBlock:mountContent');
@@ -118,15 +116,22 @@ Component.AjaxBlock = function(option)
     
     // event
     ael(this,'ajaxBlock:mountContent',function() {
-        const node = trigHdlr(this,'ajaxBlock:getContentNode');
-        if(node != null)
-        trigEvt(document,'doc:mountCommon',node);
+        if($option.mount === true)
+        {
+            const node = trigHdlr(this,'ajaxBlock:getContentNode');
+            if(node != null)
+            trigEvt(document,'doc:mountCommon',node);
+        }
+        
     });
     
     ael(this,'ajaxBlock:unmountContent',function() {
-        const node = trigHdlr(this,'ajaxBlock:getContentNode');
-        if(node != null)
-        trigEvt(document,'doc:unmountCommon',node);
+        if($option.unmount === true && !trigHdlr(this,'ajaxBlock:isEmptyContentNode'))
+        {
+            const node = trigHdlr(this,'ajaxBlock:getContentNode');
+            if(node != null)
+            trigEvt(document,'doc:unmountCommon',node);
+        }
     });
     
     return this;

@@ -20,6 +20,10 @@ Component.Form = function()
     // handler
     setHdlrs(this,'form:',{
         
+        isBinded: function() {
+            return true;
+        },
+        
         isSubmitted: function() {
             return getData(this,'form-submitted') === 1;
         },
