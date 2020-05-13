@@ -236,7 +236,7 @@ const ObjKeyValue = {
         this.each(loop,function(value,key) {
             const result = callback(value,key);
 
-            if(result === null)
+            if(result == null)
             return true;
 
             else if(Arr.is(r))

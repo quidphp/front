@@ -134,12 +134,7 @@ const Html = Lemur.Html = {
     {
         let r = '';
         const isSelfClosing = this.isSelfClosing(tag);
-        
-        if(Str.isNotEmpty(attr))
-        attr = {class: attr};
-        
-        if(!Pojo.is(attr))
-        attr = {};
+        attr = this.attrToPojo(attr);
         
         if(isSelfClosing === true && Pojo.keyExists(tag,this.valueAttr))
         {
@@ -156,6 +151,22 @@ const Html = Lemur.Html = {
         
         attr = this.prepareAttr(attr);
         r = Pojo.str(attr,"="," ",true);
+        
+        return r;
+    },
+    
+    
+    // attrToPojo
+    // permet de transformer un argument attr en pojo
+    attrToPojo: function(attr)
+    {
+        let r = {};
+        
+        if(Str.isNotEmpty(attr))
+        r = {class: attr};
+        
+        if(Pojo.is(attr))
+        r = attr;
         
         return r;
     },
@@ -256,7 +267,7 @@ const Html = Lemur.Html = {
     // ouvre et ferme une tag input avec valeur et attribut
     input: function(value,attr) 
     {
-        return this.tag('input',value,Pojo.replace({type: 'text'}, attr));
+        return this.tag('input',value,Pojo.replace({type: 'text'}, this.attrToPojo(attr)));
     },
     
     
@@ -264,6 +275,6 @@ const Html = Lemur.Html = {
     // ouvre et ferme une tag button avec contenu et attribut
     button: function(value,attr) 
     {
-        return this.tag('button',value,Pojo.replace({type: 'button'}, attr));
+        return this.tag('button',value,Pojo.replace({type: 'button'}, this.attrToPojo(attr)));
     }
 };

@@ -13,5 +13,18 @@ const Datetime = Lemur.Datetime = {
     now: function() 
     {
         return (new Date).getTime();
+    },
+    
+    
+    // toSecond
+    // permet de formatter une date jusqu'au seconde
+    toSecond: function(date,locale,option)
+    {
+        date = (Str.isNotEmpty(date))? new Date(date):new Date();
+        locale = (Str.isNotEmpty(locale))? locale:'fr-CA';
+        option = Pojo.replace({year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'},option);
+        const intl = new Intl.DateTimeFormat(locale,option);
+        
+        return intl.format(date);
     }
 }

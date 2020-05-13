@@ -247,6 +247,7 @@ Test.Include = function()
         
         // datetime
         assert(Num.is(Datetime.now()));
+        assert(Str.isNotEmpty(Datetime.toSecond()));
         
         // debug
         
@@ -567,6 +568,7 @@ Test.Include = function()
         assert(Html.input(false,{type: 'text'}) === "<input type='text' value='0'/>");
         assert(Html.input(null,{type: 'text'}) === "<input type='text' value=''/>");
         assert(Html.div('ok','whatEscape') === "<div class='whatEscape'>ok</div>");
+        assert(Html.button("ok","james") === "<button type='button' class='james'>ok</button>");
         
         // integer
         assert(!Integer.is('2'));
