@@ -32,12 +32,12 @@ Component.Doc = function(option)
         
         // retourne la node html
         getHtml: function() {
-            return qs(this,'html');
+            return Ele.typecheck(qs(this,'html'));
         },
         
         // retourne la node body
         getBody: function() {
-            return qs(this,'body');
+            return Ele.typecheck(qs(this,'body'));
         },
         
         // retourne un tableau avec les nodes html et body
@@ -54,6 +54,20 @@ Component.Doc = function(option)
             r = qs(r,$option.routeWrap);
             
             return r;
+        },
+        
+        // getAttr
+        // permet d'obtenir un attribut de la balise html
+        getAttr: function(key,cast) {
+            const html = trigHdlr(this,'doc:getHtml');
+            return getAttr(html,key,cast);
+        },
+        
+        // setAttr
+        // permet de changer un attribut de la balise html
+        setAttr: function(key,value) {
+            const html = trigHdlr(this,'doc:getHtml');
+            setAttr(html,key,value);
         },
         
         // getTitle

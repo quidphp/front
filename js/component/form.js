@@ -152,6 +152,20 @@ Component.Form = function()
             Ele.focus(target);
             
             return this;
+        },
+        
+        enable: function() {
+            const fields = trigHdlr(this,'form:getFields');
+            Arr.each(fields,function(value) {
+                trigHdlr(value,'input:enable');
+            });
+        },
+        
+        disable: function() {
+            const fields = trigHdlr(this,'form:getFields');
+            Arr.each(fields,function(value) {
+                trigHdlr(value,'input:disable');
+            });
         }
     });
     
