@@ -156,6 +156,7 @@ Component.Form = function()
         
         enable: function() {
             const fields = trigHdlr(this,'form:getFields');
+            trigHdlr(this,'node:enable');
             Arr.each(fields,function(value) {
                 trigHdlr(value,'input:enable');
             });
@@ -163,6 +164,7 @@ Component.Form = function()
         
         disable: function() {
             const fields = trigHdlr(this,'form:getFields');
+            trigHdlr(this,'node:disable');
             Arr.each(fields,function(value) {
                 trigHdlr(value,'input:disable');
             });
@@ -198,6 +200,9 @@ Component.Form = function()
         if(Ele.match(this,"[data-unload]"))
         prepareUnload.call(this);
         
+        // submitted
+        prepareSubmitted.call(this);
+
         // block
         if(!Ele.match(this,"[data-block='0']"))
         prepareBlock.call(this);
@@ -296,6 +301,17 @@ Component.Form = function()
         
         aelOnce(document,'doc:unmountPage',function() {
             trigHdlr(window,'windowUnload:removeNode',$this);
+        });
+    }
+    
+    
+    // prepareSubmitted
+    const prepareSubmitted = function()
+    {
+        ael(this,'submit',function() {
+            Func.async(function() {
+                trigEvt(this,'form:submitted');
+            },this);
         });
     }
     

@@ -111,6 +111,10 @@ Component.Tooltip = function(option)
             trigHdlr(this,'tooltip:hide');
         });
         
+        setHdlr(this,'node:disable',function() {
+            trigHdlr(this,'tooltip:hide');
+        });
+        
         if($option.persistent !== true)
         {
             const $this = this;

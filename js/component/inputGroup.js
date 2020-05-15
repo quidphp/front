@@ -62,6 +62,11 @@ Component.InputGroup = function()
             }
             
             return r;
+        },
+        
+        setChecked: function(value) {
+            Bool.typecheck(value);
+            Ele.setProp(this,'checked',value);
         }
     });
     

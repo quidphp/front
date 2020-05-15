@@ -187,11 +187,13 @@ Component.Input = function()
         // handlers qui renvoie vers event, car ie11 n'envoie pas de custom event aux nodes disabled
         enable: function() {
             setProp(this,'disabled',false);
+            trigHdlr(this,'node:enable');
             trigEvt(this,'input:enable');
         },
         
         disable: function() {
             trigEvt(this,'input:disable');
+            trigHdlr(this,'node:disable');
             setProp(this,'disabled',true);
         }
     });

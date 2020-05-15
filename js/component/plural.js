@@ -109,7 +109,7 @@ Component.Plural = function(option)
         
         else if(Integer.is(value))
         r = value;
-        
+
         return r;
     }
     

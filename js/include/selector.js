@@ -10,7 +10,7 @@ const SelectorTarget = {
     
     // scopedQuery
     // méthode utilisé pour faire une recherche et retourner le premier enfant d'une target qui match le selector
-    scopedQuery: function(node,selector)
+    scopedQuery: function(node,selector,typecheck)
     {
         let r = null;
         node = this.realNode(node);
@@ -21,7 +21,10 @@ const SelectorTarget = {
             selector = (Doc.is(node))? selector:":scope "+selector;
             r = node.querySelector(selector);
         }
-
+        
+        if(typecheck === true)
+        Ele.typecheck(r);
+        
         return r;
     },
     
