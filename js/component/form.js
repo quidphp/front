@@ -157,17 +157,13 @@ Component.Form = function()
         enable: function() {
             const fields = trigHdlr(this,'form:getFields');
             trigHdlr(this,'node:enable');
-            Arr.each(fields,function(value) {
-                trigHdlr(value,'input:enable');
-            });
+            trigHdlrs(fields,'input:enable');
         },
         
         disable: function() {
             const fields = trigHdlr(this,'form:getFields');
             trigHdlr(this,'node:disable');
-            Arr.each(fields,function(value) {
-                trigHdlr(value,'input:disable');
-            });
+            trigHdlrs(fields,'input:disable');
         }
     });
     
