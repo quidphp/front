@@ -17,6 +17,7 @@ Component.Tooltip = function(option)
     const $option = Pojo.replace({
         target: "body > .tooltip",
         targetContent: true,
+        attrHide: "data-hide-tooltip",
         attrContent: "data-tooltip",
         attrViewport: "data-viewport",
         attr: "data-active",
@@ -57,13 +58,24 @@ Component.Tooltip = function(option)
             return Str.typecheck(r,true);
         },
         
+        setHideAttr: function(value) {
+            Bool.typecheck(value);
+            trigHdlr(this,'tooltip:hide');
+            setAttr(this,$option.attrHide,value);
+        },
+        
         show: function() {
-            const target = trigHdlr(this,'tooltip:getTarget');
-            const targetContent = trigHdlr(this,'tooltip:getTargetContent');
-            const content = trigHdlr(this,'tooltip:getContent');
-            toggleAttr(target,$option.attr,true);
-            setHtml(targetContent,content);
-            trigHdlr(this,'tooltip:updatePosition');
+            const hide = getAttr(this,$option.attrHide,'bool');
+
+            if(hide !== true)
+            {
+                const target = trigHdlr(this,'tooltip:getTarget');
+                const targetContent = trigHdlr(this,'tooltip:getTargetContent');
+                const content = trigHdlr(this,'tooltip:getContent');
+                toggleAttr(target,$option.attr,true);
+                setHtml(targetContent,content);
+                trigHdlr(this,'tooltip:updatePosition');
+            }
         },
         
         hide: function() {
