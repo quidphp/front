@@ -10,6 +10,7 @@ const SelectorTarget = {
     
     // scopedQuery
     // méthode utilisé pour faire une recherche et retourner le premier enfant d'une target qui match le selector
+    // possible de faire un typecheck (ele non vide) si le dernier argument est true
     scopedQuery: function(node,selector,typecheck)
     {
         let r = null;
@@ -32,7 +33,8 @@ const SelectorTarget = {
     // scopedQueryAll
     // méthode utilisé pour faire une recherche et retourner les enfants d'une target qui match le selector
     // doit retourner un array, pas une node list
-    scopedQueryAll: function(node,selector)
+    // possible de faire un typecheck (eles non vide) si le dernier argument est true
+    scopedQueryAll: function(node,selector,typecheck)
     {
         let r = null;
         node = this.realNode(node);
@@ -46,6 +48,9 @@ const SelectorTarget = {
             if(r instanceof NodeList)
             r = ArrLike.toArray(r);
         }
+        
+        if(typecheck === true)
+        Ele.typechecks(r,true);
 
         return r;
     },
@@ -54,7 +59,7 @@ const SelectorTarget = {
     // mergedQsa
     // permet de faire un querySelectorAll sur plusieurs nodes
     // retourne un array avec les résultats merged
-    mergedQsa: function(nodes,selector)
+    mergedQsa: function(nodes,selector,typecheck)
     {
         let r = null;
         const $inst = this;
@@ -67,6 +72,9 @@ const SelectorTarget = {
                 Arr.mergeRef(r,$inst.scopedQueryAll(ele,selector));
             });
         }
+        
+        if(typecheck === true)
+        Ele.typechecks(r,true);
         
         return r;
     },

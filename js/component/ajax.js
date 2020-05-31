@@ -32,15 +32,13 @@ Component.Ajax = function(option)
             
             if(Str.isNotEmpty($option.attrHtml))
             {
-                const html = trigHdlr(document,'doc:getHtml');
-
                 r = {
                     before: function() {
-                        setAttr(html,$option.attrHtml,true);
+                        trigHdlr(document,'doc:setAttr',$option.attrHtml,true);
                     },
                     
                     complete: function() {
-                        Ele.removeAttr(html,$option.attrHtml);
+                        trigHdlr(document,'doc:removeAttr',$option.attrHtml);
                     }
                 }
             }

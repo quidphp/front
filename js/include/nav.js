@@ -157,7 +157,7 @@ const Nav = Lemur.Nav = {
     indexNode: function(value,current,nodes,loop)
     {
         let r = null;
-        Ele.typechecks(nodes,undefined,false);
+        Ele.typechecks(nodes,false);
         
         if(nodes != null)
         {

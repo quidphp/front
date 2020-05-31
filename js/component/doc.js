@@ -32,12 +32,12 @@ Component.Doc = function(option)
         
         // retourne la node html
         getHtml: function() {
-            return Ele.typecheck(qs(this,'html'));
+            return qs(this,'html',true);
         },
         
         // retourne la node body
         getBody: function() {
-            return Ele.typecheck(qs(this,'body'));
+            return qs(this,'body',true);
         },
         
         // retourne un tableau avec les nodes html et body
@@ -70,6 +70,13 @@ Component.Doc = function(option)
             setAttr(html,key,value);
         },
         
+        // removeAttr
+        // permet de retirer un attribut de la balise html
+        removeAttr: function(key) {
+            const html = trigHdlr(this,'doc:getHtml');
+            Ele.removeAttr(html,key);
+        },
+        
         // getTitle
         // retourne le titre courant en string
         getTitle: function() {
@@ -90,8 +97,7 @@ Component.Doc = function(option)
         
         // met le statut de la balise html à loading
         setStatusLoading: function() {
-            const html = trigHdlr(this,'doc:getHtml');
-            setAttr(html,'data-status','loading');
+            trigHdlr(this,'doc:setAttr','data-status','loading');
         },
         
         // désactive le scrollTop lors du prochain chargement de page seulement
@@ -122,9 +128,8 @@ Component.Doc = function(option)
         mount: function(initial,isError) {
             trigEvt(this,'doc:mountImmediate',initial,isError);
             Func.timeout($option.mountTimeout,function() {
-                const html = trigHdlr(this,'doc:getHtml');
                 docMount.call(this,initial,isError);
-                setAttr(html,'data-status','ready');
+                trigHdlr(this,'doc:setAttr','data-status','ready');
             },this);
         },
 
@@ -221,7 +226,6 @@ Component.Doc = function(option)
     // docMount
     const docMount = function(initial,isError)
     {
-        const html = trigHdlr(this,'doc:getHtml');
         const routeWrap = trigHdlr(this,'doc:getRouteWrap');
         const body = trigHdlr(this,'doc:getBody');
         
@@ -235,13 +239,13 @@ Component.Doc = function(option)
             
             if(isError !== true)
             {
-                const uri = getAttr(html,"data-uri");
+                const uri = trigHdlr(this,'doc:getAttr',"data-uri");
                 
-                const group = getAttr(html,"data-group");
+                const group = trigHdlr(this,'doc:getAttr',"data-group");
                 if(Str.isNotEmpty(group))
                 trigEvt(this,'group:'+group,routeWrap,uri);
                 
-                const route = getAttr(html,"data-route");
+                const route = trigHdlr(this,'doc:getAttr',"data-route");
                 if(Str.isNotEmpty(route))
                 trigEvt(this,'route:'+route,routeWrap,uri);
             }
@@ -254,7 +258,6 @@ Component.Doc = function(option)
     // docUnmount
     const docUnmount = function()
     {
-        const html = trigHdlr(this,'doc:getHtml');
         const body = trigHdlr(this,'doc:getBody');
         const routeWrap = trigHdlr(this,'doc:getRouteWrap');
         
@@ -263,12 +266,12 @@ Component.Doc = function(option)
             trigEvt(this,'doc:unmountCommon',routeWrap);
             trigEvt(this,'doc:unmountPage',routeWrap);
             
-            const uri = getAttr(html,"data-uri");
-            const group = getAttr(html,"data-group");
+            const uri = trigHdlr(this,'doc:getAttr',"data-uri");
+            const group = trigHdlr(this,'doc:getAttr',"data-group");
             if(Str.isNotEmpty(group))
             trigEvt(this,'group:'+group+':unmount',routeWrap,uri);
             
-            const route = getAttr(html,"data-route");
+            const route = trigHdlr(this,'doc:getAttr',"data-route");
             if(Str.isNotEmpty(route))
             trigEvt(this,'route:'+route+':unmount',routeWrap,uri);
                     

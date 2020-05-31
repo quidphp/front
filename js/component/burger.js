@@ -25,8 +25,7 @@ Component.Burger = function(persistent)
     setHdlrs(this,'burger:',{
         
         isOpen: function() {
-            const html = trigHdlr(document,'doc:getHtml');
-            return getAttr(html,'data-burger') === 'open';
+            return trigHdlr(document,'doc:getAttr','data-burger') === 'open';
         },
         
         toggle: function() {
@@ -41,13 +40,11 @@ Component.Burger = function(persistent)
     });
     
     ael(this,'burger:open',function() {
-        const html = trigHdlr(document,'doc:getHtml');
-        setAttr(html,'data-burger','open');
+        trigHdlr(document,'doc:setAttr','data-burger','open');
     });
     
     ael(this,'burger:close',function() {
-        const html = trigHdlr(document,'doc:getHtml');
-        setAttr(html,'data-burger','close');
+        trigHdlr(document,'doc:setAttr','data-burger','close');
     });
     
     const escapeHandler = ael(document,'keyboardEscape:catched',function() {

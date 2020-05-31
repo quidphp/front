@@ -40,8 +40,7 @@ Component.Tooltip = function(option)
         },
         
         getTarget: function() {
-            const r = qs(document,$option.target);
-            return Ele.typecheck(r);
+            return qs(document,$option.target,true);
         },
         
         getTargetContent: function() {
