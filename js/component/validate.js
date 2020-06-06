@@ -14,84 +14,87 @@ Component.Validate = function()
     
     
     // handler
-    setHdlr(this,'validate:isBinded',function() {
-        return true;
-    });
-    
-    setHdlr(this,'validate:getValue',function() {
-        return Ele.getValue(this,true);
-    });
-    
-    setHdlr(this,'validate:isRequired',function() {
-        const dataRequired = trigHdlr(this,'validate:getRequired');
-        return Num.isPositive(dataRequired);
-    });
-    
-    setHdlr(this,'validate:getRequired',function() {
-        return getAttr(this,"data-required");
-    });
-    
-    setHdlr(this,'validate:getPattern',function() {
-        return getAttr(this,"data-pattern");
-    });
-    
-    setHdlr(this,'validate:isEmpty',function() {
-        return Vari.isEmpty(trigHdlr(this,'validate:getValue'));
-    });
-    
-    setHdlr(this,'validate:isEmptyAndRequired',function() {
-        return (trigHdlr(this,'validate:isRequired') && trigHdlr(this,'validate:isEmpty'));
-    });
-    
-    setHdlr(this,'validate:validEmptyArray',function(type) {
-        let r = [];
-        let validate = null;
-        const value = trigHdlr(this,'validate:getValue');
-        const empty = Vari.isEmpty(value);
-        const required = trigHdlr(this,'validate:getRequired');
-        const pattern = trigHdlr(this,'validate:getPattern');
+    setHdlrs(this,'validate:',{
         
-        if(type === 'required')
-        validate = Validate.required(value,required);
+        isBinded: function() {
+            return true;
+        },
         
-        else if(type === 'pattern')
-        validate = Validate.pattern(value,pattern);
+        getValue: function() {
+            return Ele.getValue(this,true);
+        },
         
-        else
-        validate = Validate.trigger(value,required,pattern);
+        isRequired: function() {
+            const dataRequired = trigHdlr(this,'validate:getRequired');
+            return Num.isPositive(dataRequired);
+        },
         
-        return [validate,empty];
-    });
-    
-    setHdlr(this,'validate:isValid',function(type) {
-        return Arr.valueFirst(trigHdlr(this,'validate:validEmptyArray',type));
-    });
-    
-    setHdlr(this,'validate:isNotEmptyAndValid',function(type) {
-        return !trigHdlr(this,'validate:isEmpty') && trigHdlr(this,'validate:isValid',type);
-    });
-    
-    setHdlr(this,'validate:process',function() {
-        return trigHdlr(this,trigHdlr(this,'validate:isEmpty')? 'validate:pattern':'validate:trigger');
-    });
-    
-    setHdlr(this,'validate:required',function() {
-        return trigHdlr(this,'validate:trigger','required');
-    });
-    
-    setHdlr(this,'validate:pattern',function() {
-        return trigHdlr(this,'validate:trigger','pattern');
-    });
-    
-    setHdlr(this,'validate:trigger',function(type) {
-        const validEmpty = trigHdlr(this,'validate:validEmptyArray',type);
-        const r = validEmpty[0];
-        const empty = validEmpty[1];
+        getRequired: function() {
+            return getAttr(this,"data-required");
+        },
         
-        trigEvt(this,(r === true)? 'validate:valid':'validate:invalid');
-        trigEvt(this,(empty === true)? 'validate:empty':'validate:notEmpty');
+        getPattern: function() {
+            return getAttr(this,"data-pattern");
+        },
         
-        return r;
+        isEmpty: function() {
+            return Vari.isEmpty(trigHdlr(this,'validate:getValue'));
+        },
+        
+        isEmptyAndRequired: function() {
+            return (trigHdlr(this,'validate:isRequired') && trigHdlr(this,'validate:isEmpty'));
+        },
+        
+        validEmptyArray: function(type) {
+            let r = [];
+            let validate = null;
+            const value = trigHdlr(this,'validate:getValue');
+            const empty = Vari.isEmpty(value);
+            const required = trigHdlr(this,'validate:getRequired');
+            const pattern = trigHdlr(this,'validate:getPattern');
+            
+            if(type === 'required')
+            validate = Validate.required(value,required);
+            
+            else if(type === 'pattern')
+            validate = Validate.pattern(value,pattern);
+            
+            else
+            validate = Validate.trigger(value,required,pattern);
+            
+            return [validate,empty];
+        },
+        
+        isValid: function(type) {
+            return Arr.valueFirst(trigHdlr(this,'validate:validEmptyArray',type));
+        },
+        
+        isNotEmptyAndValid: function(type) {
+            return !trigHdlr(this,'validate:isEmpty') && trigHdlr(this,'validate:isValid',type);
+        },
+        
+        process: function() {
+            return trigHdlr(this,trigHdlr(this,'validate:isEmpty')? 'validate:pattern':'validate:trigger');
+        },
+        
+        required: function() {
+            return trigHdlr(this,'validate:trigger','required');
+        },
+        
+        pattern: function() {
+            return trigHdlr(this,'validate:trigger','pattern');
+        },
+        
+        trigger: function(type) {
+            const validEmpty = trigHdlr(this,'validate:validEmptyArray',type);
+            const r = validEmpty[0];
+            const empty = validEmpty[1];
+            
+            trigEvt(this,(r === true)? 'validate:valid':'validate:invalid');
+            trigEvt(this,(empty === true)? 'validate:empty':'validate:notEmpty');
+            
+            return r;
+        }
     });
     
     

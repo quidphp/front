@@ -29,6 +29,16 @@ Component.InputNumeric = function(option)
     // handler
     setHdlrs(this,'inputNumeric:',{
         
+        shouldDebounce: function() {
+            const r = shouldDebounce;
+            trigHdlr(this,'inputNumeric:setDebounce',true);
+            return r;
+        },
+        
+        setDebounce: function(value) {
+            shouldDebounce = Bool.typecheck(value);
+        },
+        
         getValueRestore: function() {
             return trigHdlr(this,'inputMemory:get','int') || trigHdlr(this,'input:getValueInt');
         },
@@ -186,9 +196,10 @@ Component.InputNumeric = function(option)
     
     
     // keyboardDebouce
+    let shouldDebounce = true;
     const keyboardDebouce = Func.debounce($option.timeout,function() 
     {
-        if(Ele.match(this,":focus"))
+        if(trigHdlr(this,'inputNumeric:shouldDebounce') && Ele.match(this,":focus"))
         trigEvt(this,'inputNumeric:change');
     });
     

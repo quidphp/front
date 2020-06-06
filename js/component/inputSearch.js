@@ -17,7 +17,7 @@ Component.InputSearch = function(option)
     const $option = Pojo.replace({
         timeout: 500,
         keyEvent: 'keydown',
-        useCurrent: true,
+        useCurrent: false,
         keypressTrigger: true,
         button: "button[type='button']"
     },option);
@@ -31,6 +31,16 @@ Component.InputSearch = function(option)
     
     // handler
     setHdlrs(this,'inputSearch:',{
+        
+        shouldDebounce: function() {
+            const r = shouldDebounce;
+            trigHdlr(this,'inputSearch:setDebounce',true);
+            return r;
+        },
+        
+        setDebounce: function(value) {
+            shouldDebounce = Bool.typecheck(value);
+        },
         
         getCurrent: function() {
             return getAttr(this,'data-current');
@@ -52,9 +62,8 @@ Component.InputSearch = function(option)
             let r = trigHdlr(this,'validate:process');
             const val = trigHdlr(this,'input:getValueTrim');
             const current = trigHdlr(this,'inputSearch:getCurrent');
-            const isCurrent = Str.isEqual(val,current);
             
-            if(r === true && ($option.useCurrent && isCurrent === true))
+            if(r === true && ($option.useCurrent && Str.isEqual(val,current)))
             {
                 r = false;
                 trigEvt(this,'validate:invalid');
@@ -83,6 +92,7 @@ Component.InputSearch = function(option)
         },
         
         buttonClick: function() {
+            trigHdlr(this,'inputSearch:setDebounce',false);
             trigHdlr(this,'inputSearch:process');
         }
     });
@@ -118,14 +128,18 @@ Component.InputSearch = function(option)
     
     
     // keyboardDebouce
+    let shouldDebounce = true;
     const keyboardDebouce = Func.debounce($option.timeout,function() 
     {
-        const validate = trigHdlr(this,'inputSearch:validate');
-        
-        if((validate === false || $option.keypressTrigger) && Ele.match(this,":focus"))
+        if(trigHdlr(this,'inputSearch:shouldDebounce') && Ele.match(this,":focus"))
         {
-            trigHdlr(this,'inputMemory:remember');
-            trigHdlr(this,'inputSearch:process');
+            const validate = trigHdlr(this,'inputSearch:validate');
+            
+            if((validate === false || $option.keypressTrigger))
+            {
+                trigHdlr(this,'inputMemory:remember');
+                trigHdlr(this,'inputSearch:process');
+            }
         }
     });
     

@@ -199,7 +199,7 @@ Component.Input = function()
     });
     
     setHdlr(this,'validate:getValue',function() {
-        return trigHdlr(this,'input:getValue');
+        return trigHdlr(this,'input:getValue',true);
     });
     
     
@@ -213,7 +213,7 @@ Component.Input = function()
         
         // handler
         setHdlr(this,'validate:getValue',function() {
-            return trigHdlr(this,(isGroup === true)? 'inputGroup:getValue':'input:getValue');
+            return (isGroup === true)? trigHdlr(this,'inputGroup:getValue'):trigHdlr(this,'input:getValue',true);
         });
     });
     

@@ -93,8 +93,12 @@ const ListenerTarget = new function()
             {
                 const key = args;
                 const data = $inst.getData(ele,'rel');
-                args = Pojo.get(key,data);
-                Pojo.unsetRef(key,data);
+                
+                if(Pojo.is(data))
+                {
+                    args = Pojo.get(key,data);
+                    Pojo.unsetRef(key,data);
+                }
             }
             
             if(Arr.is(args))
