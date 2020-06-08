@@ -79,57 +79,63 @@ $defaultResponsiveMaxWidth: 900px;
 
 // position
 // permet de changer la position d'un élément
-@mixin position($top: null, $right: null, $bottom: null, $left: null) {
-    @if ($top) {
+@mixin position($top: null, $right: null, $bottom: null, $left: null, $important:null) {
+    @if not $top {
+        $top: auto;
+    }
+    
+    @if not $right {
+        $right: auto;
+    }
+    
+    @if not $bottom {
+        $bottom: auto;
+    }
+    
+    @if not $left {
+        $left: auto;
+    }
+    
+    @if ($important) {
+        top: $top !important;
+        left: $left !important;
+        bottom: $bottom !important;
+        right: $right !important;
+    }
+    
+    @else {
         top: $top;
-    } @else {
-        top: auto;
-    }
-
-    @if ($right) {
-        right: $right;
-    } @else {
-        right: auto;
-    }
-
-    @if ($bottom) {
-        bottom: $bottom;
-    } @else {
-        bottom: auto;
-    }
-
-    @if ($left) {
         left: $left;
-    } @else {
-        left: auto;
+        bottom: $bottom;
+        right: $right;
     }
 }
 
 // abs
 // mixin utilisé pour positionner un élément en absolute
-@mixin abs($top: null, $right: null, $bottom: null, $left: null) {
-    @include position($top, $right, $bottom, $left);
+@mixin abs($top: null, $right: null, $bottom: null, $left: null, $important:null) {
+    @include position($top, $right, $bottom, $left, $important);
     position: absolute;
 }
 
 // fixed
 // mixin utilisé pour positionner un élément de façon fixed
-@mixin fixed($top: null, $right: null, $bottom: null, $left: null) {
-    @include position($top, $right, $bottom, $left);
+@mixin fixed($top: null, $right: null, $bottom: null, $left: null, $important:null) {
+    @include position($top, $right, $bottom, $left, $important);
     position: fixed;
 }
 
 // relative
 // mixin utilisé pour positionner un élément de façon relative
-@mixin relative($top: null, $right: null, $bottom: null, $left: null) {
-    @include position($top, $right, $bottom, $left);
+@mixin relative($top: null, $right: null, $bottom: null, $left: null, $important:null) {
+    @include position($top, $right, $bottom, $left, $important);
     position: relative;
 }
 
 // sticky
 // mixin pour positionner un élément sticky, fallback absolute pour ie
-@mixin sticky($top: null, $right: null, $bottom: null, $left: null) {
-    @include position($top, $right, $bottom, $left);
+@mixin sticky($top: null, $right: null, $bottom: null, $left: null, $important:null) {
+    @include position($top, $right, $bottom, $left, $important);
     position: -webkit-sticky;
     position: sticky;
 
