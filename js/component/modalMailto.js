@@ -52,6 +52,7 @@ Component.ModalMailto = function(option)
         const anchors = trigHdlr(this,'modalMailto:getAnchors');
         const href = trigHdlr(this,'modalMailto:getHref');
         const query = trigHdlr(this,'modalMailto:getQuery');
+        trigHdlr(modal,'modal:anchorBind',anchors,false);
         
         ael(anchors,'click',function(event) {
             const anchorHref = getAttr(this,'href');
@@ -63,7 +64,7 @@ Component.ModalMailto = function(option)
                 config.url = href;
                 config.data = {};
                 config.data[query] = mailto;
-                trigHdlr(modal,'modal:fetch',config,$option.route);
+                trigHdlr(modal,'modal:fetch',config,this,$option.route,href);
                 Evt.preventStop(event,true);
             }
         });

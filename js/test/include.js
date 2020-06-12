@@ -247,7 +247,7 @@ Test.Include = function()
         
         // datetime
         assert(Num.is(Datetime.now()));
-        assert(Str.isNotEmpty(Datetime.toSecond()));
+        assert(Str.length(Datetime.localeFormat('fr-CA')) === 19);
         
         // debug
         
@@ -689,8 +689,10 @@ Test.Include = function()
         assert(Num.isOdd(11));
         assert(!Num.isOdd(0));
         assert(Num.isEven(0));
-        assert(Num.formatDecimal(2) === '2.00');
-        assert(Num.formatDecimal(2.034) === '2.03');
+        assert(Num.decimal(2) === '2.00');
+        assert(Num.decimal(2.034) === '2.03');
+        assert(Num.decimal(2.034,3) === '2.034');
+        assert(Num.decimal(2.034,0) === '2');
         assert(Num.round("4.2") === 4);
         assert(Num.round(4.2) === 4);
         assert(Num.round(4) === 4);

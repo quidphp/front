@@ -122,24 +122,16 @@ const NumPrimitive =  {
 // contient des méthodes pour formatter un chiffre
 const NumFormat = {
     
-    // formatDecimal
+    // decimal
     // permet de formatter un nombre en forçant le nombre de décimal
-    formatDecimal: function(value,decimal,locale)
+    decimal: function(value,decimal)
     {
         Num.typecheck(value);
-        locale = (Str.isNotEmpty(locale))? locale:'en-US';
         decimal = (Integer.is(decimal))? decimal:2;
-        const intl = new Intl.NumberFormat(locale,{ minimumFractionDigits: decimal, maximumFractionDigits: decimal });
         
-        return intl.format(value);
-    }
-}
+        return value.toFixed(decimal);
+    },
 
-
-// numMath
-// contient des méthodes pour faire des opérations avec Math sur des nombres
-const NumMath = {
-    
     // round
     // arrondi le nombre sous forme de int
     round: function(value)
