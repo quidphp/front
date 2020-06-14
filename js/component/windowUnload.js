@@ -50,7 +50,7 @@ Component.WindowUnload = function(type,timeout)
         getText: function() {
             let r = null;
             const nodes = trigHdlr(this,'windowUnload:getNodes');
-            
+
             Arr.each(nodes,function(ele) {
                 r = trigHdlr(ele,'windowUnload:getText');
                 

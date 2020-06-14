@@ -171,7 +171,7 @@ Component.Form = function()
     // prepare
     aelOnce(this,'form:prepare',function() {
         prepareGenuine.call(this);
-        prepareHasChanged.call(this);
+        prepareSerialize.call(this);
     });
     
     
@@ -208,6 +208,14 @@ Component.Form = function()
     });
     
     
+    // teardown
+    aelOnce(this,'component:teardown',function() {
+        // formUnload
+        if(Ele.match(this,"[data-unload]"))
+        removeUnload.call(this);
+    });
+    
+    
     // prepareGenuine
     const prepareGenuine = function() 
     {
@@ -227,8 +235,8 @@ Component.Form = function()
     }
     
     
-    // prepareHasChanged
-    const prepareHasChanged = function() 
+    // prepareSerialize
+    const prepareSerialize = function() 
     {
         trigHdlr(this,'form:serializeStore');
     }
@@ -318,6 +326,15 @@ Component.Form = function()
         ael(this,'submit',function() {
             trigHdlr(this,'blockEvent:block','submit');
         });
+    }
+    
+    
+    // removeUnload
+    // enlève la node de windowUnload
+    // le formulaire ne peut plus envoyer de message d'aleter
+    const removeUnload = function()
+    {
+        trigHdlr(window,'windowUnload:removeNode',this);
     }
     
     return this;
