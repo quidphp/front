@@ -44,12 +44,17 @@ Component.Filter = function(option)
     
     // event
     ael(this,'clickOpen:triggerClick',function(clickEvent) {
+        const isOpen = trigHdlr(this,'clickOpen:isOpen');
         const isEmpty = trigHdlr(this,'clickOpen:isEmpty');
         
-        if($option.closeUnsetContent === false && isEmpty === false)
-        trigEvt(this,'clickOpen:open');
-        else
-        trigHdlr(this,'ajax:init');
+        if(isOpen === true)
+        {
+            if($option.closeUnsetContent === false && isEmpty === false)
+            trigEvt(this,'clickOpen:open');
+            
+            else
+            trigHdlr(this,'ajax:init');
+        }
     });
     
     return this;

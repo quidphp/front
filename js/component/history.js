@@ -342,8 +342,12 @@ Component.History = function(option)
         
         if(trigHdlr(this,'history:isLoading') === false)
         {
-            if(Uri.isInternal(href))
+            if(Uri.isExternal(href))
+            trigHdlr(document,'history:redirect',href);
+            
+            else if(Uri.isInternal(href))
             {
+                const htmlNavigation = trigHdlr(document,'doc:getAttr','data-navigation','int');
                 const current = trigHdlr(this,'history:getCurrentState');
                 const state = HistoryState.make(href);
                 const isValid = HistoryState.isChangeValid(state,current);
@@ -352,7 +356,14 @@ Component.History = function(option)
                 if(isValid === true)
                 {
                     if(trigHdlr(window,'windowUnload:isValid') === true)
-                    r = makeAjax.call(this,state,nodeOrEvent) != null;
+                    {
+                        if(htmlNavigation === 0)
+                        trigHdlr(document,'history:redirect',href);
+                        
+                        else
+                        r = makeAjax.call(this,state,nodeOrEvent) != null;
+                    }
+                    
                     else
                     r = true;
                 }
@@ -380,9 +391,6 @@ Component.History = function(option)
                     Evt.preventStop(srcEvent);
                 }
             }
-            
-            else if(Uri.isExternal(href))
-            trigHdlr(document,'history:redirect',href);
         }
         
         else if(srcEvent != null)

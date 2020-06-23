@@ -10,7 +10,9 @@ const EvtPrimitive = {
     
     // specialKeyCode
     // code de clavier spécial
-    specialKeyCode: [10,13,27,37,38,39,40],
+    specialKeyCode: [
+        9,10,13,16,17,18,19,20,27,32,33,34,35,36,37,38,39,40,45,46,91,92,93,
+        112,113,114,115,116,117,118,119,120,121,122,123,144,145],
     
     
     // support
@@ -53,7 +55,7 @@ const EvtPrimitive = {
     
     
     // isSpecialKeyCode
-    // retourne vrai si l'event a un keyCode et que celui-ci est tab, enter, escape, ou arrow
+    // retourne vrai si l'event a un keyCode considéré comme spécial (non printable)
     isSpecialKeyCode: function(event)
     {
         let r = false;

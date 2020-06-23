@@ -20,11 +20,11 @@ Component.FeedFilter = function(option)
         classSelected: "selected",
         attrSelected: "data-selected",
         attrBind: "data-bind",
+        attrId: "data-id",
         trigger: ".trigger",
         target: ".popup",
         background: "tableRelation",
-        parse: null,
-        closeUnsetContent: false
+        parse: null
     },option);
     
     
@@ -51,13 +51,23 @@ Component.FeedFilter = function(option)
             });
         },
         
-        getSelected: function() {
-            return Arr.find(trigHdlr(this,'feedFilter:getAnchors'),function(ele) {
-                return Ele.hasClass(ele,$option.classSelected);
-            });
+        findSelected: function() {
+            let r = null;
+            const id = getAttr(this,$option.attrId,'int');
+            
+            if(Integer.is(id))
+            {
+                const anchors = trigHdlr(this,'feedFilter:getAnchors');
+                r = Arr.find(anchors,function(ele) {
+                    return getAttr(ele,$option.attrId,'int') === id;
+                });
+            }
+            
+            return r;
         },
         
-        setSelected: function(isReset) {
+        setSelected: function(id,isReset) {
+            setAttr(this,$option.attrId,id);
             toggleAttr(this,$option.attrSelected,!isReset);
         },
         
@@ -85,12 +95,13 @@ Component.FeedFilter = function(option)
     ael(this,'feed:bind',function() {
         const anchors = trigHdlr(this,'feedFilter:getUnboundAnchors');
         bindAnchor.call(this,anchors);
-    });
-    
-    ael(this,'clickOpen:opened',function() {
-        const selected = trigHdlr(this,'feedFilter:getSelected');
+        
+        const selected = trigHdlr(this,'feedFilter:findSelected');
         if(selected != null)
-        Ele.focus(selected);
+        {
+            toggleClass(selected,$option.classSelected,true);
+            Ele.focus(selected);
+        }
     });
     
     
@@ -123,16 +134,17 @@ Component.FeedFilter = function(option)
             toggleClass(this,$option.classSelected,true);
             
             trigEvt($this,'clickOpen:close');
+            
             const text = Ele.getText(this);
             trigHdlr($this,'feedFilter:setTitle',text);
+            
+            const id = getAttr(this,'data-id','int') || undefined;
+            const isReset = !Arr.in(this,anchors);
+            trigHdlr($this,'feedFilter:setSelected',id,isReset);
         });
         
         ael(anchor,'ajaxBlock:success',function() {
             trigEvt(feed,'feed:bind');
-            
-            const anchors = trigHdlr($this,'feedFilter:getAnchors');
-            const isReset = !Arr.in(this,anchors);
-            trigHdlr($this,'feedFilter:setSelected',isReset);
         });
         
         setAttr(anchor,$option.attrBind,true);
