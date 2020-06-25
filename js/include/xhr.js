@@ -115,8 +115,6 @@ const Xhr = Lemur.Xhr = new function()
         
         if(Func.is(extraCallback))
         extraCallback.apply(xhr,args);
-        
-        return;
     }
     
 

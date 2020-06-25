@@ -37,7 +37,7 @@ Component.FeedSearch = function(option)
     setHdlrs(this,'feedSearch:',{
         
         getResult: function() {
-            return qs(this,$option.result);
+            return qs(this,$option.result,true);
         },
         
         getSearch: function() {
@@ -67,7 +67,7 @@ Component.FeedSearch = function(option)
         
         getAppendTarget: function() {
             const target = trigHdlr(this,'feed:getTarget');
-            return qs(target,$option.appendTarget);
+            return qs(target,$option.appendTarget,true);
         },
         
         loadMoreRemove: function() {

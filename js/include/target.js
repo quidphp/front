@@ -85,8 +85,6 @@ const TargetRoot = {
         Arr.each(nodes,function(ele) {
             Obj.setRef(key,value,ele);
         });
-        
-        return;
     },
     
     

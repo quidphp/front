@@ -35,7 +35,7 @@ Component.InputCalendar = function(option)
         
         getCalendar: function() {
             const target = trigHdlr(this,'clickOpen:getTarget');
-            return qs(target,".calendar");
+            return qs(target,".calendar",true);
         },
         
         getInput: function() {

@@ -415,8 +415,6 @@ const EleTarget = {
             else
             ele.setAttribute(key,value);
         });
-        
-        return;
     },
     
     
@@ -449,8 +447,6 @@ const EleTarget = {
             
             $inst.setAttr(ele,key,value);
         });
-        
-        return;
     },
     
     
@@ -468,8 +464,6 @@ const EleTarget = {
                 $inst.setAttr(ele,k,v);
             });
         });
-        
-        return;
     },
 
 
@@ -486,8 +480,6 @@ const EleTarget = {
                 $inst.removeAttr(ele,value.name);
             });
         });
-        
-        return;
     },
     
     
@@ -506,8 +498,6 @@ const EleTarget = {
                 $inst.setProp(ele,'id',newId);
             }
         });
-        
-        return;
     },
     
 
@@ -523,8 +513,6 @@ const EleTarget = {
         value = '';
         
         node.style[key] = value;
-        
-        return;
     },
     
     
@@ -536,8 +524,6 @@ const EleTarget = {
         this.typecheck(node);
         value = Str.cast(value,true);
         node.value = value;
-        
-        return;
     },
     
     
@@ -551,8 +537,6 @@ const EleTarget = {
         Arr.each(nodes,function(ele) {
             ele.classList.toggle(value,bool);
         });
-        
-        return;
     },
     
     
@@ -577,8 +561,6 @@ const EleTarget = {
             height = (Num.is(height))? height+"px":height;
             this.setCss(node,'height',height);
         }
-        
-        return;
     },
     
     
@@ -593,8 +575,6 @@ const EleTarget = {
         
         if(Num.is(left))
         node.scrollLeft = (left > 0)? left:0;
-        
-        return;
     },
     
 
@@ -616,8 +596,6 @@ const EleTarget = {
         
         else
         node.focus();
-        
-        return;
     },
     
     
@@ -669,8 +647,6 @@ const EleTarget = {
         this.typecheck(node);
         value = Dom.htmlNodes(value);
         node.prepend.apply(node,value);
-        
-        return;
     },
     
     
@@ -681,8 +657,6 @@ const EleTarget = {
         this.typecheck(node);
         value = Dom.htmlNodes(value);
         node.append.apply(node,value);
-        
-        return;
     },
         
 

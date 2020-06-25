@@ -33,7 +33,7 @@ Component.Calendar = function(option)
         },
         
         getHead: function() {
-            return qs(this,'.head');
+            return qs(this,'.head',true);
         },
                 
         getCells: function() {
@@ -59,7 +59,7 @@ Component.Calendar = function(option)
             const selected = trigHdlr(this,'calendar:getSelected');
             
             if(selected != null)
-            return qs(selected,'button');
+            return qs(selected,'button',true);
         },
         
         getCurrent: function() {

@@ -29,7 +29,7 @@ Component.InputNumericRange = function(option)
         },
         
         getInput: function() {
-            return qs(this,"input[type='text']");
+            return qs(this,"input[type='text']",true);
         },
         
         getButtons: function() {
@@ -39,11 +39,11 @@ Component.InputNumericRange = function(option)
         },
         
         getButtonPrev: function() {
-            return qs(this,"button[data-range='prev']");;
+            return qs(this,"button[data-range='prev']",true);
         },
         
         getButtonNext: function() {
-            return qs(this,"button[data-range='next']");;
+            return qs(this,"button[data-range='next']",true);
         },
         
         getRangeAttr: function() {

@@ -76,8 +76,6 @@ const NodTarget = {
             value = (value == null)? '':value;
             node.textContent = value;
         }
-        
-        return;
     },
     
     
@@ -113,8 +111,6 @@ const NodTarget = {
         Arr.each(nodes,function(ele) {
             ele.remove();
         });
-        
-        return;
     }
 }
 
@@ -165,8 +161,6 @@ const EleDocTarget = {
         Arr.each(value,function(ele) {
             node.appendChild(ele);
         });
-        
-        return;
     },
     
     
@@ -226,7 +220,5 @@ const EleWinTarget = {
     {
         this.typecheck(node);
         node.blur();
-        
-        return;
     }
 }

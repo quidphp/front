@@ -60,8 +60,6 @@ const HandlerTarget = {
             const all = $inst.allHandler(ele,true);
             Pojo.setRef(type,handler,all);
         });
-        
-        return;
     },
     
     
@@ -77,8 +75,6 @@ const HandlerTarget = {
             let type = typeStart+key;
             $inst.setHandler(nodes,type,value);
         });
-        
-        return;
     },
     
     
@@ -94,8 +90,6 @@ const HandlerTarget = {
             const all = $inst.allHandler(ele,true);
             Pojo.unsetRef(type,all);
         });
-        
-        return;
     },
     
     

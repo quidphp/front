@@ -84,22 +84,26 @@ Component.Feed = function()
     {
         const $this = this;
         const loadMore = trigHdlr(this,'feed:loadMore');
-        Component.AjaxBlock.call(loadMore,{ajaxEvent: 'ajax:init'});
-        Component.KeyboardEnter.call(loadMore,true);
         
-        setHdlr(loadMore,'ajaxBlock:setContent',function(html,isError) {
-            removeLoadMore.call($this);
-            trigHdlr($this,(isError === true)? 'feed:overwrite':'feed:append',html);
-        });
-        
-        ael(loadMore,'keyboardEnter:blocked',function() {
-            trigEvt(this,'ajax:init');
-        });
-        
-        aelOnce(loadMore,'click',function(event) {
-            trigEvt(this,'ajax:init');
-            Evt.preventStop(event);
-        });
+        if(loadMore != null)
+        {
+            Component.AjaxBlock.call(loadMore,{ajaxEvent: 'ajax:init'});
+            Component.KeyboardEnter.call(loadMore,true);
+            
+            setHdlr(loadMore,'ajaxBlock:setContent',function(html,isError) {
+                removeLoadMore.call($this);
+                trigHdlr($this,(isError === true)? 'feed:overwrite':'feed:append',html);
+            });
+            
+            ael(loadMore,'keyboardEnter:blocked',function() {
+                trigEvt(this,'ajax:init');
+            });
+            
+            aelOnce(loadMore,'click',function(event) {
+                trigEvt(this,'ajax:init');
+                Evt.preventStop(event);
+            });
+        }
         
         // removeLoadMore
         const removeLoadMore = function()

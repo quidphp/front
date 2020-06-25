@@ -29,7 +29,7 @@ Component.BackToTop = function(option)
     setHdlrs(this,'backToTop:',{
         
         getTrigger: function() {
-            return qs(this,$option.trigger);
+            return qs(this,$option.trigger,true);
         },
         
         show: function() {

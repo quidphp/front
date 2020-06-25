@@ -51,8 +51,6 @@ const ListenerTarget = new function()
         const data = this.getOrSetData(node,'rel',{});
         const entry = [type,handler,option];
         Pojo.setRef(register,entry,data);
-        
-        return;
     }
     
     
@@ -104,8 +102,6 @@ const ListenerTarget = new function()
             if(Arr.is(args))
             ele.removeEventListener.apply(ele,args);
         });
-        
-        return;
     }
     
 
@@ -124,8 +120,6 @@ const ListenerTarget = new function()
                 ele.dispatchEvent(event);
             });
         }
-        
-        return;
     }
     
     
@@ -165,8 +159,6 @@ const ListenerTarget = new function()
         
         args = Arr.merge([nodes,'component:ready'],sliced);
         this.triggerNoBubble.apply(this,args);
-        
-        return;
     }
     
     

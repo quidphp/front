@@ -106,8 +106,6 @@ const WinTarget = {
         left = (left > 0)? left:0;
         top = (top > 0)? top:0;
         window.scrollTo(left, top);
-        
-        return;
     },
     
     
@@ -117,8 +115,6 @@ const WinTarget = {
     {
         this.typecheck(node);
         node.focus();
-        
-        return;
     },
     
     

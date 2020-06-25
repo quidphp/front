@@ -47,7 +47,7 @@ Component.FakeSelect = function()
         
         getTitle: function() {
             const trigger = trigHdlr(this,'clickOpen:getTrigger');
-            return qs(trigger,".title");
+            return qs(trigger,".title",true);
         },
         
         setTitle: function(value) {

@@ -89,8 +89,6 @@ const DataTarget = {
             else
             Pojo.setRef(key,value,data);
         });
-        
-        return;
     },
     
     

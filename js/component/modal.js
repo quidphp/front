@@ -29,12 +29,12 @@ Component.Modal = function(option)
     setHdlrs(this,'modal:',{
         
         getBox: function() {
-            return qs(this,'.box');
+            return qs(this,'.box',true);
         },
         
         getInner: function() {
             const box = trigHdlr(this,'modal:getBox');
-            return qs(box,".inner");
+            return qs(box,".inner",true);
         },
         
         getAnchors: function(route) {

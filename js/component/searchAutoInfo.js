@@ -36,7 +36,7 @@ Component.SearchAutoInfo = function(option)
     
     // handler
     setHdlr(this,'searchAutoInfo:getInfo',function() {
-        return qs(this,$option.targetInfo);
+        return qs(this,$option.targetInfo,true);
     });
     
     setHdlr(this,'focusable:getTargets',function() {
