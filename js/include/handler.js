@@ -118,15 +118,12 @@ const HandlerTarget = {
     // retorne un tableau avec tous les résultats
     triggersHandler: function(nodes,type)
     {
-        let r = null;
         nodes = this.toArray(nodes);
         const $inst = this;
         const args = ArrLike.sliceStart(2,arguments);
         
-        r = Arr.accumulate([],nodes,function(ele) {
+        return Arr.accumulate([],nodes,function(ele) {
             return $inst.triggerHandler.apply($inst,Arr.merge([ele,type],args));
         });
-
-        return r;
     }
 }
