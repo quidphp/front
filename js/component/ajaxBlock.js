@@ -78,37 +78,37 @@ Component.AjaxBlock = function(option)
         },
         
         error: function(parsedError,xhr) {
+            const node = trigHdlr(this,'ajaxBlock:getStatusNode');
+            setAttr(node,"data-status",'error');
+            
             if(trigHdlr(this,'ajaxBlock:shouldSetContent'))
             {
-                const node = trigHdlr(this,'ajaxBlock:getStatusNode');
-                setAttr(node,"data-status",'error');
-                
                 trigEvt(this,'ajaxBlock:unmountContent');
                 trigHdlr(this,'ajaxBlock:setContent',parsedError,true);
                 trigEvt(this,'ajaxBlock:beforeMount',parsedError,true);
                 trigEvt(this,'ajaxBlock:mountContent');
-                trigEvt(this,'ajaxBlock:error',parsedError,xhr);
             }
+            
+            trigEvt(this,'ajaxBlock:error',parsedError,xhr);
         },
         
         success: function(data,xhr) {
+            const node = trigHdlr(this,'ajaxBlock:getStatusNode');
+            setAttr(node,"data-status",'ready');
+            
             if(trigHdlr(this,'ajaxBlock:shouldSetContent'))
             {
-                const node = trigHdlr(this,'ajaxBlock:getStatusNode');
-                setAttr(node,"data-status",'ready');
-                
                 trigEvt(this,'ajaxBlock:unmountContent');
                 trigHdlr(this,'ajaxBlock:setContent',data,false);
                 trigEvt(this,'ajaxBlock:beforeMount',data,false);
                 trigEvt(this,'ajaxBlock:mountContent');
-                trigEvt(this,'ajaxBlock:success',data,xhr);
             }
+            
+            trigEvt(this,'ajaxBlock:success',data,xhr);
         },
         
         complete: function(xhr) {
             trigHdlr(this,'blockEvent:unblock',$option.ajaxEvent);
-            
-            if(trigHdlr(this,'ajaxBlock:shouldSetContent'))
             trigEvt(this,'ajaxBlock:complete',xhr);
         }
     });
@@ -122,7 +122,6 @@ Component.AjaxBlock = function(option)
             if(node != null)
             trigEvt(document,'doc:mountCommon',node);
         }
-        
     });
     
     ael(this,'ajaxBlock:unmountContent',function() {

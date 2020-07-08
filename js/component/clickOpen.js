@@ -174,7 +174,7 @@ Component.ClickOpen = function(option)
         
         if($option.closeUnsetContent === true)
         trigHdlr(this,'clickOpen:unsetTargetContent');
-        
+
         const background = trigHdlr(document,'doc:getBackground');
         const bgFrom = $option.background;
         if(newBg !== bgFrom)

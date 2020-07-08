@@ -918,6 +918,10 @@ Test.Include = function()
         assert(Str.isEqual(undefined,null));
         assert(Str.in('a','as') === true);
         assert(Str.in('é','aÉè') === false);
+        assert(Str.icompare('E','e'));
+        assert(Str.icompare('e','e'));
+        assert(Str.icompare('éÈ','Éè'));
+        assert(!Str.icompare('2',2));
         assert(Str.cast(2) === '2');
         assert(Str.cast(false) === 'false');
         assert(Str.cast(true) === 'true');

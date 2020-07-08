@@ -172,12 +172,11 @@ const Xhr = Lemur.Xhr = new function()
         let r = (Pojo.is(config))? config:{};
         const tagName = Ele.tag(node);
         
-        if(r.url == null)
-        r = configNodeUrl(r,node);
-
         if(r.method == null)
         r = configNodeMethod(r,node,tagName);
         
+        r = configNodeUrl(r,node,tagName);
+
         if(r.data == null)
         r = configNodeData(r,node,tagName);
         
@@ -185,7 +184,7 @@ const Xhr = Lemur.Xhr = new function()
         r = this.configNodeEvents(node,r);
         
         r = prepareConfig.call(this,r);
-        
+
         return r;
     }
     
@@ -274,12 +273,26 @@ const Xhr = Lemur.Xhr = new function()
     
     // configNodeUrl
     // fait la configuration de l'url pour une node
-    const configNodeUrl = function(r,node)
+    // pour un form get, ajoute les données du formulaire comme query
+    const configNodeUrl = function(r,node,tagName)
     {
+        if(r.url == null)
         r.url = Target.triggerHandler(node,'ajax:getUrl');
         
         if(r.url == null)
         r.url = Ele.getUri(node);
+        
+        if(r.url != null && tagName === 'form' && Str.icompare(r.method,'get'))
+        {
+            const query = Ele.triggerHandler(node,'form:serialize');
+            const parse = Uri.parse(r.url);
+            
+            if(query != null && parse != null)
+            {
+                parse.search = query;
+                r.url = Uri.build(parse);
+            }
+        }
         
         return r;
     }
@@ -306,13 +319,15 @@ const Xhr = Lemur.Xhr = new function()
     
     // configNodeData
     // fait la configuration des datas pour une node
+    // pour un formulaire seulement si c'est post
     const configNodeData = function(r,node,tagName)
     {
         r.data = Target.triggerHandler(node,'ajax:getData');
-        
-        if(r.data == null && tagName === 'form')
+
+        if(r.data == null && tagName === 'form' && Str.icompare(r.method,'post'))
         {
             const formData = new FormData(node);
+            
             const clicked = Target.triggerHandler(node,'form:getClickedSubmit');
             
             if(clicked != null)

@@ -17,7 +17,8 @@ Component.TabsNav = function(option)
     const $option = Pojo.replace({
         nav: [],
         navAttr: 'data-tab',
-        navClickTrigger: true,
+        navClickTrigger: true, // ajoute un handler pour le click sur le nav
+        navClickTriggerToggle: true, // permet le toggle on/off via le click sur le nav
         first: null,
         prev: null,
         next: null,
@@ -126,13 +127,37 @@ Component.TabsNav = function(option)
                 });
                 
                 if($option.navClickTrigger)
-                {
-                    ael(value,'click',function() {
-                        trigHdlr(this,'nav:trigger');
-                    });
-                }
+                ael(value,'click',handlerNavClickTrigger);
             }
         });
+    }
+    
+    
+    // handlerNavClickTrigger
+    const handlerNavClickTrigger = function(event)
+    {
+        let trigger = true;
+        
+        if($option.navClickTriggerToggle)
+        {
+            const tab = trigHdlr(this,'nav:getTab');
+            const isOpen = trigHdlr(tab,'tab:isOpen');
+            const $this = trigHdlr(tab,'tab:getParent');
+            
+            if(isOpen === true)
+            {
+                trigger = false;
+                trigEvt(tab,'tab:close');
+                syncNav.call($this);
+                trigEvt($this,'tabs:navClickTriggerToggle',tab);
+                Evt.preventStop(event,true);
+            }
+        }
+        
+        if(trigger === true)
+        trigHdlr(this,'nav:trigger');
+        
+        return trigger;
     }
     
     
@@ -163,14 +188,16 @@ Component.TabsNav = function(option)
     const syncNav = function()
     {
         const navs = trigHdlr(this,'tabsNav:getNavs');
-        const current = trigHdlr(this,'tabsNav:getCurrentNav');
+        const currentTab = trigHdlr(this,'tabs:getCurrent');
         
         if(Arr.isNotEmpty(navs))
         {
+            const currentNav = (currentTab != null)? trigHdlr(currentTab,'tab:getNav'):null;
+            
             toggleAttr(navs,$option.navAttr,false);
             
-            if(current != null)
-            toggleAttr(current,$option.navAttr,true);
+            if(currentNav != null)
+            toggleAttr(currentNav,$option.navAttr,true);
         }
     }
     

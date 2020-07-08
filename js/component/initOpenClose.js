@@ -97,7 +97,8 @@ Component.InitOpenClose = function(option)
         if(trigHdlr(this,type+':canClose') === true)
         {
             toggleAttr(this,$option.attr,false);
-            trigEvt(this,type+':closed');
+            const firstArg = ArrLike.get(1,arguments); // passe seulement le premier argument car pas de splat operator en es5
+            trigEvt(this,type+':closed',firstArg);
             
             if(Integer.is($option.transitionTimeout))
             setTransitionTimeout.call(this,$option.transitionTimeout);

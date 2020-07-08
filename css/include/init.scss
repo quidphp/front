@@ -421,6 +421,18 @@ $defaultResponsiveMaxWidth: 900px;
     }
 }
 
+// inputPlaceholder
+// mixin pour appliquer des styles aux placeholder d'un input
+@mixin inputPlaceholder() {
+    &::placeholder {
+        @content;
+    }
+
+    &:-ms-input-placeholder {
+        @content;
+    }
+}
+
 // inputsTextarea
 // mixin pour appliquer des styles à tous les inputs de type texte et textarea
 @mixin inputsTextarea() {
@@ -431,6 +443,20 @@ $defaultResponsiveMaxWidth: 900px;
     input[type='tel'],
     textarea {
         @content;
+    }
+}
+
+// inputRadioCheckbox 
+// mixin pour faire un reset des styles pour input radio et checkbox
+@mixin inputRadioCheckbox() {
+    input[type='radio'],
+    input[type='checkbox'] {
+        @include wh(1px);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: transparent;
+        border: 0;
     }
 }
 

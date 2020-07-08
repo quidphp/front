@@ -49,6 +49,14 @@ const StrPrimitive = {
     },
     
     
+    // icompare
+    // compare deux string de façon insensible à la case
+    icompare: function(value,value2)
+    {
+        return (this.is(value) && this.is(value2))? (value.toUpperCase() === value2.toUpperCase()):false
+    },
+    
+    
     // cast
     // retourne une valeur string
     // si la valeur est null retourne ''
