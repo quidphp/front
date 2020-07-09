@@ -546,3 +546,23 @@ $defaultResponsiveMaxWidth: 900px;
         @include triangle($direction, $color3, $dimension, $transparent);
     }
 }
+
+// hoverAndSelected
+// pemet d'ajouter des styles à hover et selected
+@mixin hoverAndSelected($selector:'.selected')
+{
+    &:hover,
+    &#{$selector} {
+        @content;
+    }
+}
+
+// activeAndClick
+// pemet d'ajouter des styles à active et le clickState
+@mixin activeAndClick($clickState:'[data-triggered="1"]')
+{
+    &:active,
+    &#{$clickState} {
+        @content;
+    }
+}

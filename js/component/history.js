@@ -18,7 +18,8 @@ Component.History = function(option)
         form: "form:not([data-navigation='0'])",
         responseUrl: 'QUID-URI',
         timeout: 30000,
-        attrTriggered: "data-triggered"
+        attrTriggered: "data-triggered",
+        headerNavigation: 'Quid-Navigation'
     },option);
     
     
@@ -471,6 +472,9 @@ Component.History = function(option)
             const config = {
                 url: state.url,
                 timeout: $option.timeout,
+                before: function(xhr) {
+                    setAjaxHeaders.call(this,xhr);
+                },
                 progress: function(percent,event,xhr) {
                     trigEvt(document,'doc:ajaxProgress',percent,event);
                 },
@@ -494,7 +498,16 @@ Component.History = function(option)
         return r;
     }
     
-
+    
+    // setAjaxHeaders
+    // permet d'ajouter un header d'en-tête
+    const setAjaxHeaders = function(xhr)
+    {
+        if($option.headerNavigation)
+        xhr.setRequestHeader($option.headerNavigation,'1');
+    }
+    
+    
     // afterAjax
     // callback après le ajax
     const afterAjax = function(type,state,xhr,isError)
