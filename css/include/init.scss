@@ -567,6 +567,6 @@ $defaultResponsiveMaxWidth: 900px;
 
 // aspectRatio
 // permet de générer une division avec aspectRatio, en utilisant un pourcentage à paddingTop
-@mixin aspectRatio($width:16,$height:9) {
+@mixin aspectRatio($width: 16, $height: 9) {
     padding-top: percentage($height / $width);
 }
