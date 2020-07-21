@@ -6,7 +6,7 @@
  
 // json
 // script with methods related to json format
-const Json = Lemur.Json = {
+const Json = Quid.Json = {
     
     // encode
     // encode une valeur en json

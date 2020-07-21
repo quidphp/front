@@ -6,7 +6,7 @@
  
 // browser
 // script with a some functions related to browsers detection
-const Browser = Lemur.Browser = {
+const Browser = Quid.Browser = {
     
     // isOldIe
     // retourne vrai si le navigateur est une vieille version de IE (IE 10 ou moins)

@@ -6,7 +6,7 @@
  
 // vari
 // script with a set of general functions related to variables
-const Vari = Lemur.Vari = {    
+const Vari = Quid.Vari = {    
     
     // is
     // vrai si pas non défini

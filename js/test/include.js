@@ -784,7 +784,7 @@ Test.Include = function()
             length++;
         });
         assert(length === 0);
-        assert(Pojo.is(Obj.climb(['Lemur','Test'],window)));
+        assert(Pojo.is(Obj.climb(['Quid','Test'],window)));
         assert(Obj.climb(['Lemuzr','Testz'],window) === undefined);
         
         // pojo

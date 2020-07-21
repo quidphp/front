@@ -6,7 +6,7 @@
  
 // html
 // script containing event listeners functions for target elements
-const Html = Lemur.Html = {
+const Html = Quid.Html = {
     
     // valueAttr
     // retourne l'attribut à utiliser pour la valeur d'un tag selflcosing

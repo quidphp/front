@@ -78,34 +78,34 @@ const Type = {
 }
 
 // arr
-const Arr = Lemur.Arr = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ObjWrite,ObjWriteSelf,ArrBase,ArrWriteSelf,ArrLoop);
+const Arr = Quid.Arr = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ObjWrite,ObjWriteSelf,ArrBase,ArrWriteSelf,ArrLoop);
 
 // arrLike
-const ArrLike = Lemur.ArrLike = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ArrBase,ArrLikeRead,ArrLoop);
+const ArrLike = Quid.ArrLike = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ArrBase,ArrLikeRead,ArrLoop);
 
 // bool
-const Bool = Lemur.Bool = Factory(Type,BoolPrimitive);
+const Bool = Quid.Bool = Factory(Type,BoolPrimitive);
 
 // evt
-const Evt = Lemur.Evt = Factory(Type,EvtPrimitive);
+const Evt = Quid.Evt = Factory(Type,EvtPrimitive);
 
 // func
-const Func = Lemur.Func = Factory(Type,ObjBase,FuncObj);
+const Func = Quid.Func = Factory(Type,ObjBase,FuncObj);
 
 // integer
-const Integer = Lemur.Integer = Factory(Type,NumPrimitive,IntegerPrimitive);
+const Integer = Quid.Integer = Factory(Type,NumPrimitive,IntegerPrimitive);
 
 // num
-const Num = Lemur.Num = Factory(Type,NumPrimitive,NumFormat);
+const Num = Quid.Num = Factory(Type,NumPrimitive,NumFormat);
 
 // obj
-const Obj = Lemur.Obj = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ObjWrite,ObjWriteSelf,ObjProto);
+const Obj = Quid.Obj = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ObjWrite,ObjWriteSelf,ObjProto);
 
 // pojo
-const Pojo = Lemur.Pojo = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ObjWrite,ObjWriteSelf,PojoObj);
+const Pojo = Quid.Pojo = Factory(Type,ObjBase,ObjKeyValue,ObjEach,ObjCopyFilterMap,ObjWrite,ObjWriteSelf,PojoObj);
 
 // scalar
-const Scalar = Lemur.Scalar = Factory(Type,ScalarPrimitive);
+const Scalar = Quid.Scalar = Factory(Type,ScalarPrimitive);
 
 // str
-const Str = Lemur.Str = Factory(Type,ObjBase,ObjKeyValue,ObjEach,StrPrimitive);
+const Str = Quid.Str = Factory(Type,ObjBase,ObjKeyValue,ObjEach,StrPrimitive);

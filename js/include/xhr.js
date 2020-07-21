@@ -6,7 +6,7 @@
 
 // xhr
 // script with some logic for ajax calls and xhr object
-const Xhr = Lemur.Xhr = new function()
+const Xhr = Quid.Xhr = new function()
 {
     // inst
     const $inst = this;

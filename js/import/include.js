@@ -6,36 +6,36 @@
 
 // include
 // script that imports many variables from include within the scope
-const Arr = Lemur.Arr;
-const ArrLike = Lemur.ArrLike;
-const Bool = Lemur.Bool;
-const Browser = Lemur.Browser;
-const Datetime = Lemur.Datetime;
-const Debug = Lemur.Debug;
-const Doc = Lemur.Doc;
-const Dom = Lemur.Dom;
-const Ele = Lemur.Ele;
-const Evt = Lemur.Evt;
-const Func = Lemur.Func;
-const HistoryState = Lemur.HistoryState;
-const Html = Lemur.Html;
-const Integer = Lemur.Integer;
-const Json = Lemur.Json;
-const Nav = Lemur.Nav;
-const Nod = Lemur.Nod;
-const Num = Lemur.Num;
-const Obj = Lemur.Obj;
-const Pojo = Lemur.Pojo;
-const Request = Lemur.Request;
-const Scalar = Lemur.Scalar;
-const Selector = Lemur.Selector;
-const Str = Lemur.Str;
-const Target = Lemur.Target;
-const Uri = Lemur.Uri;
-const Validate = Lemur.Validate;
-const Vari = Lemur.Vari;
-const Win = Lemur.Win;
-const Xhr = Lemur.Xhr;
+const Arr = Quid.Arr;
+const ArrLike = Quid.ArrLike;
+const Bool = Quid.Bool;
+const Browser = Quid.Browser;
+const Datetime = Quid.Datetime;
+const Debug = Quid.Debug;
+const Doc = Quid.Doc;
+const Dom = Quid.Dom;
+const Ele = Quid.Ele;
+const Evt = Quid.Evt;
+const Func = Quid.Func;
+const HistoryState = Quid.HistoryState;
+const Html = Quid.Html;
+const Integer = Quid.Integer;
+const Json = Quid.Json;
+const Nav = Quid.Nav;
+const Nod = Quid.Nod;
+const Num = Quid.Num;
+const Obj = Quid.Obj;
+const Pojo = Quid.Pojo;
+const Request = Quid.Request;
+const Scalar = Quid.Scalar;
+const Selector = Quid.Selector;
+const Str = Quid.Str;
+const Target = Quid.Target;
+const Uri = Quid.Uri;
+const Validate = Quid.Validate;
+const Vari = Quid.Vari;
+const Win = Quid.Win;
+const Xhr = Quid.Xhr;
 
 // debug
 const debug = Debug.status.bind(Debug);
@@ -76,10 +76,10 @@ const trigSetup = Target.triggerSetup.bind(Target);
 const trigTeardown = Target.triggerTeardown.bind(Target);
 
 // component
-const Component = Lemur.Component;
+const Component = Quid.Component;
 
 // factory
-const Factory = Lemur.Factory;
+const Factory = Quid.Factory;
 
 // test
-const Test = Lemur.Test;
+const Test = Quid.Test;

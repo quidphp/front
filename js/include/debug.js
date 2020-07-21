@@ -6,7 +6,7 @@
  
 // debug
 // script with functions related to debugging
-const Debug = Lemur.Debug = new function()
+const Debug = Quid.Debug = new function()
 {   
     // status debug, peut être scalar
     let debug = false;

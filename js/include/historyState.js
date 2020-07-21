@@ -6,7 +6,7 @@
  
 // historyState
 // script with functions related to the history states
-const HistoryState = Lemur.HistoryState = {
+const HistoryState = Quid.HistoryState = {
     
     // is
     // retourne vrai si la valeur est un objet compatible pour un état d'historique

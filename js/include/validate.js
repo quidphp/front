@@ -6,7 +6,7 @@
  
 // validate
 // script with behaviours related to validation
-const Validate = Lemur.Validate = {
+const Validate = Quid.Validate = {
     
     // isNumericDash
     // retourne vrai si la valeur contient seulement des caractères numérique ou -

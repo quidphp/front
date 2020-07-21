@@ -6,7 +6,7 @@
  
 // uri
 // script with a set of helper functions related to uri management
-const Uri = Lemur.Uri = {
+const Uri = Quid.Uri = {
     
     // isInternal
     // retourne vrai si l'uri et la comparaison ont le même scheme et host

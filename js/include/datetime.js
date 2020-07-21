@@ -6,7 +6,7 @@
  
 // datetime
 // script with functions related to date and time
-const Datetime = Lemur.Datetime = {
+const Datetime = Quid.Datetime = {
     
     // now
     // retourne le timestamp courant

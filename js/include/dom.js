@@ -6,7 +6,7 @@
   
 // dom
 // script with functions related to html and dom
-const Dom = Lemur.Dom = {
+const Dom = Quid.Dom = {
     
     // selectorInput
     // retourne un selector commun à utiliser pour les inputs

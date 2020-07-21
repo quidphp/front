@@ -130,4 +130,4 @@ const WinTarget = {
 }
 
 // win
-const Win = Lemur.Win = Factory(TargetRoot,DataTarget,HandlerTarget,ListenerTarget,EleWinTarget,WinTarget);
+const Win = Quid.Win = Factory(TargetRoot,DataTarget,HandlerTarget,ListenerTarget,EleWinTarget,WinTarget);

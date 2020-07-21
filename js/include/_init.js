@@ -5,23 +5,23 @@
  */
 
 // variable
-const Lemur = {};
-Lemur.Component = {};
-Lemur.Test = {};
+const Quid = {};
+Quid.Component = {};
+Quid.Test = {};
 
 // globale
-window.Lemur = Lemur;
+window.Quid = Quid;
 
 // initDoc
-const InitDoc = Lemur.InitDoc = function()
+const InitDoc = Quid.InitDoc = function()
 {
     document.addEventListener("DOMContentLoaded", function() {
-        Lemur.Doc.triggerSetup(Lemur.Component.Doc.call(this));
+        Quid.Doc.triggerSetup(Quid.Component.Doc.call(this));
     });
 }
 
 // factory
-const Factory = Lemur.Factory = function(prototype)
+const Factory = Quid.Factory = function(prototype)
 {
     const r = Object.create((prototype === true)? {}:(prototype || null));
     const args = Array.prototype.slice.call(arguments,1);
@@ -31,9 +31,9 @@ const Factory = Lemur.Factory = function(prototype)
 }
 
 // testsuite
-const TestSuite = Lemur.TestSuite = function() 
+const TestSuite = Quid.TestSuite = function() 
 {
-    return Pojo.each(Lemur.Test,function(suite,key) {
+    return Pojo.each(Quid.Test,function(suite,key) {
         return suite();
     });
 }

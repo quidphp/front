@@ -6,7 +6,7 @@
  
 // nav
 // script with helper functions related to navigation and pagination
-const Nav = Lemur.Nav = {
+const Nav = Quid.Nav = {
     
     // isFirst
     // retourne vrai si la valeur est la première

@@ -6,7 +6,7 @@
  
 // request
 // script with functions related to the current request
-const Request = Lemur.Request = {
+const Request = Quid.Request = {
     
     // relative
     // retourne l'uri relative courante

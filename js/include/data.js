@@ -20,7 +20,7 @@ const DataTarget = {
     // retourne la clé de date
     getDataKey: function()
     {
-        return '_lemur_';
+        return '_quid_';
     },
     
     
