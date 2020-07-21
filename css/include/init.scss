@@ -14,6 +14,8 @@ $white: #fff;
 $black: #000;
 $media: $uriMedia;
 $defaultResponsiveMaxWidth: 900px;
+$defaultSelectedState: '.selected';
+$defaultClickState: '[data-triggered="1"]';
 
 // defaultClasses
 // mixin qui génère les classes par défaut
@@ -549,7 +551,7 @@ $defaultResponsiveMaxWidth: 900px;
 
 // hoverAndSelected
 // pemet d'ajouter des styles à hover et selected
-@mixin hoverAndSelected($selector: '.selected') {
+@mixin hoverAndSelected($selector: $defaultSelectedState) {
     &:hover,
     &#{$selector} {
         @content;
@@ -558,7 +560,7 @@ $defaultResponsiveMaxWidth: 900px;
 
 // activeAndClick
 // pemet d'ajouter des styles à active et le clickState
-@mixin activeAndClick($clickState: '[data-triggered="1"]') {
+@mixin activeAndClick($clickState: $defaultClickState) {
     &:active,
     &#{$clickState} {
         @content;
