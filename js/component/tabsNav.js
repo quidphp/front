@@ -18,7 +18,7 @@ Component.TabsNav = function(option)
         nav: [],
         navAttr: 'data-tab',
         navClickTrigger: true, // ajoute un handler pour le click sur le nav
-        navClickTriggerToggle: true, // permet le toggle on/off via le click sur le nav
+        navClickTriggerToggle: false, // permet le toggle on/off via le click sur le nav
         first: null,
         prev: null,
         next: null,
