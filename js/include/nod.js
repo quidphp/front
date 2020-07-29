@@ -155,6 +155,10 @@ const EleDocTarget = {
         this.typecheck(node);
         node = this.realNode(node);
         const children = Nod.children(node,null,true);
+        
+        if(Pojo.is(value))
+        value = Json.encode(value);
+        
         value = Dom.htmlNodes(value,clone);
         Nod.remove(children);
         
