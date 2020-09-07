@@ -126,7 +126,7 @@ const Xhr = Quid.Xhr = new function()
             url: undefined,
             method: undefined,
             data: undefined,
-            timeout: 5000
+            timeout: 10000
         };
     }
     
