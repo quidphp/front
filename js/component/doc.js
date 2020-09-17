@@ -100,6 +100,11 @@ Component.Doc = function(option)
             trigHdlr(this,'doc:setAttr','data-status','loading');
         },
         
+        // met le statut de la balise html à ready
+        setStatusReady: function() {
+            trigHdlr(this,'doc:setAttr','data-status','ready');
+        },
+        
         // désactive le scrollTop lors du prochain chargement de page seulement
         skipNextScrollTop: function() {
             $option.scrollTop = null;
@@ -129,7 +134,7 @@ Component.Doc = function(option)
             trigEvt(this,'doc:mountImmediate',initial,isError);
             Func.timeout($option.mountTimeout,function() {
                 docMount.call(this,initial,isError);
-                trigHdlr(this,'doc:setAttr','data-status','ready');
+                trigHdlr(this,'doc:setStatusReady');
             },this);
         },
 
