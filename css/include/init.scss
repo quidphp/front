@@ -173,8 +173,13 @@ $defaultClickState: '[data-triggered="1"]';
 
 // flexCol
 // mixin utilisé pour créer un flexbox column
-@mixin flexCol($justify: null, $align: null, $wrap: wrap) {
-    display: flex;
+@mixin flexCol($justify: null, $align: null, $wrap: wrap, $inline: null) {
+    @if ($inline) {
+        display: inline-flex;
+    } @else {
+        display: flex;
+    }
+    
     flex-direction: column;
 
     @if ($align) {
@@ -188,6 +193,12 @@ $defaultClickState: '[data-triggered="1"]';
     @if ($wrap) {
         flex-wrap: $wrap;
     }
+}
+
+// iflexCol
+// mixin utilisé pour créer un inline-flex pour du contenu en colonne
+@mixin iflexCol($justify: null, $align: center, $wrap: null) {
+    @include flexCol($justify, $align, $wrap, true);
 }
 
 // wh

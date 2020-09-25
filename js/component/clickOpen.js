@@ -164,6 +164,7 @@ Component.ClickOpen = function(option)
         trigEvt(this,'clickOpen:focus');
         
         const background = trigHdlr(document,'doc:getBackground');
+        if(background != null)
         trigHdlr(background,'background:set',bgFrom,false);
         
         trigHdlr(this,'clickOpen:refreshTargetHeight',compSetup);
@@ -177,7 +178,7 @@ Component.ClickOpen = function(option)
 
         const background = trigHdlr(document,'doc:getBackground');
         const bgFrom = $option.background;
-        if(newBg !== bgFrom)
+        if(background != null && newBg !== bgFrom)
         trigHdlr(background,'background:unset',bgFrom);
         
         if($option.targetHeight)

@@ -7,7 +7,7 @@
 // background
 // stylesheet for the background component
 @mixin Background($zindex: 2, $opacity: 0.2, $rgb: null) {
-    @if (!$rgb) {
+    @if not $rgb {
         $rgb: 0, 0, 0;
     }
 
