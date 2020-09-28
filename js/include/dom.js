@@ -76,8 +76,8 @@ const Dom = Quid.Dom = {
     {
         Str.typecheck(html);
         html = html.replace(/<\!DOCTYPE[^>]*>/i, '');
-        html = html.replace(/<(html|head|body|script|noscript)([\s\>])/gi,'<div data-tag="$1"$2');
-        html = html.replace(/<\/(html|head|body|script|noscript)\>/gi,'</div>');
+        html = html.replace(/<(html|head|body)([\s\>])/gi,'<div data-tag="$1"$2');
+        html = html.replace(/<\/(html|head|body)\>/gi,'</div>');
         html = Str.trim(html);
         
         return html;

@@ -135,6 +135,9 @@ const Xhr = Quid.Xhr = new function()
     // dernière préparation à la configuration ajax
     const prepareConfig = function(config)
     {
+        if(Pojo.is(config) && Str.is(config.uri))
+        config.url = config.uri;
+        
         config = Pojo.replace(defaultConfig(),config);
         
         if(!Str.is(config.method))
@@ -143,16 +146,16 @@ const Xhr = Quid.Xhr = new function()
         
         if(Pojo.is(config.data))
         {
-            if(config.method === 'GET')
+            if(config.method === 'POST')
+            config.data = this.pojoToFormData(config.data);
+            
+            else
             {
                 const parse = Uri.parse(config.url);
                 const query = Uri.makeQuery(config.data).toString();
                 parse.search = query;
                 config.url = parse.toString();
             }
-            
-            else if(config.method === 'POST')
-            config.data = this.pojoToFormData(config.data);
         }
         
         if(!config.data instanceof FormData)
