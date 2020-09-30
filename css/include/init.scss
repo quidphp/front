@@ -548,7 +548,7 @@ $defaultClickState: '[data-triggered="1"]';
 
 // triangleEvent
 // mixin pour génèrer un triangle de couleur avec état hover et active
-@mixin triangleEvent($direction, $dimension: 10px, $transparent: null, $color1, $color2, $color3) {
+@mixin triangleEvent($direction, $dimension, $transparent, $color1, $color2, $color3) {
     @include triangle($direction, $color1, $dimension, $transparent);
 
     &:hover {
