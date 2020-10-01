@@ -247,7 +247,7 @@ Test.Include = function()
         
         // datetime
         assert(Num.is(Datetime.now()));
-        assert(Str.length(Datetime.localeFormat('fr-CA')) === 19);
+        assert(Str.length(Datetime.localeFormat('fr-CA')) >= 19);
         
         // debug
         
@@ -1155,7 +1155,7 @@ Test.Include = function()
         assert(Win.isCurrent(window));
         assert(!Win.isProxy(window));
         assert(Bool.is(Win.isScrollable()));
-        assert(!Win.isScrollable('x'));
+        assert(Bool.is(Win.isScrollable('x')));
         assert(Pojo.length(Win.getScroll()) === 8);
         assert(Win.getDimension().width > 0);
         assert(Win.getDimension().height > 0);
