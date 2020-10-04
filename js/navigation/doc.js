@@ -16,15 +16,13 @@ Component.Doc = function(option)
     const $option = Pojo.replace({
         mountTimeout: 0,
         routeWrap: "> .route-wrap",
-        scrollTop: true
+        scrollTop: true,
+        contentType: 'html'
     },option);
     
     
     // components
     Component.History.call(this,$option);
-    Component.KeyboardEscape.call(this);
-    Component.Window.call(window);
-    Component.WindowUnload.call(window);
     
     
     // handler
@@ -33,6 +31,11 @@ Component.Doc = function(option)
         // retourne la node html
         getHtml: function() {
             return qs(this,'html',true);
+        },
+        
+        // retourne la node head
+        getHead: function() {
+            return qs(this,'head',true);
         },
         
         // retourne la node body
@@ -77,6 +80,12 @@ Component.Doc = function(option)
             Ele.removeAttr(html,key);
         },
         
+        // setError
+        // permettre de mettre un type d'erreur dans l'attribut
+        setError: function(value) {
+            trigHdlr(this,'doc:setAttr','data-error',value);
+        },
+        
         // getTitle
         // retourne le titre courant en string
         getTitle: function() {
@@ -95,6 +104,12 @@ Component.Doc = function(option)
             setHtml(node,value);
         },
         
+        // getData
+        // retourne le dernier objet de data
+        getData: function() {
+            return getData(this,'data-doc');
+        },
+        
         // met le statut de la balise html à loading
         setStatusLoading: function() {
             trigHdlr(this,'doc:setAttr','data-status','loading');
@@ -109,26 +124,7 @@ Component.Doc = function(option)
         skipNextScrollTop: function() {
             $option.scrollTop = null;
         },
-        
-        // crée le document à partir d'un objet doc, passé dans dom.parse
-        make: function(doc) {
-            return docMake.call(this,doc);
-        },
-        
-        // démonte la page courante, crée et monte la nouvelle page
-        makeMount: function(doc,isError) {
-            trigHdlr(this,'doc:unmount');
-            trigHdlr(this,'doc:make',doc);
-
-            if($option.scrollTop === true)
-            trigHdlr(window,'window:scrollTo',0);
-            
-            if($option.scrollTop == null)
-            $option.scrollTop = true;
-            
-            trigHdlr(this,'doc:mount',false,isError);
-        },
-        
+                
         // lance les évènements pour monter le document dans le bon order
         mount: function(initial,isError) {
             trigEvt(this,'doc:mountImmediate',initial,isError);
@@ -147,16 +143,32 @@ Component.Doc = function(option)
         mountNodeCommon: function(node) {
             trigEvt(this,'doc:mountNode',node);
             trigEvt(this,'doc:mountCommon',node);
+        },
+        
+        // prépare le document, les attributs de html, le head, les attributs de body
+        makeMeta: function(htmlAttr,title,meta,bodyAttr,routeWrapAttr) {
+            docMetaMake.call(this,htmlAttr,title,meta,bodyAttr,routeWrapAttr);
+        },
+        
+        // crée le document à partir d'un objet doc, passé dans dom.parse
+        makeHtml: function(doc) {
+            return docMakeHtml.call(this,doc);
+        },
+        
+        // démonte la page courante, crée et monte la nouvelle page html
+        makeHtmlMount: function(doc,isError) {
+            docMakeMount.call(this,'html','doc:makeHtml',doc,isError);
+        },
+        
+        // crée le document à partir d'un objet json
+        makeJson: function(json) {
+            return docMakeJson.call(this,json);
+        },
+        
+        // démonte la page courante, crée et monte la nouvelle page json
+        makeJsonMount: function(json,isError) {
+            docMakeMount.call(this,'json','doc:makeJson',json,isError);
         }
-    });
-    
-    
-    // event
-    
-    // keyboardEscape
-    // trigger un click
-    ael(this,'keyboardEscape:catched',function() {
-        trigBubble(this,'click');
     });
     
     
@@ -166,65 +178,148 @@ Component.Doc = function(option)
     });
     
     
-    // docMake
-    const docMake = function(doc)
+    // manageScrollTop
+    const manageScrollTop = function()
     {
-        let r = false;
+        if($option.scrollTop === true)
+        Win.setScroll(0);
         
-        if(Pojo.is(doc) && doc.body != null)
+        if($option.scrollTop == null)
+        $option.scrollTop = true;
+    }
+    
+    
+    // docMakeMount
+    const docMakeMount = function(type,handler,parsedData,isError)
+    {
+        Str.typecheck(handler,true);
+        Pojo.typecheck(parsedData);
+        
+        if($option.contentType === true || $option.contentType === type)
         {
-            r = true;
+            trigHdlr(this,'doc:unmount');
+            trigHdlr(this,handler,parsedData);
+            setData(this,'data-doc',parsedData);
+            trigHdlr(this,'doc:mount',false,isError);
+            manageScrollTop.call(this);
+        }
+        
+        else
+        {
+            trigHdlr(this,'doc:setError','content-type');
+            trigHdlr(this,'doc:setStatusReady');
+            throw new Error($option.contentType);
+        }
+    }
+    
+    
+    // docMakeHtml
+    const docMakeHtml = function(doc)
+    {
+        Pojo.typecheck(doc);
+        
+        // routeWrapAttr
+        const routeWrapAttr = getRouteWrapAttr.call(this,doc.body);
+        
+        // metaMake
+        trigHdlr(this,'doc:makeMeta',doc.htmlAttr,doc.title,doc.meta,doc.bodyAttr,routeWrapAttr);
+        
+        // routeWrap
+        docRouteWrapMake.call(this,doc.body);
+    }
+    
+    
+    // docMakeJson
+    const docMakeJson = function(json)
+    {
+        Pojo.typecheck(doc);
+        
+        // metaMake
+        trigHdlr(this,'doc:makeMeta',json.htmlAttr,json.title,json.meta,json.bodyAttr,json.routeWrapAttr);
+        
+        // emit
+        ael(this,'doc:emitResponse',json);
+    }
+    
+    
+    // docMetaMake
+    const docMetaMake = function(htmlAttr,title,meta,bodyAttr,routeWrapAttr)
+    {
+        const html = trigHdlr(this,'doc:getHtml');
+        const head = trigHdlr(this,'doc:getHead');
+        const body = trigHdlr(this,'doc:getBody');
+        const routeWrap = trigHdlr(this,'doc:getRouteWrap');
+        
+        // htmlAttr
+        // les attributs de html sont remplacés (les attributs existants ne sont pas effacés)
+        if(Pojo.isNotEmpty(htmlAttr))
+        Ele.setsAttr(html,htmlAttr);
+        
+        // title
+        if(!Str.is(title) || !title)
+        title = '?';
+        trigHdlr(this,'doc:setTitle',title);
+        
+        // meta
+        const oldMeta = qsa(head,'meta');
+        Ele.remove(oldMeta);
+        if(Arr.isNotEmpty(meta))
+        Ele.prepend(head,meta);
+        
+        // body
+        // les attributs de body sont effacés et remplacés
+        Ele.emptyAttr(body);
+        if(Pojo.isNotEmpty(bodyAttr))
+        Ele.setsAttr(body,bodyAttr);
+        
+        // routeWrap
+        Ele.emptyAttr(routeWrap);
+        Ele.setsAttr(routeWrap,routeWrapAttr);
+    }
+    
+    
+    // getRouteWrapTarget
+    const getRouteWrapTarget = function(contentTarget)
+    {
+        let r = null;
+        const routeWrap = trigHdlr(this,'doc:getRouteWrap');
+        
+        if($option.routeWrap && !Ele.match(routeWrap,"body") && contentTarget != null)
+        {
+            const routeWrapTarget = qs(contentTarget,$option.routeWrap);
             
-            // html
-            // les attributs de html sont remplacés (les attributs existants ne sont pas effacés)
-            const html = trigHdlr(this,'doc:getHtml');
-            if(Pojo.isNotEmpty(doc.htmlAttr))
-            Ele.setsAttr(html,doc.htmlAttr);
-            
-            // head
-            const head = qs(html,'head');
-            trigHdlr(this,'doc:setTitle',doc.title);
-            
-            // meta
-            const meta = qsa(head,'meta');
-            Ele.remove(meta);
-            Ele.prepend(head,doc.meta);
-            
-            // body
-            // les attributs de body sont effacés et remplacés
-            const body = trigHdlr(this,'doc:getBody');
-            Ele.emptyAttr(body);
-            if(Pojo.isNotEmpty(doc.bodyAttr))
-            Ele.setsAttr(body,doc.bodyAttr);
-            
-            // routeWrap
-            // les attributs de routeWrap sont effacés et remplacés seulement si routeWrap n'est pas body
-            const routeWrap = trigHdlr(this,'doc:getRouteWrap');
-            let contentHtml = '';
-            let contentTarget = doc.body;
-            
-            if(contentTarget != null)
-            {
-                if($option.routeWrap && !Ele.match(routeWrap,"body"))
-                {
-                    const routeWrapTarget = qs(contentTarget,$option.routeWrap);
-                    if(routeWrapTarget != null)
-                    {
-                        contentTarget = routeWrapTarget;
-                        const routeWrapAttributes = Ele.attr(contentTarget);
-                        Ele.emptyAttr(routeWrap);
-                        
-                        if(Pojo.isNotEmpty(routeWrapAttributes))
-                        Ele.setsAttr(routeWrap,routeWrapAttributes);
-                    }
-                }
-                contentHtml = getHtml(contentTarget);
-            }
-            
-            setHtml(routeWrap,contentHtml);
+            if(routeWrapTarget != null)
+            r = routeWrapTarget;
         }
         
         return r;
+    }
+    
+    
+    // getRouteWrapAttr
+    const getRouteWrapAttr = function(contentTarget)
+    {
+        let r = null;
+        contentTarget = getRouteWrapTarget.call(this,contentTarget);
+        
+        if(contentTarget != null)
+        r = Ele.attr(contentTarget);
+        
+        return r;
+    }
+    
+    
+    // docRouteWrapMake
+    const docRouteWrapMake = function(contentTarget)
+    {
+        const routeWrap = trigHdlr(this,'doc:getRouteWrap');
+        contentTarget = getRouteWrapTarget.call(this,contentTarget);
+        let contentHtml = '';
+        
+        if(contentTarget != null)
+        contentHtml = getHtml(contentTarget);
+        
+        setHtml(routeWrap,contentHtml);
     }
     
     

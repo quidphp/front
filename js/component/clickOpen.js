@@ -26,7 +26,7 @@ Component.ClickOpen = function(option)
     },option);
     
     
-    // keyboard escape
+    // components
     Component.InitOpenClose.call(this,Pojo.replace($option,{type: 'clickOpen'}));
     Component.KeyboardEscape.call(this);
     

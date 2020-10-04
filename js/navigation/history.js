@@ -17,10 +17,14 @@ Component.History = function(option)
         anchor: "a:not([target='_blank']):not([data-navigation='0']):not([data-modal]):not([href^='mailto:'])",
         form: "form:not([data-navigation='0'])",
         responseUrl: 'QUID-URI',
-        timeout: 30000,
+        timeout: 20000,
         attrTriggered: "data-triggered",
         headerNavigation: 'Quid-Navigation'
     },option);
+    
+    
+    // component
+    Component.WindowUnload.call(window);
     
     
     // variable
@@ -468,7 +472,7 @@ Component.History = function(option)
         if(HistoryState.is(state))
         {
             trigHdlr(this,'doc:setStatusLoading');
-
+            
             const config = {
                 url: state.url,
                 timeout: $option.timeout,
@@ -514,37 +518,64 @@ Component.History = function(option)
     {
         if(Str.isNotEmpty(type) && HistoryState.is(state) && Obj.is(xhr))
         {
-            const data = xhr.responseText;
-            const currentUri = (Str.isNotEmpty($option.responseUrl))? xhr.getResponseHeader($option.responseUrl):null;
+            const data = xhr.responseText || '';
+            const contentType = xhr.getResponseHeader('content-type');
+            const isHtml = Str.isStart('text/html',contentType);
+            const isJson = Str.isStart('text/json',contentType);
+            let parsedData = {};
+            
+            if(isHtml === true)
+            parsedData = Dom.doc(data);
+            
+            else if(isJson === true)
+            parsedData = Json.decode(data);
+            
+            const title = parsedData.title || '?';
             const current = trigHdlr(this,'history:getCurrentState');
-
-            if(Str.is(data))
+            const currentUri = (Str.isNotEmpty($option.responseUrl))? xhr.getResponseHeader($option.responseUrl):null;
+            
+            if(type === 'push' || type === 'form')
             {
-                const doc = Dom.doc(data);
+                state = HistoryState.make(state.url,title);
                 
-                if(type === 'push' || type === 'form')
+                if(state.url !== current.url)
                 {
-                    state = HistoryState.make(state.url,doc.title);
-                    
-                    if(state.url !== current.url)
-                    {
-                        if(type === 'push' || !Uri.isSamePathQuery(current.url,currentUri))
-                        trigHdlr(this,'history:pushState',state);
-                    }
+                    if(type === 'push' || !Uri.isSamePathQuery(current.url,currentUri))
+                    trigHdlr(this,'history:pushState',state);
                 }
-                
-                if(Str.is(currentUri) && state.url !== currentUri)
-                {
-                    if(!Uri.isInternal(state.url,currentUri) || !Uri.isSamePathQuery(state.url,currentUri))
-                    state = trigHdlr(this,'history:replaceState',currentUri,state.title);
-                }	
-                
-                trigHdlr(this,'doc:makeMount',doc,isError);
-                
-                Ele.remove(doc.html);
-                $previous = state;
             }
+            
+            if(Str.is(currentUri) && state.url !== currentUri)
+            {
+                if(!Uri.isInternal(state.url,currentUri) || !Uri.isSamePathQuery(state.url,currentUri))
+                state = trigHdlr(this,'history:replaceState',currentUri,state.title);
+            }
+            
+            if(isHtml === true)
+            afterAjaxHtml.call(this,parsedData,isError);
+            
+            else if(isJson === true)
+            afterAjaxJson.call(this,parsedData,isError);
+            
+            $previous = state;
         }
+    }
+    
+    
+    // afterAjaxHtml
+    const afterAjaxHtml = function(doc,isError)
+    {
+        Pojo.typecheck(doc);
+        trigHdlr(this,'doc:makeHtmlMount',doc,isError);
+        Ele.remove(doc.html);
+    }
+    
+    
+    // afterAjaxJson
+    const afterAjaxJson = function(json,isError)
+    {
+        Pojo.typecheck(json);
+        trigHdlr(this,'doc:makeJsonMount',json,isError);
     }
     
     return this;

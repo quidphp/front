@@ -4,8 +4,16 @@
  * License: https://github.com/quidphp/front/blob/master/LICENSE
  */
 
-// include
+// import
 // script that imports many variables from include within the scope
+
+// default
+const d = console.log;
+const dd = console.dir;
+const backtrace = console.trace;
+const $$ = alert;
+
+// include
 const Arr = Quid.Arr;
 const ArrLike = Quid.ArrLike;
 const Bool = Quid.Bool;

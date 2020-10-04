@@ -6,19 +6,11 @@
 
 // variable
 const Quid = {};
-Quid.Component = {};
 Quid.Test = {};
+Quid.Component = {};
 
 // globale
 window.Quid = Quid;
-
-// initDoc
-const InitDoc = Quid.InitDoc = function()
-{
-    document.addEventListener("DOMContentLoaded", function() {
-        Quid.Doc.triggerSetup(Quid.Component.Doc.call(this));
-    });
-}
 
 // factory
 const Factory = Quid.Factory = function(prototype)
