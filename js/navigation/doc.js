@@ -150,6 +150,12 @@ Component.Doc = function(option)
             docMetaMake.call(this,htmlAttr,title,meta,bodyAttr,routeWrapAttr);
         },
         
+        // prépare le document à paritr d'un objet doc
+        makeMetaFromDoc: function(doc) {
+            Pojo.typecheck(doc);
+            docMetaMake.call(this,doc.htmlAttr,doc.title,doc.meta,doc.bodyAttr,doc.routeWrapAttr);
+        },
+        
         // crée le document à partir d'un objet doc, passé dans dom.parse
         makeHtml: function(doc) {
             return docMakeHtml.call(this,doc);
@@ -222,7 +228,7 @@ Component.Doc = function(option)
         const routeWrapAttr = getRouteWrapAttr.call(this,doc.body);
         
         // metaMake
-        trigHdlr(this,'doc:makeMeta',doc.htmlAttr,doc.title,doc.meta,doc.bodyAttr,routeWrapAttr);
+        trigHdlr(this,'doc:makeMetaFromDoc',doc);
         
         // routeWrap
         docRouteWrapMake.call(this,doc.body);
@@ -232,13 +238,13 @@ Component.Doc = function(option)
     // docMakeJson
     const docMakeJson = function(json)
     {
-        Pojo.typecheck(doc);
+        Pojo.typecheck(json);
         
         // metaMake
-        trigHdlr(this,'doc:makeMeta',json.htmlAttr,json.title,json.meta,json.bodyAttr,json.routeWrapAttr);
+        trigHdlr(this,'doc:makeMetaFromDoc',json.doc);
         
         // emit
-        ael(this,'doc:emitResponse',json);
+        trigEvt(this,'doc:makeJsonResponse',json);
     }
     
     
@@ -261,10 +267,13 @@ Component.Doc = function(option)
         trigHdlr(this,'doc:setTitle',title);
         
         // meta
-        const oldMeta = qsa(head,'meta');
-        Ele.remove(oldMeta);
-        if(Arr.isNotEmpty(meta))
-        Ele.prepend(head,meta);
+        if(meta != null)
+        {
+            const oldMeta = qsa(head,'meta');
+            Ele.remove(oldMeta);
+            if(Arr.isNotEmpty(meta))
+            Ele.prepend(head,meta);
+        }
         
         // body
         // les attributs de body sont effacés et remplacés
@@ -273,8 +282,11 @@ Component.Doc = function(option)
         Ele.setsAttr(body,bodyAttr);
         
         // routeWrap
-        Ele.emptyAttr(routeWrap);
-        Ele.setsAttr(routeWrap,routeWrapAttr);
+        if(routeWrapAttr != null)
+        {
+            Ele.emptyAttr(routeWrap);
+            Ele.setsAttr(routeWrap,routeWrapAttr);
+        }
     }
     
     

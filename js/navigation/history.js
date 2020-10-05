@@ -547,7 +547,7 @@ Component.History = function(option)
             
             if(Str.is(currentUri) && state.url !== currentUri)
             {
-                if(!Uri.isInternal(state.url,currentUri) || !Uri.isSamePathQuery(state.url,currentUri))
+                if(!Uri.isSamePathQuery(state.url,currentUri))
                 state = trigHdlr(this,'history:replaceState',currentUri,state.title);
             }
             
