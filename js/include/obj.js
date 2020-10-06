@@ -286,8 +286,12 @@ const ObjKeyValue = {
     
     // climb
     // permet de grimper dans un objet à partir d'un tableau
+    // si on passe une string ou divise par /
     climb: function(array,r) 
     {
+        if(Str.is(array))
+        array = Str.explode("/",array);
+        
         Arr.typecheck(array);
         this.typecheck(r);
         var i;

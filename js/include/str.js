@@ -250,5 +250,13 @@ const StrPrimitive = {
         r = this.removeAllWhitespace(r);
         
         return r;
+    },
+    
+    // slug
+    // transforme une string en slug
+    slug: function(string)
+    {
+        string = this.lower(string);
+        return string.replace(/ /g,'-').replace(/[^\w-]+/g,'').replace(/--/g,'-');
     }
 }

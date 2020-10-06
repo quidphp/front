@@ -611,6 +611,9 @@ Test.Include = function()
         // json
         assert(Json.encode({ok: 2}) === '{"ok":2}');
         assert(Pojo.isEqual(Json.decode('{"ok":2}'),{ok: 2}));
+        const jObj = {ok: 2};
+        assert(Json.recode(jObj) !== jObj);
+        assert(Pojo.isEqual(Json.recode(jObj),jObj));
         
         // listener
         
@@ -802,6 +805,7 @@ Test.Include = function()
         assert(Pojo.isEqual(Pojo.replaceRecursive({test: 2},{test: { ok: 3}},{test: { ok: {ok: 1}, ok2: [1,2,3]}}),{test: {ok: {ok: 1}, ok2: [1, 2, 3]}}));
         assert(Pojo.climb(['test','what'],{test: {what: 'LOL'}}) === 'LOL');
         assert(Pojo.climb(['test','whatz'],{test: {what: 'LOL'}}) === undefined);
+        assert(Pojo.climb('test/what',{test: {what: 'LOL'}}) === 'LOL');
         assert(Pojo.isEqual(Pojo.replace(replace,{ok: {james: false}}),{test: 2, ok: {james: false}}));
         assert(Pojo.isEqual(replace,{test:2, ok: {what: true}}));
         assert(Pojo.set('meh',2,pojoGetSet) !== pojoGetSet);
@@ -997,6 +1001,8 @@ Test.Include = function()
         assert(Str.toNum("1,4") === 1);
         assert(Str.toNum("1.4") === 1.4);
         assert(Str.toInt("1,4") === 1);
+        assert(Str.slug("OK LA VIE EST BONNE") === 'ok-la-vie-est-bonne');
+        assert(Str.slug("OK-LAé À@#?& VIE EST BONNE") === 'ok-la-vie-est-bonne');
         
         // target
         assert(Target.is(document));
@@ -1052,6 +1058,11 @@ Test.Include = function()
         assert(Uri.fragment("http://google.com/testok.php?ok=2#meh") === 'meh');
         assert(Uri.fragment("http://google.com/testok.php") === '');
         assert(Uri.extension("http://google.com/ok.jpg?v=2#what") === 'jpg');
+        assert(Uri.basename("http://ok.com/james.jpg") === 'james.jpg');
+        assert(Uri.basename("james.jpg") === 'james.jpg');
+        assert(Uri.basename("/james.jpg") === 'james.jpg');
+        assert(Uri.filename("http://ok.com/james.jpg") === 'james');
+        assert(Uri.filename("/james.jpg") === 'james');
         assert(Uri.build(Uri.parse("/test.ok?t=2#hash"),false,true) === '/test.ok?t=2#hash');
         assert(Uri.build(Uri.parse("hash"),false,true) === '/hash');
         assert(Uri.build(Uri.parse("https://google.com/ok?v=2#what"),true,true) === "https://google.com/ok?v=2#what");

@@ -21,5 +21,14 @@ const Json = Quid.Json = {
     decode: function(value) 
     {
         return JSON.parse(Str.typecheck(value));
+    },
+    
+    
+    // recode
+    // encode et decode une valeur
+    // permet de faire des copies complêtes
+    recode: function(value) 
+    {
+        return this.decode(this.encode(value));
     }
 }

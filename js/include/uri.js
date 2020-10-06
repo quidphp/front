@@ -179,6 +179,34 @@ const Uri = Quid.Uri = {
     },
     
     
+    // basename
+    // retourne le basename du path de l'uri
+    basename: function(uri)
+    {
+        let r = null;
+        const path = this.path(uri);
+        
+        if(Str.is(path))
+        r = path.substr(path.lastIndexOf("/") + 1);
+        
+        return r;
+    },
+    
+    
+    // filename
+    // retourne le filename du path de l'uri
+    filename: function(uri)
+    {
+        let r = null;
+        const basename = this.basename(uri);
+        
+        if(Str.is(basename))
+        r = basename.replace(/\.[^.$]+$/, '');
+        
+        return r;
+    },
+    
+    
     // extension
     // retourne l'extension du path de l'uri
     extension: function(uri)
