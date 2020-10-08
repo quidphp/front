@@ -548,7 +548,10 @@ Component.History = function(option)
             if(Str.is(currentUri) && state.url !== currentUri)
             {
                 if(!Uri.isSamePathQuery(state.url,currentUri))
-                state = trigHdlr(this,'history:replaceState',currentUri,state.title);
+                {
+                    const replaceUri = Uri.relative(currentUri,true);
+                    state = trigHdlr(this,'history:replaceState',replaceUri,state.title);
+                }
             }
             
             if(isHtml === true)
