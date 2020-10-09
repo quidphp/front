@@ -384,7 +384,7 @@ Component.History = function(option)
                 
                 if(r === true)
                 {
-                    if(isHashChange === false)
+                    if($option.attrTriggered && isHashChange === false)
                     {
                         const targetsTriggered = getTargetsTriggered.call(this,nodeOrEvent);
                         
@@ -471,7 +471,7 @@ Component.History = function(option)
 
         if(HistoryState.is(state))
         {
-            trigHdlr(this,'doc:setStatusLoading');
+            trigEvt(this,'doc:initAjax');
             
             const config = {
                 url: state.url,

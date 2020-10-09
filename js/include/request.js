@@ -10,9 +10,15 @@ const Request = Quid.Request = {
     
     // relative
     // retourne l'uri relative courante
-    relative: function() 
+    // possible d'inclure le hash
+    relative: function(hash) 
     {
-        return window.location.pathname + window.location.search;
+        let r = window.location.pathname + window.location.search;
+        
+        if(hash === true && window.location.hash)
+        r += Uri.makeHash(window.location.hash,true);
+        
+        return r;
     },
 
     

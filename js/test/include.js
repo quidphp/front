@@ -226,6 +226,8 @@ Test.Include = function()
         assert(!Bool.is(null));
         assert(!Bool.is(1));
         assert(Bool.is(true));
+        assert(Bool.typecheck(true));
+        assert(Bool.typecheck(false) === false);
         assert(Bool.toggle(false) === true);
         assert(Bool.isEmpty(false));
         assert(!Bool.isEmpty(0));
@@ -868,6 +870,7 @@ Test.Include = function()
         
         // request
         assert(Str.isNotEmpty(Request.relative()));
+        assert(Str.isNotEmpty(Request.relative(true)));
         assert(Request.absolute() !== Request.relative());
         assert(Str.isNotEmpty(Request.scheme()));
         assert(Request.scheme() !== Request.scheme(true));
@@ -947,6 +950,8 @@ Test.Include = function()
         assert(Str.quote("L'article\"de",false,true) === "'L&#39;article&quot;de'");
         assert(Str.sub(2,true,'what') === 'at');
         assert(Str.sub(2,true,'éèà') === 'à');
+        assert(Str.excerpt(3,'okkkkk','...') === 'okk...');
+        assert(Str.excerpt(12,'okkkkk','...') === 'okkkkk');
         assert(Obj.isEqual(Str.explode('-','la-vie-ok'),['la','vie','ok']));
         assert(Str.explodeIndex(2,'-','la-vie-ok') === 'ok');
         assert(Str.explodeIndex('2','-','la-vie-ok') === undefined);

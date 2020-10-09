@@ -178,6 +178,12 @@ Component.Doc = function(option)
     });
     
     
+    // event
+    ael(this,'doc:initAjax',function() {
+        trigHdlr(this,'doc:setStatusLoading');
+    });
+    
+    
     // setup
     aelOnce(this,'component:setup',function() {
         trigHdlr(this,'doc:mount',true);
@@ -271,6 +277,10 @@ Component.Doc = function(option)
         {
             const oldMeta = qsa(head,'meta');
             Ele.remove(oldMeta);
+            
+            if(Str.isNotEmpty(meta))
+            meta = Dom.parse(meta);
+            
             if(Arr.isNotEmpty(meta))
             Ele.prepend(head,meta);
         }

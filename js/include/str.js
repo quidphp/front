@@ -182,6 +182,20 @@ const StrPrimitive = {
     },
     
     
+    // excerpt
+    // retourne une nouvelle sous chaîne
+    // peut ajouter un suffix si la chaîne a été coupé
+    excerpt: function(limit,string,suffix)
+    {
+        let r = this.sub(0,limit,string);
+        
+        if(r !== string && this.isNotEmpty(suffix))
+        r += suffix;
+        
+        return r;
+    },
+    
+    
     // explode
     // explode une chaîne
     // retourne un tableau dans tous les cas
