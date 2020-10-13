@@ -570,7 +570,6 @@ Component.History = function(option)
     {
         Pojo.typecheck(doc);
         trigHdlr(this,'doc:makeHtmlMount',doc,isError);
-        Ele.remove(doc.html);
     }
     
     

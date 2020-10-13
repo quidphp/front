@@ -55,9 +55,10 @@ Component.Modal = function(option)
         
         set: function(html,anchors,route,uri) {
             Str.typecheck(html,true);
+            
             setModalAttr.call(this,anchors,route,uri);
-            trigHdlr(this,'clickOpen:setTargetContent',html);
             trigEvt(this,'clickOpen:open');
+            trigHdlr(this,'clickOpen:setTargetContent',html);
         },
         
         fetch: function(config,anchors,route,uri) {

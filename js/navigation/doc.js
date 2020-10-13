@@ -54,7 +54,7 @@ Component.Doc = function(option)
             let r = trigHdlr(this,'doc:getBody');
 
             if($option.routeWrap)
-            r = qs(r,$option.routeWrap);
+            r = qs(r,$option.routeWrap,true);
             
             return r;
         },
@@ -231,7 +231,7 @@ Component.Doc = function(option)
         Pojo.typecheck(doc);
         
         // routeWrapAttr
-        const routeWrapAttr = getRouteWrapAttr.call(this,doc.body);
+        doc.routeWrapAttr = getRouteWrapAttr.call(this,doc.body);
         
         // metaMake
         trigHdlr(this,'doc:makeMetaFromDoc',doc);
@@ -301,17 +301,24 @@ Component.Doc = function(option)
     
     
     // getRouteWrapTarget
-    const getRouteWrapTarget = function(contentTarget)
+    const getRouteWrapTarget = function(contentTarget,onlyRouteWrap)
     {
         let r = null;
-        const routeWrap = trigHdlr(this,'doc:getRouteWrap');
         
-        if($option.routeWrap && !Ele.match(routeWrap,"body") && contentTarget != null)
+        if(contentTarget != null)
         {
-            const routeWrapTarget = qs(contentTarget,$option.routeWrap);
+            const routeWrap = trigHdlr(this,'doc:getRouteWrap');
             
-            if(routeWrapTarget != null)
-            r = routeWrapTarget;
+            if($option.routeWrap && routeWrap != null && !Ele.match(routeWrap,"body"))
+            {
+                const routeWrapTarget = qs(contentTarget,$option.routeWrap);
+                
+                if(routeWrapTarget != null)
+                r = routeWrapTarget;
+            }
+            
+            if(r == null && onlyRouteWrap !== true)
+            r = contentTarget;
         }
         
         return r;
@@ -322,11 +329,11 @@ Component.Doc = function(option)
     const getRouteWrapAttr = function(contentTarget)
     {
         let r = null;
-        contentTarget = getRouteWrapTarget.call(this,contentTarget);
+        contentTarget = getRouteWrapTarget.call(this,contentTarget,true);
         
         if(contentTarget != null)
         r = Ele.attr(contentTarget);
-        
+
         return r;
     }
     
@@ -335,6 +342,7 @@ Component.Doc = function(option)
     const docRouteWrapMake = function(contentTarget)
     {
         const routeWrap = trigHdlr(this,'doc:getRouteWrap');
+        
         contentTarget = getRouteWrapTarget.call(this,contentTarget);
         let contentHtml = '';
         
