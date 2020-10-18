@@ -249,7 +249,10 @@ Test.Include = function()
         
         // datetime
         assert(Num.is(Datetime.now()));
+        assert(Num.is(Datetime.year()));
         assert(Str.length(Datetime.localeFormat('fr-CA')) >= 19);
+        assert(Datetime.ymd(null,2010,0,3) === "2010-02-03");
+        assert(Datetime.ymd(1519241542) === "2018-02-21");
         
         // debug
         
