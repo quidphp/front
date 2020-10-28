@@ -46,10 +46,12 @@ const Datetime = Quid.Datetime = {
         r.setFullYear(year);
         
         if(Integer.is(month))
-        r.setMonth(month + 1);
+        r.setMonth(month - 1);
         
         if(Integer.is(day))
         r.setDate(day);
+        
+        r.setHours(0,0,0);
         
         return r.toISOString().substr(0, 10);
     }
