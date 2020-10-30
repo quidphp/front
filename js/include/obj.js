@@ -432,7 +432,24 @@ const ObjWrite = {
         return r;
     },
 
-
+    
+    // unsets
+    // permet de retirer plusieurs propriétés d'un objet
+    // l'objet retourner est une copie
+    unsets: function(props,obj)
+    {
+        let r = this.copy(obj);
+        const $inst = this;
+        
+        Arr.each(props,function(prop) {
+            if($inst.keyExists(prop,obj))
+            delete r[prop];
+        });
+        
+        return r;
+    },
+    
+    
     // replace
     // retourne un nouvel objet contenant le résultat d'un merge unidimensionnel de tous les objets données en argument
     replace: function() 
@@ -467,10 +484,9 @@ const ObjWriteSelf = {
     setRef: function(prop,value,obj)
     {
         this.typecheck(obj);
-        let r = obj;
-        r[prop] = value;
+        obj[prop] = value;
         
-        return r;
+        return obj;
     },
     
     
@@ -479,16 +495,29 @@ const ObjWriteSelf = {
     // l'objet retourner est le même (pas une copie)
     unsetRef: function(prop,obj)
     {
-        let r = null;
         this.typecheck(obj);
         
         if(this.keyExists(prop,obj))
-        {
-            delete obj[prop];
-            r = obj;
-        }
+        delete obj[prop];
         
-        return r;
+        return obj;
+    },
+    
+    
+    // unsetsRef
+    // permet de retirer plusieurs propriétés d'un objet
+    // l'objet retourner est le même (pas une copie)
+    unsetsRef: function(props,obj)
+    {
+        this.typecheck(obj);
+        const $inst = this;
+        
+        Arr.each(props,function(prop) {
+            if($inst.keyExists(prop,obj))
+            delete obj[prop];
+        });
+        
+        return obj;
     }
 }
 

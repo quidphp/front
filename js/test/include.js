@@ -817,9 +817,14 @@ Test.Include = function()
         assert(Pojo.isEqual(Pojo.set('meh',2,pojoGetSet),{meh: 2}));
         assert(Pojo.setRef('meh',2,pojoGetSet) === pojoGetSet);
         assert(Pojo.get('meh',pojoGetSet) === 2);
+        assert(Pojo.isEqual(Pojo.gets(['meh','ok','what'],{ok: 3, meh: 4, whatz: 'LOL'}),{meh:4, ok:3, what: undefined}));
+        assert(Pojo.isEmpty(Pojo.unsets(['meh'],pojoGetSet)));
         assert(Pojo.unset('meh',pojoGetSet) !== pojoGetSet);
         assert(Pojo.isEqual(Pojo.unset('meh',pojoGetSet),{}));
         assert(Pojo.unsetRef('meh',pojoGetSet) === pojoGetSet);
+        pojoGetSet.meh = 2;
+        assert(Pojo.unsetsRef(['meh','test'],pojoGetSet) === pojoGetSet);
+        assert(Pojo.isEmpty(pojoGetSet));
         assert(Pojo.get('meh',pojoGetSet) === undefined);
         assert(Pojo.isEqual(Pojo.copy(replace),replace));
         assert(Pojo.copy(replace) !== replace);

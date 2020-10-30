@@ -220,6 +220,10 @@ Component.Doc = function(option)
         {
             trigHdlr(this,'doc:setError','content-type');
             trigHdlr(this,'doc:setStatusReady');
+            
+            if(parsedData.body)
+            trigHdlr(this,'doc:makeHtml',parsedData);
+            
             throw new Error($option.contentType);
         }
     }

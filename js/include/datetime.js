@@ -42,17 +42,17 @@ const Datetime = Quid.Datetime = {
     ymd: function(timestamp,year,month,day) {
         let r = (Integer.is(timestamp))? new Date(timestamp*1000):new Date;
         
-        if(Integer.is(year))
-        r.setFullYear(year);
-        
-        if(Integer.is(month))
-        r.setMonth(month - 1);
+        r.setHours(0,0,0);
         
         if(Integer.is(day))
         r.setDate(day);
         
-        r.setHours(0,0,0);
+        if(Integer.is(month))
+        r.setMonth(month - 1);
         
+        if(Integer.is(year))
+        r.setFullYear(year);
+
         return r.toISOString().substr(0, 10);
     }
 }

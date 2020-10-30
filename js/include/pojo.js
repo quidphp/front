@@ -16,6 +16,22 @@ const PojoObj = {
     },
     
     
+    // gets
+    // permet de retourner un nouveau pojo avec seulement les propriétés donnés en premier argumnet
+    gets: function(props,obj)
+    {
+        let r = {};
+        this.typecheck(obj);
+        const $inst = this;
+        
+        Arr.each(props,function(prop) {
+            r[prop] = ($inst.keyExists(prop,obj))? obj[prop]:undefined;
+        });
+        
+        return r;
+    },
+    
+    
     // replaceRecursive
     // retourne un nouvel objet contenant le résultat d'un merge multidimensionnel de tous les plain objets données en argument
     replaceRecursive: function() 
