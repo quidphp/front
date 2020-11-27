@@ -266,11 +266,35 @@ const StrPrimitive = {
         return r;
     },
     
+    
     // slug
     // transforme une string en slug
     slug: function(string)
     {
         string = this.lower(string);
         return string.replace(/ /g,'-').replace(/[^\w-]+/g,'').replace(/--/g,'-');
+    },
+    
+    
+    // keepNumber
+    // enleve tous les caractères non numérique
+    keepNumber: function(string)
+    {
+        this.typecheck(string);
+        return string.replace(/[^0-9]/g,'');
+    },
+    
+    
+    // replace
+    // permet de remplacer le contenu d'une string via un pojo
+    replace: function(pojo,string)
+    {
+        this.typecheck(string);
+        
+        Pojo.each(pojo,function(value,key) {
+            string = string.replace(key,value);
+        });
+        
+        return string;
     }
 }

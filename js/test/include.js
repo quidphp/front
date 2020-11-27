@@ -1016,6 +1016,8 @@ Test.Include = function()
         assert(Str.toInt("1,4") === 1);
         assert(Str.slug("OK LA VIE EST BONNE") === 'ok-la-vie-est-bonne');
         assert(Str.slug("OK-LAé À@#?& VIE EST BONNE") === 'ok-la-vie-est-bonne');
+        assert(Str.keepNumber("(515) 509-1502 #poste 12345") === '515509150212345');
+        assert(Str.replace({ '[test]': 'OK', what: 'well'},"tout va [test] what WHAT!") === "tout va OK well WHAT!");
         
         // target
         assert(Target.is(document));
