@@ -31,10 +31,16 @@ Component.HrefReplaceChar = function()
             
             if(Str.isNotEmpty(replace) && Str.isNotEmpty(href) && Str.isNotEmpty(char))
             {
-                r = href.replace(char,replace);
+                const replacePojo = {};
+                replacePojo[char] = replace;
+                r = Str.replace(replacePojo,href);
                 
                 if(Str.isNotEmpty(replace2))
-                r = r.replace(char,replace2);
+                {
+                    const replacePojo2 = {};
+                    replacePojo2[char] = replace2;
+                    r = Str.replace(replacePojo2,r);
+                }
             }
             
             return r;

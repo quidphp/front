@@ -169,11 +169,16 @@ const Dom = Quid.Dom = {
             if(r.head != null)
             {
                 const title = Ele.scopedQuery(r.head,"title");
+                const titleReplace = {
+                    '<':'&lt;',
+                    '>':'&gt;',
+                    ' & ':' &amp; '
+                };
                 
                 Ele.removeAttr(r.head,'data-tag');
                 r.headAttr = Ele.attr(r.head);
                 r.title = (title != null)? Ele.getText(title):'?';
-                r.titleHtml = r.title.replace('<','&lt;').replace('>','&gt;').replace(' & ',' &amp; ');
+                r.titleHtml = Str.replace(titleReplace,r.title);
                 r.meta = Ele.scopedQueryAll(r.head,"meta");
             }
         }
