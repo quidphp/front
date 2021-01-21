@@ -234,6 +234,22 @@ const ArrBase = {
     },
     
     
+    // column
+    // retourne un tableau avec une seule propriété de chaque pojo dans le tableau
+    column: function(prop,array)
+    {
+        const r = [];
+        Str.typecheck(prop,true);
+        
+        this.each(array,function(value) {
+            if(Pojo.is(value) && Pojo.keyExists(prop,value))
+            r.push(value[prop]);
+        });
+        
+        return r;
+    },
+    
+    
     // new
     // retourne la cible pour la copie
     new: function()
