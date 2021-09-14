@@ -54,5 +54,15 @@ const Datetime = Quid.Datetime = {
         r.setFullYear(year);
 
         return r.toISOString().substr(0, 10);
+    },
+    
+    
+    // time
+    // retourne en format hh:mm:ss (à tester)
+    time: function(timestamp) {
+        const date = (Integer.is(timestamp))? new Date(timestamp*1000):new Date;
+        const dateText = date.toTimeString();
+        
+        return dateText.split(' ')[0];
     }
 }
