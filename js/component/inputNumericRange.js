@@ -126,6 +126,10 @@ Component.InputNumericRange = function(option)
             trigHdlr($this,'inputNumericRange:refresh');
             trigEvt($this,'inputNumericRange:change');
         });
+        
+        ael(input,'inputNumeric:processFailed',function() {
+            trigHdlr($this,'inputNumericRange:refresh');
+        });
     }
     
     

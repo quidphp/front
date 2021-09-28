@@ -30,17 +30,23 @@ Component.InputNumeric = function(option)
     setHdlrs(this,'inputNumeric:',{
         
         shouldDebounce: function() {
-            const r = shouldDebounce;
+            let r = Ele.getData(this,'shouldDebounce');
+            r = (r == null)? true:r;
             trigHdlr(this,'inputNumeric:setDebounce',true);
             return r;
         },
         
         setDebounce: function(value) {
-            shouldDebounce = Bool.typecheck(value);
+            Ele.setData(this,'shouldDebounce',Bool.typecheck(value));
         },
         
         getValueRestore: function() {
-            return trigHdlr(this,'inputMemory:get','int') || trigHdlr(this,'input:getValueInt');
+            let r = trigHdlr(this,'inputMemory:get','int');
+            
+            if(!Num.is(r))
+            r = trigHdlr(this,'input:getValueInt');
+            
+            return r;
         },
         
         setValue: function(value,change) {
@@ -143,14 +149,20 @@ Component.InputNumeric = function(option)
             return true;
         },
         
-        process: function() {
+        process: function(noCompareValue) {
             const value = trigHdlr(this,'inputNumeric:getValueRestore');
             const validate = trigHdlr(this,'inputNumeric:validate');
             const shouldChange = trigHdlr(this,'inputNumeric:shouldChange');
             const newValue = trigHdlr(this,'input:getValueInt');
+            let r = (validate === true && shouldChange === true);
             
-            if(validate === true && shouldChange === true && value !== newValue)
+            if(r === true && value === newValue && noCompareValue !== true)
+            r = false;
+            
+            if(r === true)
             trigEvt(this,'inputNumeric:change');
+            
+            return r;
         }
     });
     
@@ -186,21 +198,25 @@ Component.InputNumeric = function(option)
     
     ael(this,'keyboardArrow:up',function() {
         trigHdlr(this,'inputNumeric:setNext');
-        keyboardDebouce.call(this);
+        keyboardDebouce.call(this,null,true);
     });
     
     ael(this,'keyboardArrow:down',function() {
         trigHdlr(this,'inputNumeric:setPrev');
-        keyboardDebouce.call(this);
+        keyboardDebouce.call(this,null,true);
     });
     
     
     // keyboardDebouce
-    let shouldDebounce = true;
-    const keyboardDebouce = Func.debounce($option.timeout,function() 
+    const keyboardDebouce = Func.debounce($option.timeout,function(event,noCompareValue) 
     {
         if(trigHdlr(this,'inputNumeric:shouldDebounce') && Ele.match(this,":focus"))
-        trigEvt(this,'inputNumeric:change');
+        {
+            const result = trigHdlr(this,'inputNumeric:process',noCompareValue);
+            
+            if(result === false)
+            trigEvt(this,'inputNumeric:processFailed');
+        }
     });
     
     

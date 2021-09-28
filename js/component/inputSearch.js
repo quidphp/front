@@ -33,13 +33,14 @@ Component.InputSearch = function(option)
     setHdlrs(this,'inputSearch:',{
         
         shouldDebounce: function() {
-            const r = shouldDebounce;
+            let r = Ele.getData(this,'shouldDebounce');
+            r = (r == null)? true:r;
             trigHdlr(this,'inputSearch:setDebounce',true);
             return r;
         },
         
         setDebounce: function(value) {
-            shouldDebounce = Bool.typecheck(value);
+            Ele.setData(this,'shouldDebounce',Bool.typecheck(value));
         },
         
         getCurrent: function() {
@@ -80,6 +81,8 @@ Component.InputSearch = function(option)
                 trigHdlr(this,'inputMemory:remember');
                 trigEvt(this,'inputSearch:change');
             }
+            
+            return validate;
         },
         
         success: function() {
@@ -128,18 +131,17 @@ Component.InputSearch = function(option)
     
     
     // keyboardDebouce
-    let shouldDebounce = true;
-    const keyboardDebouce = Func.debounce($option.timeout,function() 
+    const keyboardDebouce = Func.debounce($option.timeout,function(event) 
     {
         if(trigHdlr(this,'inputSearch:shouldDebounce') && Ele.match(this,":focus"))
         {
             const validate = trigHdlr(this,'inputSearch:validate');
             
+            if(validate === false)
+            trigHdlr(this,'inputMemory:remember');
+            
             if((validate === false || $option.keypressTrigger))
-            {
-                trigHdlr(this,'inputMemory:remember');
-                trigHdlr(this,'inputSearch:process');
-            }
+            trigHdlr(this,'inputSearch:process');
         }
     });
     
