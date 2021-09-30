@@ -57,9 +57,9 @@ const Datetime = Quid.Datetime = {
     },
     
     
-    // time
-    // retourne en format hh:mm:ss (à tester)
-    time: function(timestamp) {
+    // his
+    // retourne le temps en format hh:mm:ss
+    his: function(timestamp) {
         const date = (Integer.is(timestamp))? new Date(timestamp*1000):new Date;
         const dateText = date.toTimeString();
         

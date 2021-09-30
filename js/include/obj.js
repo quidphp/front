@@ -294,7 +294,6 @@ const ObjKeyValue = {
         
         Arr.typecheck(array);
         this.typecheck(r);
-        var i;
         const $inst = this;
         
         Arr.each(array,function(value) {

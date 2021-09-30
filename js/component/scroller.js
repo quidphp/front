@@ -144,7 +144,7 @@ Component.Scroller = function(option)
         const winDimension = Win.getDimension();
         const currentScroll = trigHdlr(this,'scroller:getCurrentScroll');
         const currentDimension = trigHdlr(this,'scroller:getCurrentDimension');
-        const offsetFunc = (offsetType === 'doc')? 'getOffsetDoc':'getOffsetParent';        
+        const offsetFunc = (offsetType === 'doc')? 'getOffsetDoc':'getOffsetParent';
         const windowHeight = winDimension.height;
         const windowHeightRatio = (windowHeight / 2);
         const scrollTop = currentScroll.top;

@@ -148,14 +148,10 @@ const ArrBase = {
     // find
     // retourne la première valeur de l'objet dont le callback retourne true, utilise la méthode du prototype
     find: function(array,callback) {
-        let r = null;
         this.typecheck(array);
         Func.typecheck(callback);
         
-        if(this.is(array))
-        r = Array.prototype.find.call(array,callback);
-        
-        return r;
+        return Array.prototype.find.call(array,callback);
     },
     
     
@@ -163,14 +159,10 @@ const ArrBase = {
     // vérifie qu'au moins une entrée du tableau passe le test de la fonction anonyme
     some: function(array,callback)
     {
-        let r = null;
         this.typecheck(array);
         Func.typecheck(callback);
         
-        if(this.is(array))
-        r = Array.prototype.some.call(array,callback);
-        
-        return r;
+        return Array.prototype.some.call(array,callback);
     },
     
     
@@ -178,14 +170,10 @@ const ArrBase = {
     // vérifie que toutes les entrée du tableau passe le test de la fonction anonyme
     every: function(array,callback)
     {
-        let r = null;
         this.typecheck(array);
         Func.typecheck(callback);
         
-        if(this.is(array))
-        r = Array.prototype.every.call(array,callback);
-        
-        return r;
+        return Array.prototype.every.call(array,callback);
     },
     
     
@@ -193,14 +181,10 @@ const ArrBase = {
     // permet de créer un nouvel objet avec les valeurs changés selon la fonction de rappel, utilise la méthode du prototype
     map: function(array,callback)
     {
-        let r = null;
         this.typecheck(array);
         Func.typecheck(callback);
         
-        if(this.is(array))
-        r = Array.prototype.map.call(array,callback);
-        
-        return r;
+        return Array.prototype.map.call(array,callback);
     },
     
     
@@ -208,14 +192,10 @@ const ArrBase = {
     // permet de créer un nouvel objet avec seulement les entrées qui retournent true, utilise la méthode du prototype
     filter: function(array,callback)
     {
-        let r = null;
         this.typecheck(array);
         Func.typecheck(callback);
         
-        if(this.is(array))
-        r = Array.prototype.filter.call(array,callback);
-        
-        return r;
+        return Array.prototype.filter.call(array,callback);
     },
     
     
@@ -227,10 +207,7 @@ const ArrBase = {
         this.typecheck(array);
         Func.typecheck(callback);
         
-        if(this.is(array))
-        r = Array.prototype.reduce.call(array,callback,r);
-        
-        return r;
+        return Array.prototype.reduce.call(array,callback,r);
     },
     
     

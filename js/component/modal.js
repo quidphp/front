@@ -17,6 +17,8 @@ Component.Modal = function(option)
     const $option = Pojo.replace({
         background: 'modal',
         attrAnchor: 'data-modal',
+        attrAnchorHtml: 'data-modal-html',
+        attrAnchorRoute: 'data-modal-route',
         clickOutsidePersistent: true
     },option);
     
@@ -59,6 +61,8 @@ Component.Modal = function(option)
             setModalAttr.call(this,anchors,route,uri);
             trigEvt(this,'clickOpen:open');
             trigHdlr(this,'clickOpen:setTargetContent',html);
+            
+            return true;
         },
         
         fetch: function(config,anchors,route,uri) {
@@ -201,7 +205,7 @@ Component.Modal = function(option)
         });
         
         ael(document,'doc:mountCommon',function(event,node) {
-            const anchor = qsa(node,"a["+$option.attrAnchor+"]");
+            const anchor = qsa(node,"["+$option.attrAnchor+"]");
             trigHdlr(modal,'modal:anchorBind',anchor,true);
         });
         
@@ -224,11 +228,27 @@ Component.Modal = function(option)
             toggleClass(this,'selected',false);
         });
         
+        setHdlr(anchor,'modal:getAttrHtml',function() {
+            return getAttr(this,$option.attrAnchorHtml);
+        });
+        
+        setHdlr(anchor,'modal:getAttrRoute',function() {
+            return getAttr(this,$option.attrAnchorRoute);
+        });
+
         if(click === true)
         {
             ael(anchor,'click',function(event) {
                 let r = true;
-                const result = trigHdlr(modal,'modal:fetch',this);
+                let result = false;
+                const uri = Ele.getUri(this);
+                const attrHtml = trigHdlr(this,'modal:getAttrHtml');
+                
+                if(Str.isNotEmpty(attrHtml))
+                result = trigHdlr(modal, 'modal:set', attrHtml, null, trigHdlr(this,'modal:getAttrRoute'))
+                
+                else if(Str.isNotEmpty(uri))
+                result = trigHdlr(modal,'modal:fetch',this);
                 
                 if(result === true)
                 {

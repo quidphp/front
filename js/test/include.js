@@ -173,6 +173,7 @@ Test.Include = function()
         assert(Arr.isEqual(Arr.accumulate([],['eh','ok','what'],function(value,index) {
             return index+value;
         }),["0eh","1ok","2what"]));
+        assert(Arr.isEqual(Arr.column('test',[{ test: 'OK'},{test2: 'WELL', test: 'OK2'},{test2: 'NOP'}]),['OK','OK2']));
         
         // arrLike
         assert(!ArrLike.is([]));
@@ -253,6 +254,7 @@ Test.Include = function()
         assert(Str.length(Datetime.localeFormat('fr-CA')) >= 19);
         assert(Datetime.ymd(null,2010,2,3) === "2010-02-03");
         assert(Datetime.ymd(1519241542) === "2018-02-21");
+        assert(Datetime.his(1519241542) === "14:32:22");
         
         // debug
         
