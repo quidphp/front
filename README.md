@@ -166,7 +166,7 @@ $ composer require quidphp/front
 - *Compiling*: The compiling and concatenation of the SCSS files is done on the PHP side.
 
 ### Overview
-**QuidPHP/Front** contains 14 CSS stylesheets. Here is an overview:
+**QuidPHP/Front** contains 14 SCSS stylesheets. Here is an overview:
 - [component](css/component)
     - [absolutePlaceholder.scss](css/component/absolutePlaceholder.scss) - Stylesheet for the absolutePlaceholder component
     - [anchorCorner.scss](css/component/anchorCorner.scss) - Stylesheet for the anchorCorner component
