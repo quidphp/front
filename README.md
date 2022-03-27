@@ -25,11 +25,10 @@ $ composer require quidphp/front
 
 ## Included
 **QuidPHP/Front** comes bundled with the following front-end polyfills:
-- [jonathantneal/element-qsa-scope](https://github.com/jonathantneal/element-qsa-scope) - Qsa Scope - Return elements matching a selector relative to the current node
-- [Financial-Times/polyfill-service](https://github.com/Financial-Times/polyfill-service) - Polyfill.io - Automatic polyfill service
+- [Financial-Times/polyfill-service](https://github.com/Financial-Times/polyfill-service) - Polyfill.io - Automatic polyfill service, used for Internet Explorer and Microsoft Edge. [jonathantneal/element-qsa-scope](https://github.com/jonathantneal/element-qsa-scope), a polyfill for query selector scope, is also manually copied within the polyfill file.
 
 ## Comment
-**QuidPHP/Front** code is commented and all methods are explained. However, most of the comments are currently written in French.
+**QuidPHP/Front** code is commented and all methods are explained. However, most of the comments are written in French.
 
 ## JS
 
@@ -37,14 +36,15 @@ $ composer require quidphp/front
 - *ES5*: All code is compatible with ES5, there is no need for any JavaScript transpiler.
 - *Strict*: All generated files declare *use strict* on the first line.
 - *IE11*: The minimum compatible browser is IE11. Older browsers will fail non-gracefully.
-- *Compiling*: The compiling and concatenation of the JS files is done on the PHP side.
+- *Compiling*: The concatenation of the JS files is done on the PHP side.
 
 ### Overview
-**QuidPHP/Front** contains 98 JavaScript files. Here is an overview:
+**QuidPHP/Front** contains 106 JavaScript files. Here is an overview:
 - [component](js/component)
     - [absolutePlaceholder.js](js/component/absolutePlaceholder.js) - Script of behaviours for an absolute placeholder component
     - [ajax.js](js/component/ajax.js) - Script to activate ajax with an event on the nodes
     - [ajaxBlock.js](js/component/ajaxBlock.js) - Merges the logic for ajax, block and loading within a component
+    - [ajaxTimeout.js](js/component/ajaxTimeout.js) - Merges the logic for ajax, block, loading and timeout within a component
     - [alert.js](js/component/alert.js) - Component to launch an alert notification when an event is triggered
     - [anchorCorner.js](js/component/anchorCorner.js) - Script of behaviours for an absolute anchorCorner component
     - [backToTop.js](js/component/backToTop.js) - Script for a component which brings back to the top of the page
@@ -61,17 +61,19 @@ $ composer require quidphp/front
     - [clickOpenTrigger.js](js/component/clickOpenTrigger.js) - Manages a clickOpen component which has a trigger
     - [clickOpenTriggerBase.js](js/component/clickOpenTriggerBase.js) - Grants base functions for a clickOpen component which has a trigger to open/close
     - [clickOutside.js](js/component/clickOutside.js) - Component to manage click outside a node
+    - [clickPrint.js](js/component/clickPrint.js) - Component that triggers a window print on click
     - [confirm.js](js/component/confirm.js) - Component to request a confirmation once an event has triggered
-    - [doc.js](js/component/doc.js) - Root component for a document node
+    - [externalBlank.js](js/component/externalBlank.js) - Component to make all child anchors who are external as target _blank
     - [fakeSelect.js](js/component/fakeSelect.js) - Script with some logic for a select replacement component, uses clickOpen
     - [feed.js](js/component/feed.js) - Script of behaviours for a feed component with a load-more button
+    - [feedFilter.js](js/component/feedFilter.js) - Script of behaviours for a filter which updates a feed, can include a reset button
     - [feedSearch.js](js/component/feedSearch.js) - Component for a feed with search and order tools
     - [filter.js](js/component/filter.js) - Component for a clickOpen filter component which has a page feed, search and order tools
     - [focusable.js](js/component/focusable.js) - Component to allow focus navigaton on a set of nodes
     - [form.js](js/component/form.js) - Script with behaviours for a form component
     - [hashChange.js](js/component/hashChange.js) - Script that sends the hash change event back to the nodes
-    - [history.js](js/component/history.js) - Component managing site navigation with the HistoryAPI
     - [hrefReplaceChar.js](js/component/hrefReplaceChar.js) - Component to generate a dynamic href with some value replacement
+    - [indexNode.js](js/component/indexNode.js) - Component to find a node within a set according to an index
     - [initOpenClose.js](js/component/initOpenClose.js) - Base component used for opening, closing and initializing a container
     - [input.js](js/component/input.js) - Script with behaviours for an input component
     - [inputCalendar.js](js/component/inputCalendar.js) - Script with behaviours for a calendar component and a date input
@@ -88,14 +90,17 @@ $ composer require quidphp/front
     - [keyboardEscape.js](js/component/keyboardEscape.js) - Component to catch or prevent the escape key on the keyboard
     - [modal.js](js/component/modal.js) - Script for a modal component
     - [modalMailto.js](js/component/modalMailto.js) - Script for mailto links opening in a modal for confirmation
+    - [nav.js](js/component/nav.js) - Component for a document node, binds other components
     - [navHash.js](js/component/navHash.js) - Adds hashchange support to the nav index component
     - [navIndex.js](js/component/navIndex.js) - Base component that manages index navigation for many targets
+    - [plural.js](js/component/plural.js) - Component to manage singular or plural text for a node
     - [resizeChange.js](js/component/resizeChange.js) - Component to notify nodes when window size has changed or stopped
     - [scrollChange.js](js/component/scrollChange.js) - Component to notify nodes when window scroll has changed or stopped
     - [scrollDrag.js](js/component/scrollDrag.js) - Component to allow scrolling while dragging with the mouse
     - [scroller.js](js/component/scroller.js) - Component to manage scrolling within a container, allows animating
     - [searchAutoInfo.js](js/component/searchAutoInfo.js) - Script with logic for an auto-complete search component with another fallback popup
     - [searchSlide.js](js/component/searchSlide.js) - Component with a search input, and an info box that slides on focus
+    - [selectConvert.js](js/component/selectConvert.js) - Script to convert a select menu to a fakeSelect component
     - [tabs.js](js/component/tabs.js) - Script with behaviours for a tabs component
     - [tabsNav.js](js/component/tabsNav.js) - Script with behaviours for a tab component with support for navigation
     - [timeout.js](js/component/timeout.js) - Behaviours for a timeout component, triggers an event once a timeout has completed
@@ -103,10 +108,8 @@ $ composer require quidphp/front
     - [validate.js](js/component/validate.js) - Component with functions related to validation (pattern and required)
     - [validatePrevent.js](js/component/validatePrevent.js) - Component that blocks an event if the validation is not successfull
     - [window.js](js/component/window.js) - Behaviours to detect touch devices or responsive resolution on the window node
-    - [windowUnload.js](js/component/windowUnload.js) - Component to manage the unload notification with the window object
 - [import](js/import)
-    - [default.js](js/import/default.js) - Script that imports default variables within the scope
-    - [include.js](js/import/include.js) - Script that imports many variables from include within the scope
+    - [import.js](js/import/import.js) - Script that imports many variables from include within the scope
 - [include](js/include)
     - [_init.js](js/include/_init.js)
     - [arr.js](js/include/arr.js) - Script with some objects related to array manipulation
@@ -123,6 +126,7 @@ $ composer require quidphp/front
     - [func.js](js/include/func.js) - Script with methods related to functions
     - [handler.js](js/include/handler.js) - Script for handler management (functions stored in targets)
     - [historyState.js](js/include/historyState.js) - Script with functions related to the history states
+    - [html.js](js/include/html.js) - Script containing event listeners functions for target elements
     - [integer.js](js/include/integer.js) - Methods related to integer numbers
     - [json.js](js/include/json.js) - Script with methods related to json format
     - [listener.js](js/include/listener.js) - Script containing event listeners functions for target elements
@@ -142,7 +146,11 @@ $ composer require quidphp/front
     - [vari.js](js/include/vari.js) - Script with a set of general functions related to variables
     - [win.js](js/include/win.js) - Object for window target
     - [xhr.js](js/include/xhr.js) - Script with some logic for ajax calls and xhr object
-
+- [navigation](js/navigation)
+    - [doc.js](js/navigation/doc.js) - Root component for a document node
+    - [history.js](js/navigation/history.js) - Component managing site navigation with the HistoryAPI
+    - [windowUnload.js](js/navigation/windowUnload.js) - Component to manage the unload notification with the window object
+    
 ### Testing
 **QuidPHP/Front** contains 2 test scripts:
 - [test](js/test)
