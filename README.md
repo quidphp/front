@@ -11,7 +11,7 @@
 **QuidPHP/Front** is available as an open-source software under the [MIT license](LICENSE).
 
 ## Documentation
-**QuidPHP/Front** documentation is being written. Once ready, it will be available at https://quidphp.github.io/project.
+**QuidPHP/Front** documentation is being written. Once ready, it will be available at [QuidPHP/Docs](https://github.com/quidphp/docs).
 
 ## Installation
 **QuidPHP/Front** can be easily installed with [Composer](https://getcomposer.org). It is available on [Packagist](https://packagist.org/packages/quidphp/front).
