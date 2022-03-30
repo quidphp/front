@@ -2,7 +2,7 @@
     "name": "quidphp/front",
     "type": "library",
     "description": "QuidPHP JavaScript and CSS front-end assets",
-    "keywords": ["quidphp","quid","framework","cms"],
+    "keywords": ["quidphp","quid","php-framework","js-framework"],
     "homepage": "https://quidphp.com",
     "license": "MIT",
     "authors": [{
