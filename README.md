@@ -157,7 +157,7 @@ $ composer require quidphp/front
     - [component.js](js/test/component.js) - Script to test the component files
     - [include.js](js/test/include.js) - Script to test the include files
 
-**QuidPHP/Front** Javascript testsuite can be run by creating a new [QuidPHP/Assert](https://github.com/quidphp/assert) project.
+**QuidPHP/Front** testsuite can be run by creating a new [QuidPHP/Assert](https://github.com/quidphp/assert) project.
     
 ## CSS
 
