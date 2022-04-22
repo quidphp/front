@@ -23,10 +23,6 @@ $ composer require quidphp/front
 **QuidPHP/Front** requires the following:
 - Minimal browser: Internet Explorer 11
 
-## Included
-**QuidPHP/Front** comes bundled with the following front-end polyfills:
-- [Financial-Times/polyfill-service](https://github.com/Financial-Times/polyfill-service) - Polyfill.io - Automatic polyfill service, used for Internet Explorer and Microsoft Edge. [jonathantneal/element-qsa-scope](https://github.com/jonathantneal/element-qsa-scope), a polyfill for query selector scope, is also manually copied within the polyfill file.
-
 ## Comment
 **QuidPHP/Front** code is commented and all methods are explained. However, most of the comments are written in French.
 
