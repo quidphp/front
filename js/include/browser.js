@@ -37,12 +37,7 @@ const Browser = Quid.Browser = {
     // si onlyEdge est true alors IE11 est aussi non supporté
     isUnsupported: function(onlyEdge) 
     {
-        let r = this.isOldIe();
-        
-        if(r === true && onlyEdge === true && this.isIe11())
-        r = false;
-        
-        return r;
+        return (onlyEdge === true && this.isIe11())? true:this.isOldIe();
     },
 
 
