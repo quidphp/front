@@ -16,7 +16,6 @@ Component.InputSearch = function(option)
     // option
     const $option = Pojo.replace({
         timeout: 500,
-        keyEvent: 'keydown',
         useCurrent: false,
         keypressTrigger: true,
         button: "button[type='button']"
@@ -24,7 +23,7 @@ Component.InputSearch = function(option)
     
     
     // components
-    Component.KeyboardEnter.call(this,true,$option.keyEvent);
+    Component.KeyboardEnter.call(this,true);
     Component.ValidatePrevent.call(this,'inputSearch:change');
     Component.InputMemory.call(this);
     
@@ -101,9 +100,8 @@ Component.InputSearch = function(option)
     });
     
     // event
-    ael(this,$option.keyEvent,function(event) {
-        if(!Evt.isSpecialKeyCode(event))
-        keyboardDebouce.call(this,event);
+    ael(this,'input',function(event) {
+        processDebounce.call(this,event);
     });
     
     ael(this,'keyboardEnter:blocked',function() {
@@ -112,11 +110,6 @@ Component.InputSearch = function(option)
     
     ael(this,'click',function(event) {
         event.stopPropagation();
-    });
-    
-    ael(this,'change',function() {
-        if(trigHdlr(this,'inputMemory:hasChanged'))
-        trigHdlr(this,'inputSearch:process');
     });
     
     ael(this,'inputSearch:change',function() {
@@ -130,8 +123,16 @@ Component.InputSearch = function(option)
     });
     
     
-    // keyboardDebouce
-    const keyboardDebouce = Func.debounce($option.timeout,function(event) 
+    // processChange
+    const processChange = function() 
+    {
+        if(trigHdlr(this,'inputMemory:hasChanged'))
+        trigHdlr(this,'inputNumeric:process');
+    }
+    
+    
+    // processDebounce
+    const processDebounce = Func.debounce($option.timeout,function(event) 
     {
         if(trigHdlr(this,'inputSearch:shouldDebounce') && Ele.match(this,":focus"))
         {

@@ -19,7 +19,6 @@ Component.InputCalendar = function(option)
         triggerEvent: 'click',
         triggerToggle: false,
         background: "calendar",
-        keyEvent: 'keydown',
         calendar: {},
         timeout: 600
     },option);
@@ -78,7 +77,7 @@ Component.InputCalendar = function(option)
         const target = trigHdlr(this,'clickOpen:getTarget');
         
         // components
-        Component.KeyboardEnter.call(input,true,$option.keyEvent);
+        Component.KeyboardEnter.call(input,true);
         
         
         // handler
@@ -93,7 +92,7 @@ Component.InputCalendar = function(option)
         
         
         // event
-        ael(input,$option.keyEvent,function() {
+        ael(input,'input',function() {
             calendarChange.call(this,true,true);
         });
         
@@ -106,14 +105,13 @@ Component.InputCalendar = function(option)
             Evt.preventStop(event);
         });
         
-        ael(input,'change',function() {
-            calendarChange.call(this,false,true);
-        });
-        
         
         // calendarChange
         const calendarChange = Func.debounce($option.timeout,function(reload,onlyIn) 
         {
+            if(!trigHdlr($this,'clickOpen:isOpen'))
+            trigEvt($this,'clickOpen:open');
+            
             const calendar = trigHdlr($this,'inputCalendar:getCalendar');
             const val = trigHdlr(this,'input:getValue');
             trigHdlr(calendar,'calendar:select',val,reload,onlyIn);

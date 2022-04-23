@@ -15,8 +15,7 @@ Component.InputNumeric = function(option)
     
     // option
     const $option = Pojo.replace({
-        timeout: 500,
-        keyEvent: 'keydown'
+        timeout: 500
     },option);
     
     
@@ -168,9 +167,8 @@ Component.InputNumeric = function(option)
     
 
     // event
-    ael(this,$option.keyEvent,function(event) {
-        if(!Evt.isSpecialKeyCode(event))
-        keyboardDebouce.call(this,event);
+    ael(this,'input',function(event) {
+        processDebounce.call(this,event);
     });
     
     ael(this,'validate:invalid',function() {
@@ -185,11 +183,7 @@ Component.InputNumeric = function(option)
     });
     
     ael(this,'focusout',function() {
-        processOnChange.call(this);
-    });
-    
-    ael(this,'change',function() {
-        processOnChange.call(this);
+        processChange.call(this);
     });
     
     ael(this,'inputNumeric:change',function() {
@@ -198,17 +192,25 @@ Component.InputNumeric = function(option)
     
     ael(this,'keyboardArrow:up',function() {
         trigHdlr(this,'inputNumeric:setNext');
-        keyboardDebouce.call(this,null,true);
+        processDebounce.call(this,null,true);
     });
     
     ael(this,'keyboardArrow:down',function() {
         trigHdlr(this,'inputNumeric:setPrev');
-        keyboardDebouce.call(this,null,true);
+        processDebounce.call(this,null,true);
     });
     
     
-    // keyboardDebouce
-    const keyboardDebouce = Func.debounce($option.timeout,function(event,noCompareValue) 
+    // processChange
+    const processChange = function() 
+    {
+        if(trigHdlr(this,'inputMemory:hasChanged'))
+        trigHdlr(this,'inputNumeric:process');
+    }
+    
+    
+    // processDebounce
+    const processDebounce = Func.debounce($option.timeout,function(event,noCompareValue) 
     {
         if(trigHdlr(this,'inputNumeric:shouldDebounce') && Ele.match(this,":focus"))
         {
@@ -218,14 +220,6 @@ Component.InputNumeric = function(option)
             trigEvt(this,'inputNumeric:processFailed');
         }
     });
-    
-    
-    // processOnChange
-    const processOnChange = function() 
-    {
-        if(trigHdlr(this,'inputMemory:hasChanged'))
-        trigHdlr(this,'inputNumeric:process');
-    }
     
     return this;
 }

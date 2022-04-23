@@ -17,7 +17,6 @@ Component.ClickOpenInputAjax = function(option)
     const $option = Pojo.replaceRecursive({
         ajaxEvent: 'submit',
         inputSearch: {
-            keyEvent: 'keydown',
             timeout: 800
         }
     },option);
@@ -47,7 +46,7 @@ Component.ClickOpenInputAjax = function(option)
         const field = trigHdlr(this,'form:getValidateField');
         
         // components
-        Component.KeyboardEscape.call(field,true,$option.inputSearch.keyEvent);
+        Component.KeyboardEscape.call(field,true);
         Component.InputSearch.call(field,$option.inputSearch);
         
         
@@ -57,7 +56,7 @@ Component.ClickOpenInputAjax = function(option)
         });
         
         // event
-        ael(field,'keyboardEscape:blocked',function(event,keyEvent) {
+        ael(field,'keyboardEscape:blocked',function(event) {
             trigHdlr(this,'inputSearch:clearTimeout');
             trigEvt($this,'clickOpen:close');
         });

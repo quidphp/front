@@ -120,16 +120,14 @@ Component.FakeSelect = function()
     {
         const $this = this;
         const select = trigHdlr(this,'fakeSelect:getSelect');
-        const handleChange = function() {
+        
+        ael(select,'input:change',function() {
             const value = trigHdlr(this,'input:getValue');
             const choice = trigHdlr($this,'fakeSelect:getChoice',value);
             
             if(choice != null)
             choose.call($this,choice);
-        };
-        
-        ael(select,'change',handleChange);
-        ael(select,'input:change',handleChange);
+        });
         
         ael(select,'input:disable',function() {
             trigHdlr($this,'clickOpen:disable');
@@ -194,13 +192,10 @@ Component.FakeSelect = function()
         Ele.removeAttr(choices,'data-selected');
         toggleAttr(selected,'data-selected',true);
         
-        trigHdlr(select,'input:setValue',value);
+        trigHdlr(select,'input:setValue',value,true,true);
         trigHdlr(this,'fakeSelect:setTitle',text);
         trigHdlr(this,'absolutePlaceholder:refresh');
         trigEvt(this,'clickOpen:close');
-        
-        if(!Str.isEqual(value,current))
-        trigBubble(select,'change');
     }
 
     return this;

@@ -163,7 +163,7 @@ Component.FeedSearch = function(option)
         const $this = this;
         
         // event
-        ael(order,'change',function() {
+        ael(order,'input',function() {
             trigEvt($this,'ajax:init');
         });
     }

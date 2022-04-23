@@ -78,7 +78,6 @@ Component.Calendar = function(option)
         findCell: function(value,onlyIn) {
             let r = undefined;
             const tds = trigHdlr(this,'calendar:getCells');
-            const format = trigHdlr(this,'calendar:getFormat');
             value = prepareValue.call(this,value);
             
             if(Num.is(value))
@@ -88,7 +87,7 @@ Component.Calendar = function(option)
                 });
             }
             
-            else if(Str.isNotEmpty(value) && value.length == Str.length(format))
+            else if(trigHdlr(this,'calendar:validateValue',value,true))
             {
                 r = Arr.find(tds,function(ele) {
                     return Ele.match(ele,"[data-format^='"+value+"']");
@@ -111,9 +110,32 @@ Component.Calendar = function(option)
             else if(reload === true)
             {
                 value = prepareValue.call(this,value);
-                setAttr(this,'data-current',value);
-                trigHdlr(this,'calendar:load');
+                
+                if(trigHdlr(this,'calendar:validateValue',value))
+                {
+                    setAttr(this,'data-current',value);
+                    trigHdlr(this,'calendar:load');
+                }
             }
+        },
+        
+        validateValue: function(value,withFormat) {
+            let r = false;
+            
+            if(Str.isNotEmpty(value))
+            {
+                const format = trigHdlr(this,'calendar:getFormat');
+                
+                if(!withFormat || value.length == Str.length(format))
+                {
+                    const split = Str.explode('-',value);
+                    r = Arr.length(split) === 3 && Arr.every(split,function(v) {
+                        return Num.is(v);
+                    });
+                }
+            }
+            
+            return r;
         },
         
         load: function() {

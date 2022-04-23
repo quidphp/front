@@ -94,6 +94,10 @@ Component.Input = function()
             return Ele.closest(this,'form');
         },
         
+        getValidateEvent: function() {
+            return 'input';
+        },
+        
         isRadioCheckbox: function() {
             return Arr.in(trigHdlr(this,'input:getType'),['radio','checkbox']);
         },
@@ -102,13 +106,21 @@ Component.Input = function()
             return trigHdlr(this,'input:getType') === 'select';
         },
         
-        setValue: function(value) {
+        setValue: function(value,fireInput,fireChange) {
             const oldValue = trigHdlr(this,'input:getValue');
             Ele.setValue(this,value);
             const newValue = trigHdlr(this,'input:getValue');
             
             if(oldValue !== newValue)
-            trigEvt(this,'input:change');
+            {
+                trigEvt(this,'input:change');
+                
+                if(fireInput === true)
+                trigEvt(this,'input');
+                
+                if(fireChange === true)
+                trigEvt(this,'change');
+            }
         },
         
         setEmpty: function() {
@@ -218,6 +230,7 @@ Component.Input = function()
     });
     
     aelOnce(this,'input:setupValidate',function() {
+        const validateEvent = Str.typecheck(trigHdlr(this,'input:getValidateEvent'),true);
         
         if(!trigHdlr(this,'validate:isBinded'))
         Component.Validate.call(this);
@@ -234,7 +247,7 @@ Component.Input = function()
             trigEvt(this,"validate:valid");
         });
                 
-        ael(this,'change',function() {
+        ael(this,validateEvent,function() {
             const isGroup = trigHdlr(this,'input:isGroup');
             const target = (isGroup === true)? trigHdlr(this,'inputGroup:get'):this;
             trigHdlrs(target,(isGroup === true)? 'validate:trigger':'validate:process');
