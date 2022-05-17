@@ -7,14 +7,7 @@
 // import
 // script that imports many variables from include within the scope
 
-// default
-const dd = console.dir;
-const $$ = alert;
-
 // node
-const d = Quid.d;
-const assert = Quid.assert;
-const logError = Quid.logError;
 const Arr = Quid.Arr;
 const ArrLike = Quid.ArrLike;
 const Bool = Quid.Bool;
@@ -51,35 +44,34 @@ const Uri = Quid.Uri;
 const Win = Quid.Win;
 const Xhr = Quid.Xhr;
 
-// ele
-const getAttr = Ele.getAttr.bind(Ele);
-const setAttr = Ele.setAttr.bind(Ele);
-const toggleAttr = Ele.toggleAttr.bind(Ele);
-const setCss = Ele.setCss.bind(Ele);
-const toggleClass = Ele.toggleClass.bind(Ele);
-const getHtml = Ele.getHtml.bind(Ele);
-const setHtml = Ele.setHtml.bind(Ele);
-
-// nod
-const qs = Nod.scopedQuery.bind(Nod);
-const qsa = Nod.scopedQueryAll.bind(Nod);
-
-// target
-const getProp = Target.getProp.bind(Target);
-const setProp = Target.setProp.bind(Target);
-const getData = Target.getData.bind(Target);
-const setData = Target.setData.bind(Target);
-const setHdlr = Target.setHandler.bind(Target);
-const setHdlrs = Target.setsHandler.bind(Target);
-const allHdlr = Target.allHandler.bind(Target);
-const trigHdlr = Target.triggerHandler.bind(Target);
-const trigHdlrs = Target.triggersHandler.bind(Target);
-const ael = Target.addListener.bind(Target);
-const aelDelegate = Target.addDelegatedListener.bind(Target);
-const aelPassive = Target.addPassiveListener.bind(Target);
-const aelOnce = Target.addListenerOnce.bind(Target);
-const rel = Target.removeListener.bind(Target);
-const trigEvt = Target.triggerNoBubble.bind(Target);
-const trigBubble = Target.triggerBubble.bind(Target);
-const trigSetup = Target.triggerSetup.bind(Target);
-const trigTeardown = Target.triggerTeardown.bind(Target);
+// shortcut
+const d = Quid.Shortcut.d;
+const assert = Quid.Shortcut.assert;
+const logError = Quid.Shortcut.logError;
+const getAttr = Quid.Shortcut.getAttr;
+const setAttr = Quid.Shortcut.setAttr;
+const toggleAttr = Quid.Shortcut.toggleAttr;
+const setCss = Quid.Shortcut.setCss;
+const toggleClass = Quid.Shortcut.toggleClass;
+const getHtml = Quid.Shortcut.getHtml;
+const setHtml = Quid.Shortcut.setHtml;
+const qs = Quid.Shortcut.qs;
+const qsa = Quid.Shortcut.qsa;
+const getProp = Quid.Shortcut.getProp;
+const setProp = Quid.Shortcut.setProp;
+const getData = Quid.Shortcut.getData;
+const setData = Quid.Shortcut.setData;
+const setHdlr = Quid.Shortcut.setHdlr;
+const setHdlrs = Quid.Shortcut.setHdlrs;
+const allHdlr = Quid.Shortcut.allHdlr;
+const trigHdlr = Quid.Shortcut.trigHdlr;
+const trigHdlrs = Quid.Shortcut.trigHdlrs;
+const ael = Quid.Shortcut.ael;
+const aelDelegate = Quid.Shortcut.aelDelegate;
+const aelPassive = Quid.Shortcut.aelPassive;
+const aelOnce = Quid.Shortcut.aelOnce;
+const rel = Quid.Shortcut.rel;
+const trigEvt = Quid.Shortcut.trigEvt;
+const trigBubble = Quid.Shortcut.trigBubble;
+const trigSetup = Quid.Shortcut.trigSetup;
+const trigTeardown = Quid.Shortcut.trigTeardown;
