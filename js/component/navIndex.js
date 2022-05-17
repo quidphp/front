@@ -116,7 +116,7 @@ Component.NavIndex = function(option)
             const current = trigHdlr(this,type+':getCurrent');
             const targets = trigHdlr(this,type+':getTargets');
             
-            return Nav.indexNode(value,current,targets,$option.loop);
+            return Nav.indexObj(value,current,targets,$option.loop);
         },
         
         go: function(value,context) {

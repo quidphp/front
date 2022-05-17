@@ -138,3 +138,6 @@ const EvtPrimitive = {
         return r;
     }
 };
+
+// evt
+const Evt = Quid.Evt = Factory(Tool.Type,EvtPrimitive);

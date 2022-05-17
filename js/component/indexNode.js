@@ -39,7 +39,7 @@ Component.IndexNode = function(option)
             const targets = trigHdlr(this,$option.key+':targets');
             
             if(targets != null)
-            r = Nav.indexNode(type,current,targets,$option.loop);
+            r = Nav.indexObj(type,current,targets,$option.loop);
             
             return r;
         }

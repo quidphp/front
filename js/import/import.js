@@ -8,47 +8,48 @@
 // script that imports many variables from include within the scope
 
 // default
-const d = console.log;
 const dd = console.dir;
-const backtrace = console.trace;
 const $$ = alert;
 
-// include
+// node
+const d = Quid.d;
+const assert = Quid.assert;
+const logError = Quid.logError;
 const Arr = Quid.Arr;
 const ArrLike = Quid.ArrLike;
 const Bool = Quid.Bool;
-const Browser = Quid.Browser;
 const Datetime = Quid.Datetime;
 const Debug = Quid.Debug;
-const Doc = Quid.Doc;
-const Dom = Quid.Dom;
-const Ele = Quid.Ele;
-const Evt = Quid.Evt;
 const Func = Quid.Func;
-const HistoryState = Quid.HistoryState;
 const Html = Quid.Html;
 const Integer = Quid.Integer;
 const Json = Quid.Json;
 const Nav = Quid.Nav;
-const Nod = Quid.Nod;
 const Num = Quid.Num;
 const Obj = Quid.Obj;
 const Pojo = Quid.Pojo;
-const Request = Quid.Request;
 const Scalar = Quid.Scalar;
-const Selector = Quid.Selector;
 const Str = Quid.Str;
-const Target = Quid.Target;
-const Uri = Quid.Uri;
 const Validate = Quid.Validate;
 const Vari = Quid.Vari;
+const Component = Quid.Component;
+const Factory = Quid.Factory;
+const Test = Quid.Test;
+
+// browser
+const Browser = Quid.Browser;
+const Doc = Quid.Doc;
+const Dom = Quid.Dom;
+const Ele = Quid.Ele;
+const Evt = Quid.Evt;
+const HistoryState = Quid.HistoryState;
+const Nod = Quid.Nod;
+const Request = Quid.Request;
+const Selector = Quid.Selector;
+const Target = Quid.Target;
+const Uri = Quid.Uri;
 const Win = Quid.Win;
 const Xhr = Quid.Xhr;
-
-// debug
-const debug = Debug.status.bind(Debug);
-const assert = Debug.assertThrow.bind(Debug);
-const logError = Debug.logError.bind(Debug);
 
 // ele
 const getAttr = Ele.getAttr.bind(Ele);
@@ -82,12 +83,3 @@ const trigEvt = Target.triggerNoBubble.bind(Target);
 const trigBubble = Target.triggerBubble.bind(Target);
 const trigSetup = Target.triggerSetup.bind(Target);
 const trigTeardown = Target.triggerTeardown.bind(Target);
-
-// component
-const Component = Quid.Component;
-
-// factory
-const Factory = Quid.Factory;
-
-// test
-const Test = Quid.Test;
