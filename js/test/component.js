@@ -29,6 +29,8 @@ Test.Component = function()
         
         // ajaxBlock
         
+        // ajaxTimeout
+        
         // alert
         
         // anchorCorner
@@ -103,15 +105,17 @@ Test.Component = function()
         
         // clickOutside
         
-        // confirm
+        // clickPrint
         
-        // doc
+        // confirm
         
         // externalBlank
         
         // fakeSelect
         
         // feed
+        
+        // feedFilter
         
         // feedSearch
         
@@ -123,9 +127,9 @@ Test.Component = function()
         
         // hashChange
         
-        // history
-        
         // hrefReplaceChar
+        
+        // indexNode
         
         // initOpenClose
         
@@ -172,9 +176,13 @@ Test.Component = function()
         
         // modalMailto
         
+        // nav
+        
         // navHash
         
         // navIndex
+        
+        // plural
         
         // resizeChange
         
@@ -187,6 +195,8 @@ Test.Component = function()
         // searchAutoInfo
         
         // searchSlide
+        
+        // selectConvert
         
         // tabs
         
@@ -223,8 +233,6 @@ Test.Component = function()
         // validatePrevent
         
         // window
-        
-        // windowUnload
         
         // cleanup 
         Ele.remove(formNode);
