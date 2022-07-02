@@ -5,7 +5,7 @@
  */
 
 // import
-// script that imports many variables from include within the scope
+// script that imports many variables within the scope
 
 // node
 const Arr = Quid.Arr;

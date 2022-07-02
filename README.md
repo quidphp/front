@@ -33,6 +33,10 @@ Once installed, the package will be available within your *vendor* folder.
 - *Compiling*: The concatenation of the JS and SCSS files is done on the PHP side.
 
 ## Overview
+**QuidPHP/Front** contains one JavaScript initialization file.
+- [init](init.js) - Script that imports many variables within the scope
+
+### Source
 **QuidPHP/Front** contains 67 JavaScript files. Here is an overview:
 - [absolutePlaceholder](src/absolutePlaceholder.js) - Script of behaviours for an absolute placeholder component
 - [ajax](src/ajax.js) - Script to activate ajax with an event on the nodes
