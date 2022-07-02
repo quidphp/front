@@ -185,7 +185,7 @@ Component.Modal = function(option)
         const modal = this;
         const box = trigHdlr(this,'modal:getBox');
         
-        ael(box,'click',function() {
+        ael(box,'click',function(event) {
             event.stopPropagation();
         });
         

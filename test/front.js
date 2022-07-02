@@ -5,7 +5,7 @@
  */
  
 // include
-// script to test the component files
+// script to test the front files
 Test.Component = function()
 {   
     let r = true;
