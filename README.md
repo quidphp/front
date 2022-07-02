@@ -1,181 +1,124 @@
 # QuidPHP/Front
 [![Release](https://img.shields.io/github/v/release/quidphp/front)](https://packagist.org/packages/quidphp/front)
 [![License](https://img.shields.io/github/license/quidphp/front)](https://github.com/quidphp/front/blob/master/LICENSE)
-[![Style CI](https://styleci.io/repos/246818925/shield)](https://styleci.io)
 [![Code Size](https://img.shields.io/github/languages/code-size/quidphp/front)](https://github.com/quidphp/front)
 
 ## About
-**QuidPHP/Front** contains the JavaScript and CSS front end assets. It is part of the [QuidPHP](https://github.com/quidphp/project) package.
+**QuidPHP/Front** contains JavaScript and CSS assets for basic components. It is part of the [QuidPHP](https://github.com/quidphp/project) package.
 
 ## License
 **QuidPHP/Front** is available as an open-source software under the [MIT license](LICENSE).
 
 ## Documentation
-**QuidPHP/Front** documentation is being written. Once ready, it will be available at [QuidPHP/Docs](https://github.com/quidphp/docs).
+**QuidPHP/Front** documentation is available at [QuidPHP/Docs](https://github.com/quidphp/docs).
 
 ## Installation
 **QuidPHP/Front** can be easily installed with [Composer](https://getcomposer.org). It is available on [Packagist](https://packagist.org/packages/quidphp/front).
 ``` bash
 $ composer require quidphp/front
 ```
+Once installed, the package will be available within your *vendor* folder.
 
 ## Requirement
-**QuidPHP/Front** requires the following:
-- Minimal browser: Internet Explorer 11
+**QuidPHP/Front** requires any modern browser (not Internet Explorer).
 
 ## Comment
-**QuidPHP/Front** code is commented and all methods are explained. However, most of the comments are written in French.
-
-## JS
+**QuidPHP/Front** code is commented and all methods are explained (in French).
 
 ### Convention
-- *ES5*: All code is compatible with ES5, there is no need for any JavaScript transpiler.
-- *Strict*: All generated files declare *use strict* on the first line.
-- *IE11*: The minimum compatible browser is IE11. Older browsers will fail non-gracefully.
-- *Compiling*: The concatenation of the JS files is done on the PHP side.
+**QuidPHP/Front** is built on the following conventions:
+- *ES5*: All JavaScript code is compatible with ES5, there is no need for any transpiler.
+- *Strict*: All generated JavaScript files declare *use strict* on the first line.
+- *SCSS*: Nesting, variables and mixins are used within the SCSS stylesheets.
+- *Compiling*: The concatenation of the JS and SCSS files is done on the PHP side.
 
 ### Overview
-**QuidPHP/Front** contains 106 JavaScript files. Here is an overview:
-- [component](js/component)
-    - [absolutePlaceholder.js](js/component/absolutePlaceholder.js) - Script of behaviours for an absolute placeholder component
-    - [ajax.js](js/component/ajax.js) - Script to activate ajax with an event on the nodes
-    - [ajaxBlock.js](js/component/ajaxBlock.js) - Merges the logic for ajax, block and loading within a component
-    - [ajaxTimeout.js](js/component/ajaxTimeout.js) - Merges the logic for ajax, block, loading and timeout within a component
-    - [alert.js](js/component/alert.js) - Component to launch an alert notification when an event is triggered
-    - [anchorCorner.js](js/component/anchorCorner.js) - Script of behaviours for an absolute anchorCorner component
-    - [backToTop.js](js/component/backToTop.js) - Script for a component which brings back to the top of the page
-    - [background.js](js/component/background.js) - Component for a background that can fadein or out
-    - [base.js](js/component/base.js) - Base component which allow to activate or deactivate components
-    - [blockEvent.js](js/component/blockEvent.js) - Script of behaviours for a component which blocks event propagation
-    - [burger.js](js/component/burger.js) - Script for a burger menu component
-    - [calendar.js](js/component/calendar.js) - Script for the calendar component
-    - [carousel.js](js/component/carousel.js) - Script for a carousel component based on the clickOpen logic
-    - [clickOpen.js](js/component/clickOpen.js) - Grants base methods and events for a clickOpen component
-    - [clickOpenAjax.js](js/component/clickOpenAjax.js) - Manages a clickOpen component which triggers an ajax request when open
-    - [clickOpenAjaxAnchor.js](js/component/clickOpenAjaxAnchor.js) - ClickOpen component which is triggered by an anchor click and dispatches an ajax call
-    - [clickOpenInputAjax.js](js/component/clickOpenInputAjax.js) - Component for a one field form which triggers an ajax request that displays in a clickOpen
-    - [clickOpenTrigger.js](js/component/clickOpenTrigger.js) - Manages a clickOpen component which has a trigger
-    - [clickOpenTriggerBase.js](js/component/clickOpenTriggerBase.js) - Grants base functions for a clickOpen component which has a trigger to open/close
-    - [clickOutside.js](js/component/clickOutside.js) - Component to manage click outside a node
-    - [clickPrint.js](js/component/clickPrint.js) - Component that triggers a window print on click
-    - [confirm.js](js/component/confirm.js) - Component to request a confirmation once an event has triggered
-    - [externalBlank.js](js/component/externalBlank.js) - Component to make all child anchors who are external as target _blank
-    - [fakeSelect.js](js/component/fakeSelect.js) - Script with some logic for a select replacement component, uses clickOpen
-    - [feed.js](js/component/feed.js) - Script of behaviours for a feed component with a load-more button
-    - [feedFilter.js](js/component/feedFilter.js) - Script of behaviours for a filter which updates a feed, can include a reset button
-    - [feedSearch.js](js/component/feedSearch.js) - Component for a feed with search and order tools
-    - [filter.js](js/component/filter.js) - Component for a clickOpen filter component which has a page feed, search and order tools
-    - [focusable.js](js/component/focusable.js) - Component to allow focus navigaton on a set of nodes
-    - [form.js](js/component/form.js) - Script with behaviours for a form component
-    - [hashChange.js](js/component/hashChange.js) - Script that sends the hash change event back to the nodes
-    - [hrefReplaceChar.js](js/component/hrefReplaceChar.js) - Component to generate a dynamic href with some value replacement
-    - [indexNode.js](js/component/indexNode.js) - Component to find a node within a set according to an index
-    - [initOpenClose.js](js/component/initOpenClose.js) - Base component used for opening, closing and initializing a container
-    - [input.js](js/component/input.js) - Script with behaviours for an input component
-    - [inputCalendar.js](js/component/inputCalendar.js) - Script with behaviours for a calendar component and a date input
-    - [inputGroup.js](js/component/inputGroup.js) - Script with behaviours for an input group component (like checkbox and radio)
-    - [inputMemory.js](js/component/inputMemory.js) - Script with behaviours for an input which has a value in memory
-    - [inputNumeric.js](js/component/inputNumeric.js) - Script with logic for an input containing a number
-    - [inputNumericHref.js](js/component/inputNumericHref.js) - Script with logic for an input containing a number which triggers a page change
-    - [inputNumericRange.js](js/component/inputNumericRange.js) - Script for a numeric input, linked to a range (with plus and minus buttons)
-    - [inputSearch.js](js/component/inputSearch.js) - Script containing logic for a search input with a button
-    - [inputSearchHref.js](js/component/inputSearchHref.js) - Script containing logic for a search input which triggers a page change
-    - [keyboard.js](js/component/keyboard.js) - Component to catch and/or prevent an event related to a key press on the keyboard
-    - [keyboardArrow.js](js/component/keyboardArrow.js) - Component to catch or prevent the arrow keys on the keyboard
-    - [keyboardEnter.js](js/component/keyboardEnter.js) - Component to catch or prevent the enter key on the keyboard
-    - [keyboardEscape.js](js/component/keyboardEscape.js) - Component to catch or prevent the escape key on the keyboard
-    - [modal.js](js/component/modal.js) - Script for a modal component
-    - [modalMailto.js](js/component/modalMailto.js) - Script for mailto links opening in a modal for confirmation
-    - [nav.js](js/component/nav.js) - Component for a document node, binds other components
-    - [navHash.js](js/component/navHash.js) - Adds hashchange support to the nav index component
-    - [navIndex.js](js/component/navIndex.js) - Base component that manages index navigation for many targets
-    - [plural.js](js/component/plural.js) - Component to manage singular or plural text for a node
-    - [resizeChange.js](js/component/resizeChange.js) - Component to notify nodes when window size has changed or stopped
-    - [scrollChange.js](js/component/scrollChange.js) - Component to notify nodes when window scroll has changed or stopped
-    - [scrollDrag.js](js/component/scrollDrag.js) - Component to allow scrolling while dragging with the mouse
-    - [scroller.js](js/component/scroller.js) - Component to manage scrolling within a container, allows animating
-    - [searchAutoInfo.js](js/component/searchAutoInfo.js) - Script with logic for an auto-complete search component with another fallback popup
-    - [searchSlide.js](js/component/searchSlide.js) - Component with a search input, and an info box that slides on focus
-    - [selectConvert.js](js/component/selectConvert.js) - Script to convert a select menu to a fakeSelect component
-    - [tabs.js](js/component/tabs.js) - Script with behaviours for a tabs component
-    - [tabsNav.js](js/component/tabsNav.js) - Script with behaviours for a tab component with support for navigation
-    - [timeout.js](js/component/timeout.js) - Behaviours for a timeout component, triggers an event once a timeout has completed
-    - [tooltip.js](js/component/tooltip.js) - Component to manage tooltip content
-    - [validate.js](js/component/validate.js) - Component with functions related to validation (pattern and required)
-    - [validatePrevent.js](js/component/validatePrevent.js) - Component that blocks an event if the validation is not successfull
-    - [window.js](js/component/window.js) - Behaviours to detect touch devices or responsive resolution on the window node
-- [import](js/import)
-    - [import.js](js/import/import.js) - Script that imports many variables from include within the scope
-- [include](js/include)
-    - [_init.js](js/include/_init.js)
-    - [arr.js](js/include/arr.js) - Script with some objects related to array manipulation
-    - [arrLike.js](js/include/arrLike.js) - Script with some functions related to array like management
-    - [bool.js](js/include/bool.js) - Methods for bool primitive type
-    - [browser.js](js/include/browser.js) - Script with a some functions related to browsers detection
-    - [data.js](js/include/data.js) - Script for storing datas within targets
-    - [datetime.js](js/include/datetime.js) - Script with functions related to date and time
-    - [debug.js](js/include/debug.js) - Script with functions related to debugging
-    - [doc.js](js/include/doc.js) - Object for document and document fragment targets
-    - [dom.js](js/include/dom.js) - Script with functions related to html and dom
-    - [ele.js](js/include/ele.js) - Script with many functions related to element nodes
-    - [evt.js](js/include/evt.js) - Script containing event management functions
-    - [func.js](js/include/func.js) - Script with methods related to functions
-    - [handler.js](js/include/handler.js) - Script for handler management (functions stored in targets)
-    - [historyState.js](js/include/historyState.js) - Script with functions related to the history states
-    - [html.js](js/include/html.js) - Script containing event listeners functions for target elements
-    - [integer.js](js/include/integer.js) - Methods related to integer numbers
-    - [json.js](js/include/json.js) - Script with methods related to json format
-    - [listener.js](js/include/listener.js) - Script containing event listeners functions for target elements
-    - [nav.js](js/include/nav.js) - Script with helper functions related to navigation and pagination
-    - [nod.js](js/include/nod.js) - Object for element, text and document nodes
-    - [num.js](js/include/num.js) - Script with functions related to numbers
-    - [obj.js](js/include/obj.js) - Script with a set of helper functions related to objects
-    - [pojo.js](js/include/pojo.js) - Script with a set of helper functions related to plain objects
-    - [request.js](js/include/request.js) - Script with functions related to the current request
-    - [scalar.js](js/include/scalar.js) - Script with functions related to scalar values
-    - [selector.js](js/include/selector.js) - Script with methods related to selecting and matching nodes
-    - [str.js](js/include/str.js) - Script with a set of helper functions related to strings
-    - [target.js](js/include/target.js) - Script with basic functions related to event targets elements
-    - [type.js](js/include/type.js) - Script with common methods for all variable types
-    - [uri.js](js/include/uri.js) - Script with a set of helper functions related to uri management
-    - [validate.js](js/include/validate.js) - Script with behaviours related to validation
-    - [vari.js](js/include/vari.js) - Script with a set of general functions related to variables
-    - [win.js](js/include/win.js) - Object for window target
-    - [xhr.js](js/include/xhr.js) - Script with some logic for ajax calls and xhr object
-- [navigation](js/navigation)
-    - [doc.js](js/navigation/doc.js) - Root component for a document node
-    - [history.js](js/navigation/history.js) - Component managing site navigation with the HistoryAPI
-    - [windowUnload.js](js/navigation/windowUnload.js) - Component to manage the unload notification with the window object
-    
+**QuidPHP/Front** contains 67 JavaScript files. Here is an overview:
+- [absolutePlaceholder](src/absolutePlaceholder.js) - Script of behaviours for an absolute placeholder component
+- [ajax](src/ajax.js) - Script to activate ajax with an event on the nodes
+- [ajaxBlock](src/ajaxBlock.js) - Merges the logic for ajax, block and loading within a component
+- [ajaxTimeout](src/ajaxTimeout.js) - Merges the logic for ajax, block, loading and timeout within a component
+- [alert](src/alert.js) - Component to launch an alert notification when an event is triggered
+- [anchorCorner](src/anchorCorner.js) - Script of behaviours for an absolute anchorCorner component
+- [backToTop](src/backToTop.js) - Script for a component which brings back to the top of the page
+- [background](src/background.js) - Component for a background that can fadein or out
+- [base](src/base.js) - Base component which allow to activate or deactivate components
+- [blockEvent](src/blockEvent.js) - Script of behaviours for a component which blocks event propagation
+- [burger](src/burger.js) - Script for a burger menu component
+- [calendar](src/calendar.js) - Script for the calendar component
+- [carousel](src/carousel.js) - Script for a carousel component based on the clickOpen logic
+- [clickOpen](src/clickOpen.js) - Grants base methods and events for a clickOpen component
+- [clickOpenAjax](src/clickOpenAjax.js) - Manages a clickOpen component which triggers an ajax request when open
+- [clickOpenAjaxAnchor](src/clickOpenAjaxAnchor.js) - ClickOpen component which is triggered by an anchor click and dispatches an ajax call
+- [clickOpenInputAjax](src/clickOpenInputAjax.js) - Component for a one field form which triggers an ajax request that displays in a clickOpen
+- [clickOpenTrigger](src/clickOpenTrigger.js) - Manages a clickOpen component which has a trigger
+- [clickOpenTriggerBase](src/clickOpenTriggerBase.js) - Grants base functions for a clickOpen component which has a trigger to open/close
+- [clickOutside](src/clickOutside.js) - Component to manage click outside a node
+- [clickPrint](src/clickPrint.js) - Component that triggers a window print on click
+- [confirm](src/confirm.js) - Component to request a confirmation once an event has triggered
+- [externalBlank](src/externalBlank.js) - Component to make all child anchors who are external as target _blank
+- [fakeSelect](src/fakeSelect.js) - Script with some logic for a select replacement component, uses clickOpen
+- [feed](src/feed.js) - Script of behaviours for a feed component with a load-more button
+- [feedFilter](src/feedFilter.js) - Script of behaviours for a filter which updates a feed, can include a reset button
+- [feedSearch](src/feedSearch.js) - Component for a feed with search and order tools
+- [filter](src/filter.js) - Component for a clickOpen filter component which has a page feed, search and order tools
+- [focusable](src/focusable.js) - Component to allow focus navigaton on a set of nodes
+- [form](src/form.js) - Script with behaviours for a form component
+- [hashChange](src/hashChange.js) - Script that sends the hash change event back to the nodes
+- [hrefReplaceChar](src/hrefReplaceChar.js) - Component to generate a dynamic href with some value replacement
+- [indexNode](src/indexNode.js) - Component to find a node within a set according to an index
+- [initOpenClose](src/initOpenClose.js) - Base component used for opening, closing and initializing a container
+- [input](src/input.js) - Script with behaviours for an input component
+- [inputCalendar](src/inputCalendar.js) - Script with behaviours for a calendar component and a date input
+- [inputGroup](src/inputGroup.js) - Script with behaviours for an input group component (like checkbox and radio)
+- [inputMemory](src/inputMemory.js) - Script with behaviours for an input which has a value in memory
+- [inputNumeric](src/inputNumeric.js) - Script with logic for an input containing a number
+- [inputNumericHref](src/inputNumericHref.js) - Script with logic for an input containing a number which triggers a page change
+- [inputNumericRange](src/inputNumericRange.js) - Script for a numeric input, linked to a range (with plus and minus buttons)
+- [inputSearch](src/inputSearch.js) - Script containing logic for a search input with a button
+- [inputSearchHref](src/inputSearchHref.js) - Script containing logic for a search input which triggers a page change
+- [keyboard](src/keyboard.js) - Component to catch and/or prevent an event related to a key press on the keyboard
+- [keyboardArrow](src/keyboardArrow.js) - Component to catch or prevent the arrow keys on the keyboard
+- [keyboardEnter](src/keyboardEnter.js) - Component to catch or prevent the enter key on the keyboard
+- [keyboardEscape](src/keyboardEscape.js) - Component to catch or prevent the escape key on the keyboard
+- [modal](src/modal.js) - Script for a modal component
+- [modalMailto](src/modalMailto.js) - Script for mailto links opening in a modal for confirmation
+- [nav](src/nav.js) - Component for a document node, binds other components
+- [navHash](src/navHash.js) - Adds hashchange support to the nav index component
+- [navIndex](src/navIndex.js) - Base component that manages index navigation for many targets
+- [plural](src/plural.js) - Component to manage singular or plural text for a node
+- [resizeChange](src/resizeChange.js) - Component to notify nodes when window size has changed or stopped
+- [scrollChange](src/scrollChange.js) - Component to notify nodes when window scroll has changed or stopped
+- [scrollDrag](src/scrollDrag.js) - Component to allow scrolling while dragging with the mouse
+- [scroller](src/scroller.js) - Component to manage scrolling within a container, allows animating
+- [searchAutoInfo](src/searchAutoInfo.js) - Script with logic for an auto-complete search component with another fallback popup
+- [searchSlide](src/searchSlide.js) - Component with a search input, and an info box that slides on focus
+- [selectConvert](src/selectConvert.js) - Script to convert a select menu to a fakeSelect component
+- [tabs](src/tabs.js) - Script with behaviours for a tabs component
+- [tabsNav](src/tabsNav.js) - Script with behaviours for a tab component with support for navigation
+- [timeout](src/timeout.js) - Behaviours for a timeout component, triggers an event once a timeout has completed
+- [tooltip](src/tooltip.js) - Component to manage tooltip content
+- [validate](src/validate.js) - Component with functions related to validation (pattern and required)
+- [validatePrevent](src/validatePrevent.js) - Component that blocks an event if the validation is not successfull
+- [window](src/window.js) - Behaviours to detect touch devices or responsive resolution on the window node
+
+### Styling
+**QuidPHP/Front** contains 12 SCSS stylesheets. Here is an overview:
+- [absolutePlaceholder](css/absolutePlaceholder.scss) - Stylesheet for the absolutePlaceholder component
+- [anchorCorner](css/anchorCorner.scss) - Stylesheet for the anchorCorner component
+- [background](css/background.scss) - Stylesheet for the background component
+- [calendar](css/calendar.scss) - Stylesheet for the calendar component
+- [clickOpen](css/clickOpen.scss) - Stylesheet for the base styles of the clickOpen component
+- [fakeSelect](css/fakeSelect.scss) - Stylesheet for the base styles of the fakeSelect component
+- [form](css/form.scss) - Stylsheet with base styles for form components
+- [inputCalendar](css/inputCalendar.scss) - Stylesheet for the input calendar component
+- [inputNumericRange](css/inputNumericRange.scss) - Base styles for the inputNumericRange component
+- [modal](css/modal.scss) - Stylesheet for the modal component
+- [scrollDrag](css/scrollDrag.scss) - Stylesheet for the scrollDrag component
+- [tooltip](css/tooltip.scss) - Base styles for the tooltip component
+
 ### Testing
-**QuidPHP/Front** contains 2 test scripts:
-- [test](js/test)
-    - [component.js](js/test/component.js) - Script to test the component files
-    - [include.js](js/test/include.js) - Script to test the include files
+**QuidPHP/Front** contains 1 test script:
+- [front](test/front.js) - Script to test the front files
 
 **QuidPHP/Front** testsuite can be run by creating a new [QuidPHP/Assert](https://github.com/quidphp/assert) project.
-    
-## CSS
-
-### Convention
-- *SCSS*: Nesting, variables and mixins are used within the stylesheets.
-- *Compiling*: The compiling and concatenation of the SCSS files is done on the PHP side.
-
-### Overview
-**QuidPHP/Front** contains 14 SCSS stylesheets. Here is an overview:
-- [component](css/component)
-    - [absolutePlaceholder.scss](css/component/absolutePlaceholder.scss) - Stylesheet for the absolutePlaceholder component
-    - [anchorCorner.scss](css/component/anchorCorner.scss) - Stylesheet for the anchorCorner component
-    - [background.scss](css/component/background.scss) - Stylesheet for the background component
-    - [calendar.scss](css/component/calendar.scss) - Stylesheet for the calendar component
-    - [clickOpen.scss](css/component/clickOpen.scss) - Stylesheet for the base styles of the clickOpen component
-    - [document.scss](css/component/document.scss) - Stylesheet for the document component, includes many style reset
-    - [fakeSelect.scss](css/component/fakeSelect.scss) - Stylesheet for the base styles of the fakeSelect component
-    - [form.scss](css/component/form.scss) - Stylsheet with base styles for form components
-    - [inputCalendar.scss](css/component/inputCalendar.scss) - Stylesheet for the input calendar component
-    - [inputNumericRange.scss](css/component/inputNumericRange.scss) - Base styles for the inputNumericRange component
-    - [modal.scss](css/component/modal.scss) - Stylesheet for the modal component
-    - [scrollDrag.scss](css/component/scrollDrag.scss) - Stylesheet for the scrollDrag component
-    - [tooltip.scss](css/component/tooltip.scss) - Base styles for the tooltip component
-- [include](css/include)
-    - [init.scss](css/include/init.scss) - Stylesheet containing default variables and a set of helpers mixins
