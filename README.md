@@ -25,14 +25,14 @@ Once installed, the package will be available within your *vendor* folder.
 ## Comment
 **QuidPHP/Front** code is commented and all methods are explained (in French).
 
-### Convention
+## Convention
 **QuidPHP/Front** is built on the following conventions:
 - *ES5*: All JavaScript code is compatible with ES5, there is no need for any transpiler.
 - *Strict*: All generated JavaScript files declare *use strict* on the first line.
 - *SCSS*: Nesting, variables and mixins are used within the SCSS stylesheets.
 - *Compiling*: The concatenation of the JS and SCSS files is done on the PHP side.
 
-### Overview
+## Overview
 **QuidPHP/Front** contains 67 JavaScript files. Here is an overview:
 - [absolutePlaceholder](src/absolutePlaceholder.js) - Script of behaviours for an absolute placeholder component
 - [ajax](src/ajax.js) - Script to activate ajax with an event on the nodes
