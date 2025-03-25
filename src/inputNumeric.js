@@ -59,7 +59,8 @@ Component.InputNumeric = function(option)
         },
         
         getMin: function() {
-            return getAttr(this,'data-min','int') || 1;
+            const min = getAttr(this,'data-min','int');
+            return min == null ? 1: min;
         },
         
         getMax: function() {
